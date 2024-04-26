@@ -16,7 +16,7 @@ class CityResource extends JsonResource
     {
         return [
             'id'    => $this->id,
-            'name'  => $this->name,
+            'name'  => $request->header('Accept-Language') == 'ar' ? $this->name : $this->code,
             'code'  => $this->code,
             'google_city_id' => $this->google_city_id,
             'created_at' => $this->created_at->format('Y-m-d'),

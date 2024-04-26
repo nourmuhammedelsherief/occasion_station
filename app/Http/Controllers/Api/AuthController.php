@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Cart;
+use App\Models\PhoneVerification;
 use App\Http\Resources\CartResource;
 use App\Models\Order;
 use App\Models\Setting;
@@ -44,7 +45,7 @@ class AuthController extends Controller
         }
         $user = User::wherePhone_number($request->phone_number)->first();
         if ($user == null) {
-            $body = 'كود التأكيد الخاص بك في تكية هو ' . $code;
+            $body = trans('messages.confirm_code') . $code;
             taqnyatSms($body , $phone);
         } else {
             $errors = [
@@ -53,12 +54,12 @@ class AuthController extends Controller
             ];
             return ApiController::respondWithErrorArray(array($errors));
         }
-        $created = App\Models\PhoneVerification::create([
+        $created = PhoneVerification::create([
             'code' => $code,
             'phone_number' => $request->phone_number
         ]);
         $success = [
-            'message' => 'تم أرسال الكود بنجاح',
+            'message' => trans('messages.codeSentSuccessfully'),
             'code'    => $code
         ];
         return ApiController::respondWithSuccess($success);
@@ -118,9 +119,9 @@ class AuthController extends Controller
             $phone = '002' . $request->phone_number;
         }
         $code = mt_rand(1000, 9999);
-        $body = 'كود التأكيد الخاص بك في تكية هو ' . $code;
+        $body = trans('messages.confirm_code') . $code;
         taqnyatSms($body, $phone);
-        $created = App\Models\PhoneVerification::create([
+        $created = PhoneVerification::create([
             'code' => $code,
             'phone_number' => $request->phone_number
         ]);
@@ -246,9 +247,9 @@ class AuthController extends Controller
             } else {
                 $phone = '002' . $request->phone_number;
             }
-            $body = 'د التأكيد  الخاص بك  في  تكية هو ' . $code;
+            $body = trans('messages.confirm_code') . $code;
             taqnyatSms($body, $phone);
-            $updated = App\Models\User::where('phone_number', $request->phone_number)
+            $updated = User::where('phone_number', $request->phone_number)
                 ->update([
                     'verification_code' => $code,
                 ]);
@@ -391,9 +392,9 @@ class AuthController extends Controller
         } else {
             $phone = '002' . $request->phone_number;
         }
-        $body = 'كود التأكيد  الخاص بك في منصة الأحتفالات هو ' . $code;
+        $body = trans('messages.confirm_code'). $code;
         taqnyatSms($body, $phone);
-        $updated = App\Models\User::where('id', Auth::user()->id)->update([
+        $updated = User::where('id', Auth::user()->id)->update([
             'verification_code' => $code,
         ]);
         $success = [
@@ -504,7 +505,7 @@ class AuthController extends Controller
             ]
         );
         $success = [
-            'message' => 'تم تسجيل الخروج بنجاح'
+            'message' => trans('messages.logout_successfully')
         ];
         return $users
             ? ApiController::respondWithSuccess($success)

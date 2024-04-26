@@ -59,8 +59,8 @@
                                                     <input type="text" name="name" class="form-control" placeholder="أكتب أسم  المدينة" value="{{old('name')}}" required>
                                                     @if ($errors->has('name'))
                                                         <span class="help-block">
-                                               <strong style="color: red;">{{ $errors->first('name') }}</strong>
-                                            </span>
+                                                            <strong style="color: red;">{{ $errors->first('name') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>

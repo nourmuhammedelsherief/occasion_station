@@ -57,7 +57,6 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
         $this->validate($request , [
             'name'    => 'required|string|max:191',
             'city_id' => 'required|exists:cities,id',
@@ -74,6 +73,9 @@ class ProviderController extends Controller
             'longitude' => 'required',
             'photo'   => 'required|mimes:jpg,png,jpeg,gif,tif,bmp,psd|max:5000',
             'logo'    => 'required|mimes:jpg,png,jpeg,gif,tif,bmp,psd|max:5000',
+            'bank_payment'   => 'sometimes',
+            'online_payment' => 'sometimes',
+            'tamara_payment' => 'sometimes',
         ]);
         // create new provider
         $provider = Provider::create([
@@ -87,6 +89,9 @@ class ProviderController extends Controller
             'address' => $request->address,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
+            'bank_payment'   => $request->bank_payment ?: 'false',
+            'online_payment' => $request->online_payment ?: 'false',
+            'tamara_payment' => $request->tamara_payment ?: 'false',
 //            'category_id' => $request->category_id,
             'photo'   => $request->file('photo') == null ? null : UploadImage($request->file('photo') , 'photo' , '/uploads/providers'),
             'logo'    => $request->file('logo') == null ? null : UploadImage($request->file('logo') , 'logo' , '/uploads/providers/logos')
@@ -175,6 +180,9 @@ class ProviderController extends Controller
             'longitude' => 'required',
             'photo'   => 'nullable|mimes:jpg,png,jpeg,gif,tif,bmp,psd|max:5000',
             'logo'    => 'nullable|mimes:jpg,png,jpeg,gif,tif,bmp,psd|max:5000',
+            'bank_payment'   => 'sometimes',
+            'online_payment' => 'sometimes',
+            'tamara_payment' => 'sometimes',
         ]);
         $provider->update([
             'name'   => $request->name,
@@ -187,6 +195,10 @@ class ProviderController extends Controller
             'description' => $request->description,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
+            'bank_payment'   => $request->bank_payment ?: 'false',
+            'online_payment' => $request->online_payment ?: 'false',
+            'tamara_payment' => $request->tamara_payment ?: 'false',
+//
 //            'category_id' => $request->category_id,
             'photo'   => $request->file('photo') == null ? $provider->photo : UploadImageEdit($request->file('photo') , 'photo' , '/uploads/providers' , $provider->photo),
             'logo'   => $request->file('logo') == null ? $provider->logo : UploadImageEdit($request->file('logo') , 'logo' , '/uploads/providers/logos' , $provider->logo),

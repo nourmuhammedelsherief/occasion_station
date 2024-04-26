@@ -59,6 +59,17 @@
                                     </a>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    <a href="{{route('waiting_accept_products')}}">
+                                        <button id="sample_editable_1_new"
+                                                class="btn btn-primary">
+                                            منتجات بانتظار الموافقه
+                                            ({{\App\Models\Product::whereAccepted('false')->count()}})
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover table-checkable order-column"

@@ -18,22 +18,16 @@ class PageController extends Controller
     //
     public function about()
     {
-
-
-
         $settings =AboutUs::find(1);
         return view('admin.pages.about',compact('settings'));
-
-//
     }
     public function store_about(Request $request)
     {
-//        dd($request->deposit_type);
         $this->validate($request, [
             "title"  => "required|string|max:255",
+            "title_en"  => "required|string|max:255",
             'content'=> 'required|string',
-
-
+            'content_en'=> 'required|string',
         ]);
 
         AboutUs::where('id',1)->first()->update($request->all());
@@ -44,22 +38,16 @@ class PageController extends Controller
     }
     public function terms()
     {
-
-
-
         $settings =TermsCondition::find(1);
         return view('admin.pages.terms',compact('settings'));
-
-//
     }
     public function store_terms(Request $request)
     {
-//        dd($request->deposit_type);
         $this->validate($request, [
             "title"  => "required|string|max:255",
+            "title_en"  => "required|string|max:255",
             'content'=> 'required|string',
-
-
+            'content_en'=> 'required|string',
         ]);
 
         TermsCondition::where('id',1)->first()->update($request->all());

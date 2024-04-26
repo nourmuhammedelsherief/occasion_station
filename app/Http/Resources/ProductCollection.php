@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\FavoriteProduct;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Http\Resources\ProviderCategoryResource;
 
@@ -18,7 +19,7 @@ class ProductCollection extends ResourceCollection
     {
         return [
             'current_page' => $this->currentPage(),
-            'list' => $this->collection->transform(function ($query){
+            'list' => $this->collection->transform(function ($query ){
                 $arr = [array(asset('/uploads/products/default.jpeg'))];
                 return [
                     'id'    => $query->id,

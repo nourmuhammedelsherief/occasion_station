@@ -34,6 +34,10 @@ class ProviderCollection extends ResourceCollection
                     'category'       => CategoryResource::collection($query->provider_main_categories),
                     'sub_categories' => SubCategoryResource::collection($query->provider_categories),
                     'description'  => $query->description,
+                    'bank_payment'   => $query->bank_payment,
+                    'online_payment' => $query->online_payment,
+                    'tamara_payment' => $query->tamara_payment,
+                    'rate'           => $query->rate,
                     'created_at'     => $query->created_at->format('Y-m-d'),
                 ];
             }),

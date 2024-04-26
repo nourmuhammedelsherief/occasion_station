@@ -30,6 +30,7 @@ class ProductController extends Controller
     {
         $products = Product::orderBy('id' , 'desc')
             ->where('recomended' , 'false')
+            ->whereAccepted('true')
             ->paginate(100);
         return view('admin.products.index' , compact('products'));
     }
@@ -38,8 +39,26 @@ class ProductController extends Controller
     {
         $products = Product::orderBy('id' , 'desc')
             ->where('recomended' , 'true')
+            ->whereAccepted('true')
             ->paginate(100);
         return view('admin.products.recomended' , compact('products'));
+    }
+    public function waiting_accept_products()
+    {
+        $products = Product::whereAccepted('false')
+            ->orderBy('id' , 'desc')
+            ->paginate(100);
+        return view('admin.products.waiting_accept' , compact('products'));
+    }
+
+    public function AcceptProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update([
+            'accepted' => 'true',
+        ]);
+        flash('تم قبول المنتج بنجاح')->success();
+        return redirect()->back();
     }
 
     /**

@@ -29,7 +29,11 @@ class ProviderResource extends JsonResource
             'arrange'        => $this->arrange,
             'category'       => CategoryResource::collection($this->provider_main_categories),
             'sub_categories' => SubCategoryResource::collection($this->provider_categories),
-            'description'  => $this->description,
+            'description'    => $this->description,
+            'bank_payment'   => $this->bank_payment,
+            'online_payment' => $this->online_payment,
+            'tamara_payment' => $this->tamara_payment,
+            'rate'           => $this->rate,
             'created_at'     => $this->created_at->format('Y-m-d'),
         ];
     }

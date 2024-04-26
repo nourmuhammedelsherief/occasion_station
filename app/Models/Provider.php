@@ -32,6 +32,10 @@ class Provider extends Authenticatable
         'arrange',
         'description',
         'commission',  // the total commissions for provider
+        'bank_payment',
+        'online_payment',
+        'tamara_payment',
+        'rate',
     ];
 
     public function category()
@@ -57,5 +61,13 @@ class Provider extends Authenticatable
     public function sliders()
     {
         return $this->hasMany(ProviderSlider::class , 'provider_id');
+    }
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteProvider::class , 'provider_id');
+    }
+    public function rates()
+    {
+        return $this->hasMany(ProviderRate::class , 'provider_id');
     }
 }

@@ -33,6 +33,7 @@ use \App\Http\Controllers\AdminController\AnimatedSliderController;
 use \App\Http\Controllers\AdminController\SettingController;
 use \App\Http\Controllers\AdminController\PageController;
 use \App\Http\Controllers\AdminController\OrderController;
+use \App\Http\Controllers\AdminController\ProviderRateController;
 
 // provider controller
 use \App\Http\Controllers\ProviderController\HomeController as ProviderHomeController;
@@ -265,6 +266,14 @@ Route::prefix('admin')->group(function () {
             Route::get('providers/vip/{id}/{status}','vip')->name('vipProvider');
             Route::get('providers/stop/{id}/{state}','stop')->name('stopProvider');
         });
+        Route::controller(ProviderRateController::class)->group(function () {
+            Route::get('providers/{id}/rates','index')->name('showProviderRates');
+            Route::get('providers/{id}/rates/create','create')->name('createProviderRates');
+            Route::post('providers/{id}/rates/store','store')->name('storeProviderRates');
+            Route::get('providers/{id}/rates/edit','edit')->name('editProviderRates');
+            Route::post('providers/{id}/rates/update','update')->name('updateProviderRates');
+            Route::get('providers/rates/delete/{id}','destroy')->name('deleteProviderRate');
+        });
 
         Route::get('get/sub_categories/{id}','AdminController\ProviderController@sub_categories')->name('sub_categories');
 
@@ -273,6 +282,7 @@ Route::prefix('admin')->group(function () {
         Route::controller(ProductController::class)->group(function () {
             Route::get('products','index')->name('Product');
             Route::get('recomended_products','recomended_products')->name('recomended_products');
+            Route::get('waiting_accept_products','waiting_accept_products')->name('waiting_accept_products');
             Route::get('products/create','create')->name('createProduct');
             Route::post('products/store','store')->name('storeProduct');
             Route::get('products/edit/{id}','edit')->name('editProduct');
@@ -282,6 +292,7 @@ Route::prefix('admin')->group(function () {
             Route::get('products/recommend/{id}/{status}','recommend')->name('recommendProduct');
             Route::get('products/images/remove/{id}','imageProductRemove')->name('imageProductRemove');
             Route::get('get_provider/{id}','get_provider')->name('get_provider');
+            Route::get('AcceptProduct/{id}','AcceptProduct')->name('AcceptProduct');
 
         });
 

@@ -36,86 +36,23 @@ class ProductController extends Controller
         if ($validator->fails())
             return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
 
+        $products = Product::whereProviderId($request->provider_id)
+            ->where(function ($query) use ($request) {
+                if (isset($request->key_search)) {
+                    $query->where('name', 'LIKE', "%{$request->search}%");
+                }
+                if (isset($request->provider_category_id) and $request->provider_category_id != 'all') {
+                    $query->where('category_id',$request->provider_category_id);
+                }
+                if (isset($request->activity) and $request->activity != 'all') {
+                    $query->where('activity',$request->activity);
+                }
+            })
+            ->whereStop('false')
+            ->whereAccepted('true')
+            ->orderBy('id' , 'desc')
+            ->paginate(10);
 
-        if($request->provider_category_id == 'all')
-        {
-            $products = Product::whereProviderId($request->provider_id)
-                ->whereStop('false')
-                ->orderBy('id' , 'desc')
-                ->paginate(10);
-        }elseif ($request->search != null and $request->activity == null and $request->provider_category_id == null) {
-            $products = Product::whereProviderId($request->provider_id)
-                ->where('name', 'LIKE', "%{$request->search}%")
-                ->whereStop('false')
-                ->orderBy('id' , 'desc')
-                ->paginate(10);
-        } elseif ($request->search != null and $request->activity == null and $request->provider_category_id != null) {
-            $products = Product::whereProviderId($request->provider_id)
-                ->where('name', 'LIKE', "%{$request->search}%")
-                ->where('category_id', $request->provider_category_id)
-                ->whereStop('false')
-                ->orderBy('id' , 'desc')
-                ->paginate(10);
-        }  elseif ($request->search == null and $request->provider_category_id == null and $request->activity != null) {
-            if ($request->activity == 'all')
-            {
-                $products = Product::whereProviderId($request->provider_id)
-                    ->whereStop('false')
-                    ->orderBy('id' , 'desc')
-                    ->paginate(10);
-            }else{
-                $products = Product::whereProviderId($request->provider_id)
-                    ->where('activity', $request->activity)
-                    ->whereStop('false')
-                    ->orderBy('id' , 'desc')
-                    ->paginate(10);
-            }
-        }elseif ($request->search == null and $request->provider_category_id != null and $request->activity != null) {
-            if ($request->activity == 'all')
-            {
-                $products = Product::whereProviderId($request->provider_id)
-                    ->where('category_id', $request->provider_category_id)
-                    ->whereStop('false')
-                    ->orderBy('id' , 'desc')
-                    ->paginate(10);
-            }else{
-                $products = Product::whereProviderId($request->provider_id)
-                    ->where('activity', $request->activity)
-                    ->where('category_id', $request->provider_category_id)
-                    ->whereStop('false')
-                    ->orderBy('id' , 'desc')
-                    ->paginate(10);
-            }
-        }elseif ($request->search == null and $request->provider_category_id != null and $request->activity == null) {
-            $products = Product::whereProviderId($request->provider_id)
-                ->where('category_id', $request->provider_category_id)
-                ->whereStop('false')
-                ->orderBy('id' , 'desc')
-                ->paginate(10);
-        } elseif ($request->search != null and $request->activity != null and $request->provider_category_id != null) {
-            if ($request->activity == 'all')
-            {
-                $products = Product::whereProviderId($request->provider_id)
-                    ->where('name', 'LIKE', "%{$request->search}%")
-                    ->where('category_id', $request->provider_category_id)
-                    ->whereStop('false')
-                    ->orderBy('id' , 'desc')
-                    ->paginate(10);
-            }else{
-                $products = Product::whereProviderId($request->provider_id)
-                    ->where('activity', $request->activity)
-                    ->where('name', 'LIKE', "%{$request->search}%")
-                    ->where('category_id', $request->provider_category_id)
-                    ->whereStop('false')
-                    ->orderBy('id' , 'desc')
-                    ->paginate(10);
-            }
-        } else {
-            $products = Product::whereProviderId($request->provider_id)
-                ->whereStop('false')
-                ->orderBy('id' , 'desc')
-                ->paginate(10);
-        }
         $categories = ProviderProductCategory::whereProviderId($request->provider_id)
             ->get();
         foreach ($categories as $category)
@@ -135,142 +72,40 @@ class ProductController extends Controller
         return ApiController::respondWithSuccessData($all);
     }
 
-    public function providers_products_search(Request $request)
+    public function products_search(Request $request)
     {
         $rules = [
             'key_search' => 'sometimes|string|max:191',
-            'activity' => 'sometimes|in:rent,sale,all',
-            'google_city_id' => 'required'
+            'activity'   => 'required|in:rent,sale,all',
+            'google_city_id' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails())
             return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
 
-//        $range = Setting::find(1)->search_range;
-//        $lat = $request->latitude;
-//        $lon = $request->longitude;
-        if ($request->key_search != null && $request->activity == null) {
-            $products = Product::with('provider')
-                ->whereHas('provider', function ($q) use ($request) {
-                    $q->with('city');
-                    $q->whereHas('city' , function ($d) use ($request){
-                        $d->where('google_city_id', $request->google_city_id);
-                    });
-                })
-                ->where('name', 'LIKE', "%{$request->key_search}%")
-                ->whereStop('false')
-                ->paginate(10);
-            $providers = Provider::with('city')
-                ->whereHas('city' , function ($q) use ($request){
-                    $q->where('google_city_id', $request->google_city_id);
-                })
-                ->where('name', 'LIKE', "%{$request->key_search}%")
-                ->whereStop('false')
-                ->paginate(10);
-        } elseif ($request->key_search == null && $request->activity != null) {
-            if ($request->activity == 'all')
-            {
-                $products = Product::with('provider')
-                    ->whereHas('provider', function ($q) use ($request) {
-                        $q->with('city');
-                        $q->whereHas('city' , function ($d) use ($request){
-                            $d->where('google_city_id', $request->google_city_id);
-                        });
-                    })
-                    ->whereStop('false')
-                    ->paginate(10);
-                $providers = Provider::with('city')
-                    ->whereHas('city' , function ($q) use ($request){
-                        $q->where('google_city_id', $request->google_city_id);
-                    })
-                    ->whereStop('false')
-                    ->paginate(10);
-            }else{
-                $products = Product::with('provider')
-                    ->whereHas('provider', function ($q) use ($request) {
-                        $q->with('city');
-                        $q->whereHas('city' , function ($d) use ($request){
-                            $d->where('google_city_id', $request->google_city_id);
-                        });
-                    })
-                    ->where('activity', $request->activity)
-                    ->whereStop('false')
-                    ->paginate(10);
-                $providers = Provider::with('city')
-                    ->whereHas('city' , function ($q) use ($request){
-                        $q->where('google_city_id', $request->google_city_id);
-                    })
-                    ->whereIn('activity', [$request->activity , 'both'])
-                    ->whereStop('false')
-                    ->paginate(10);
-            }
-        } elseif ($request->key_search != null && $request->activity != null) {
-            if ($request->activity == 'all')
-            {
-                $products = Product::with('provider')
-                    ->whereHas('provider', function ($q) use ($request) {
-                        $q->with('city');
-                        $q->whereHas('city' , function ($d) use ($request){
-                            $d->where('google_city_id', $request->google_city_id);
-                        });
-                    })
-                    ->where('name', 'LIKE', "%{$request->key_search}%")
-                    ->whereStop('false')
-                    ->paginate(15);
-                $providers = Provider::with('city')
-                    ->whereHas('city' , function ($q) use ($request){
-                        $q->where('google_city_id', $request->google_city_id);
-                    })
-                    ->where('name', 'LIKE', "%{$request->key_search}%")
-                    ->whereStop('false')
-                    ->paginate(10);
-            }else{
-                $products = Product::with('provider')
-                    ->whereHas('provider', function ($q) use ($request) {
-                        $q->with('city');
-                        $q->whereHas('city' , function ($d) use ($request){
-                            $d->where('google_city_id', $request->google_city_id);
-                        });
-                    })
-                    ->where('activity', $request->activity)
-                    ->where('name', 'LIKE', "%{$request->key_search}%")
-                    ->whereStop('false')
-                    ->paginate(15);
-                $providers = Provider::with('city')
-                    ->whereHas('city' , function ($q) use ($request){
-                        $q->where('google_city_id', $request->google_city_id);
-                    })
-                    ->whereIn('activity', [$request->activity , 'both'])
-                    ->where('name', 'LIKE', "%{$request->key_search}%")
-                    ->whereStop('false')
-                    ->paginate(10);
-            }
-        } else {
-            $products = Product::with('provider')
-                ->whereHas('provider', function ($q) use ($request) {
-                    $q->with('city');
-                    $q->whereHas('city' , function ($d) use ($request){
-                        $d->where('google_city_id', $request->google_city_id);
-                    });
-                })
-                ->whereStop('false')
-                ->paginate(10);
-            $providers = Provider::with('city')
-                ->whereHas('city' , function ($q) use ($request){
-                    $q->where('google_city_id', $request->google_city_id);
-                })
-                ->whereStop('false')
-                ->paginate(10);
-        }
-        if ($products->count() > 0 || $providers->count() > 0) {
-            $data = [
-                'providers' => new ProviderCollection($providers),
-                'products' => new ProductCollection($products)
-            ];
-            return ApiController::respondWithSuccessData($data);
+        $products = Product::with('provider')
+            ->whereHas('provider', function ($q) use ($request) {
+                $q->with('city');
+                $q->whereHas('city' , function ($d) use ($request){
+                    $d->where('google_city_id', $request->google_city_id);
+                });
+            })
+            ->where(function ($query) use ($request) {
+                if (isset($request->key_search)) {
+                    $query->where('name', 'LIKE', "%{$request->key_search}%");
+                }
+                if (isset($request->activity) and $request->activity != 'all') {
+                    $query->where('activity',$request->activity);
+                }
+            })
+            ->whereStop('false')
+            ->whereAccepted('true')
+            ->paginate(15);
+        if ($products->count() > 0 ) {
+            return ApiController::respondWithSuccessData(new ProductCollection($products));
         } else {
             $errors = [
-                'message' => ' لا يوجد منتجات ومزودين'
+                'message' => ' لا يوجد منتجات '
             ];
             return ApiController::respondWithErrorClient($errors);
         }
@@ -297,6 +132,7 @@ class ProductController extends Controller
             })
             ->where('recomended' , 'true')
             ->whereStop('false')
+            ->whereAccepted('true')
             ->get();
         return ApiController::respondWithSuccessData(new HomeResource($products));
         // if ($products->count() > 0) {
@@ -320,6 +156,7 @@ class ProductController extends Controller
 //                })
                 ->where('id' , '!=' , $id)
                 ->whereStop('false')
+                ->whereAccepted('true')
                 ->orderBy('id' , 'desc')
                 ->get()->take(10);
             $data = [

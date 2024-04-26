@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ProviderController;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductPhoto;
 use App\Models\Provider;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::whereProviderId(Auth::guard('provider')->user()->id)
+            ->whereAccepted('true')
             ->orderBy('id' , 'desc')
             ->paginate(100);
         return view('provider.products.index' , compact('products'));
@@ -39,7 +41,8 @@ class ProductController extends Controller
     public function create()
     {
         $providers = Provider::all();
-        return view('provider.products.create' , compact('providers'));
+        $categories = ProductCategory::all();
+        return view('provider.products.create' , compact('providers' , 'categories'));
     }
 
     /**
@@ -52,9 +55,11 @@ class ProductController extends Controller
     {
         $this->validate($request , [
             'name'                 => 'required|string|max:191',
+            'category_id'          => 'required|exists:product_categories,id',
             'activity'             => 'required|in:rent,sale',
             'description'          => 'sometimes|string',
             'price'                => 'required',
+            'price_before_discount'=> 'nullable',
             'less_amount'          => 'required',
             'product_requirements' => 'required',
             'delivery'             => 'required|in:yes,no',
@@ -65,13 +70,16 @@ class ProductController extends Controller
         // create new product
         $product = Product::create([
             'provider_id'          => Auth::guard('provider')->user()->id,
+            'category_id'          => $request->category_id,
             'name'                 => $request->name,
             'activity'             => $request->activity,
             'description'          => $request->description,
             'price'                => $request->price,
+            'price_before_discount'=> $request->price_before_discount,
             'less_amount'          => $request->less_amount,
             'product_requirements' => $request->product_requirements,
             'delivery'             => $request->delivery,
+            'accepted'             => 'false',
 //            'delivery_price'       => $request->delivery_price,
         ]);
         // create product photos if found
@@ -92,7 +100,7 @@ class ProductController extends Controller
                 })->save($destinationPath . '/' . $fileFinalName_ar);
             }
         }
-        flash('تم أضافه  المنتج بنجاح')->success();
+        flash(trans('messages.productAdded'))->success();
         return redirect()->route('MyProduct');
     }
 

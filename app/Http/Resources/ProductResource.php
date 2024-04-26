@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\FavoriteProduct;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\ProviderCategoryResource;
 

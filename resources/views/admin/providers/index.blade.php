@@ -83,6 +83,7 @@
                             <th> النشاط </th>
                             <th> سجل المبيعات </th>
                             <th>  المنتجات</th>
+                            <th> التقييم </th>
                             @if(auth()->guard('admin')->user()->admin_category_id == 4 or auth()->guard('admin')->user()->admin_category_id == 6)
                                 <th> مميز </th>
                                 <th> vip </th>
@@ -126,6 +127,9 @@
                                         <a href="{{route('orders_completed' , $provider->id)}}" class="btn btn-success"> عرض </a>
                                     </td>
                                     <td> {{$provider->products->count()}} </td>
+                                    <td>
+                                        <a href="{{route('showProviderRates' , $provider->id)}}" class="btn btn-warning">{{$provider->rate}}</a>
+                                    </td>
                                     @if(auth()->guard('admin')->user()->admin_category_id == 4 or auth()->guard('admin')->user()->admin_category_id == 6)
                                         <td>
                                             @if($provider->special == 'true')
@@ -142,18 +146,18 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{route('ArrangeProvider' , $provider->id)}}"
+                                            {{--                                            <a href="{{route('ArrangeProvider' , $provider->id)}}"--}}
+                                            {{--                                               class="btn btn-primary">--}}
+                                            {{--                                                @if($provider->arrange == null)--}}
+                                            {{--                                                    لم يرتب--}}
+                                            {{--                                                @else--}}
+                                            {{--                                                    {{$provider->arrange}}--}}
+                                            {{--                                                @endif--}}
+                                            {{--                                            </a>--}}
+                                            <a href="{{route('provider_categories' , $provider->id)}}"
                                                class="btn btn-primary">
-                                                @if($provider->arrange == null)
-                                                    لم يرتب
-                                                @else
-                                                    {{$provider->arrange}}
-                                                @endif
+                                                عرض
                                             </a>
-{{--                                            <a href="{{route('provider_categories' , $provider->id)}}"--}}
-{{--                                               class="btn btn-primary">--}}
-{{--                                                عرض--}}
-{{--                                            </a>--}}
                                         </td>
                                         <td>
                                             @if($provider->stop == 'true')

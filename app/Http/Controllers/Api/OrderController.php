@@ -329,7 +329,8 @@ class OrderController extends Controller
                         'message' => 'تم أرسال طلبك بنجاح الي الأدراه',
                     ];
                     return ApiController::respondWithSuccessData($success);
-                } elseif ($request->payment_type == 'online') {
+                }
+                elseif ($request->payment_type == 'online') {
                     // Online Payment
                     if ($request->store_receiving == 'true') {
                         $total = $cart->total_price - $cart->delivery_price;
@@ -367,7 +368,8 @@ class OrderController extends Controller
                         return ApiController::respondWithSuccessData($success);
 
                     }
-                } elseif ($request->payment_type == 'tamara') {
+                }
+                elseif ($request->payment_type == 'tamara') {
                     // payment by tamara
                     if ($request->store_receiving == 'true') {
                         $total = $cart->total_price - $cart->delivery_price;
@@ -428,7 +430,7 @@ class OrderController extends Controller
                     ->pluck('device_token')
                     ->toArray();
                 if ($devicesTokens) {
-                    sendMultiNotification($title, $message, $devicesTokens);
+                    sendNotification($devicesTokens , $title, $message , null);
                 }
                 saveNotification($cart->user_id, $title, $message, '3', $cart->id, null);
 
@@ -575,7 +577,7 @@ class OrderController extends Controller
                     ->pluck('device_token')
                     ->toArray();
                 if ($devicesTokens) {
-                    sendMultiNotification($title, $message, $devicesTokens);
+                    sendNotification($devicesTokens , $title, $message , null);
                 }
                 saveNotification($cart->user_id, $title, $message, '3', $cart->id, null);
 

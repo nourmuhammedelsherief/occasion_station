@@ -7,6 +7,8 @@ use \App\Http\Controllers\Api\AuthController;
 use \App\Http\Controllers\Api\ProductController;
 use \App\Http\Controllers\Api\OrderController;
 use \App\Http\Controllers\Api\ApiController;
+use \App\Http\Controllers\Api\FavoriteController;
+use \App\Http\Controllers\Api\ProviderRateController;
 
 
 /*
@@ -44,8 +46,10 @@ Route::prefix('v1')->group(function () {
             echo "something went wrong";
         }
     });
-    Route::post('/complete_order' , 'Api\OrderController@complete_tamara_order');
-    Route::get('/complete_order' , 'Api\OrderController@complete_tamara_order');
+    Route::controller(OrderController::class)->group(function () {
+        Route::post('/complete_order' , 'complete_tamara_order');
+        Route::get('/complete_order' , 'complete_tamara_order');
+    });
 
     Route::group(['middleware' => ['cors', 'localization']], function () {
         /*user register*/
@@ -97,7 +101,7 @@ Route::prefix('v1')->group(function () {
 
         Route::controller(ProductController::class)->group(function () {
             Route::post('/products' , 'products');
-            Route::post('/providers_products_search' , 'providers_products_search');
+            Route::post('/products_search' , 'products_search');
             Route::get('/product_details/{product_id}' , 'product_details');
             Route::post('/home_screen' , 'home_screen');
         });
@@ -157,6 +161,22 @@ Route::prefix('v1')->group(function () {
             Route::get('/un_read_notifications_count', 'un_read_notifications_count');
             Route::post('/delete_Notifications/{id}', 'delete_Notifications');
         });
+
+        /// favorite routes
+        Route::controller(FavoriteController::class)->group(function () {
+            Route::post('/add_provider_to_favorite' , 'add_provider_to_favorite');
+            Route::post('/add_product_to_favorite' , 'add_product_to_favorite');
+            Route::get('my_favorite_providers' , 'my_favorite_providers');
+            Route::get('my_favorite_products' , 'my_favorite_products');
+        });
+
+        // rates routes
+        Route::controller(ProviderRateController::class)->group(function () {
+            Route::post('/rate_provider' , 'rate_provider');
+            Route::get('/provider/{id}/rates' , 'provider_rates');
+        });
+
+
 //        Route::get('/read_all_notification', 'Api\ApiController@read_all_notification');
 //        Route::get('/read_notification/{id}', 'Api\ApiController@read_notification');
 

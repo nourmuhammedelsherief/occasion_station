@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ProviderRate;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
@@ -1080,4 +1081,8 @@ function takia_webhook(Request $request)
 {
     file_put_contents('log.txt', $request, FILE_APPEND);
     echo "success payment";
+}
+function providerRateAvg($id)
+{
+    return round(ProviderRate::whereProviderId($id)->avg('rate') , 1);
 }

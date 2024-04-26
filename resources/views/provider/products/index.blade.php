@@ -28,8 +28,8 @@
         </ul>
     </div>
 
-    <h1 class="page-title">عرض  منتجاتي
-        <small>عرض  منتجاتي</small>
+    <h1 class="page-title">عرض منتجاتي
+        <small>عرض منتجاتي</small>
     </h1>
 @endsection
 
@@ -48,18 +48,18 @@
                 <div class="portlet-body">
 
                     <div class="table-toolbar">
-                        {{--                        <div class="row">--}}
-                        {{--                            <div class="col-md-6">--}}
-                        {{--                                <div class="btn-group">--}}
-                        {{--                                    <a href="{{route('createMyProduct')}}">--}}
-                        {{--                                        <button id="sample_editable_1_new"--}}
-                        {{--                                                class="btn sbold green"> أضافه جديد--}}
-                        {{--                                            <i class="fa fa-plus"></i>--}}
-                        {{--                                        </button>--}}
-                        {{--                                    </a>--}}
-                        {{--                                </div>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    <a href="{{route('createMyProduct')}}">
+                                        <button id="sample_editable_1_new"
+                                                class="btn sbold green"> أضافه جديد
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover table-checkable order-column"
                            id="sample_1">
@@ -72,10 +72,10 @@
                                 </label>
                             </th>
                             <th></th>
-                            <th> الاسم </th>
-                            <th> السعر </th>
-                            <th> أقل كميه </th>
-                            <th> التوصيل </th>
+                            <th> الاسم</th>
+                            <th> السعر</th>
+                            <th> أقل كميه</th>
+                            <th> التوصيل</th>
                             {{--                            <th> العمليات</th>--}}
                         </tr>
                         </thead>

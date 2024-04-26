@@ -217,6 +217,17 @@
                                                     </div>
                                                 </div>
                                             @endif
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label"> حدد نوع الدفع للمزود </label>
+                                                <div class="col-md-9">
+                                                    <input type="checkbox" name="bank_payment" value="true" {{$provider->bank_payment == 'true' ? 'checked' : ''}} style="margin: 5px"> تحويل بنكي
+
+                                                    <input type="checkbox" name="online_payment" value="true" {{$provider->online_payment == 'true' ? 'checked' : ''}} style="margin: 5px"> دفع اونلاين
+
+                                                    <input type="checkbox" name="tamara_payment" value="true" {{$provider->tamara_payment == 'true' ? 'checked' : ''}} style="margin: 5px"> دفع تمارا
+                                                </div>
+                                            </div>
                                             {{--                                            <div class="form-group">--}}
                                             {{--                                                <label class="col-md-3 control-label"> القسم الرئيسي </label>--}}
                                             {{--                                                <div class="col-md-9">--}}

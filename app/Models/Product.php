@@ -23,6 +23,7 @@ class Product extends Model
         'delivery_by',
         'store_receiving',
         'stop',
+        'accepted',
     ];
 
     public function provider()
@@ -33,5 +34,9 @@ class Product extends Model
     public function photos()
     {
         return $this->hasMany(ProductPhoto::class , 'product_id');
+    }
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteProduct::class , 'product_id');
     }
 }

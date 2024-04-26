@@ -25,12 +25,12 @@ class ProfileController extends Controller
 {
     //
 
-    public function about_us()
+    public function about_us(Request $request)
     {
         $about = AboutUs::first();
         $all = [
-            'title' => $about->title,
-            'content' => $about->content,
+            'title' => $request->header('Accept-Language') == 'ar' ? $about->title : $about->title_en,
+            'content' => $request->header('Accept-Language') == 'ar' ? $about->content : $about->content_en,
         ];
         return ApiController::respondWithSuccess($all);
     }
@@ -71,12 +71,12 @@ class ProfileController extends Controller
     }
 
 
-    public function terms_and_conditions()
+    public function terms_and_conditions(Request $request)
     {
         $terms = TermsCondition::first();
         $all = [
-            'title' => $terms->title,
-            'content' => $terms->content,
+            'title' => $request->header('Accept-Language') == 'ar' ? $terms->title : $terms->title_en,
+            'content' => $request->header('Accept-Language') == 'ar' ? $terms->content : $terms->content_en,
         ];
         return ApiController::respondWithSuccess($all);
     }

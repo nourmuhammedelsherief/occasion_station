@@ -113,4 +113,23 @@ class CategoryController extends Controller
         return redirect()->route('Category');
 
     }
+
+    public function arrange($id)
+    {
+        $category = Category::findOrFail($id);
+        return view('admin.categories.arrange' , compact('category'));
+    }
+    public function arrange_submit(Request $request , $id)
+    {
+        $category = Category::findOrFail($id);
+        $this->validate($request , [
+            'arrange' => 'required'
+        ]);
+        $category->update([
+            'arrange' => $request->arrange
+        ]);
+        flash(trans('تم ترتيب القسم بنجاح'))->success();
+        return redirect()->route('Category');
+
+    }
 }

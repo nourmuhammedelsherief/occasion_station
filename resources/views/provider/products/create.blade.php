@@ -53,6 +53,23 @@
                                 <div class="portlet-body form">
                                     <div class="form-horizontal" role="form">
                                         <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">قسم مزود الخدمة </label>
+                                                <div class="col-md-9">
+                                                    <select name="category_id" class="form-control" required>
+                                                        <option disabled selected> أختر القسم للمزود</option>
+                                                        @foreach($categories as $category)
+                                                            <option
+                                                                value="{{$category->id}}"> {{$category->name}} </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('category_id'))
+                                                        <span class="help-block">
+                                               <strong style="color: red;">{{ $errors->first('category_id') }}</strong>
+                                            </span>
+                                                    @endif
+                                                </div>
+                                            </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">أسم المنتج </label>
@@ -193,12 +210,14 @@
                                                     أدخل صور المنتج
                                                 </label>
                                                 <div class="col-md-9">
-                                                    {!! Form::file('photos[]', array('class' => ' form-control','id'=>'photo','accept'=>'image/*','multiple')) !!}
+{{--                                                    {!! Form::file('photos[]', array('class' => ' form-control','id'=>'photo','accept'=>'image/*','multiple')) !!}--}}
+                                                    <input type="file" name="photos[]"  id="photo" class="form-control" multiple>
                                                     @if ($errors->has('photos'))
                                                         <span class="help-block">
-                                                                 <strong
-                                                                     style="color: red;">{{ $errors->first('photos') }}</strong>
-                                                            </span>
+                                                            <strong style="color: red;">
+                                                                {{ $errors->first('photos') }}
+                                                            </strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>

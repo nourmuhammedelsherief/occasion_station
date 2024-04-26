@@ -31,11 +31,16 @@ class ProviderController extends Controller
 //            'password' => 'required|string|min:6|confirmed',
 //            'password_confirm' => 'required_with:password|same:password|min:4',
             'phone_number' => 'required',
+            'latitude'      => 'nullable',
+            'longitude'      => 'nullable',
         ]);
-        $data = Provider::find(Auth::id())->update([
+        $data = Provider::find(Auth::id());
+        $data->update([
             'name' => $request->name,
             'email' => $request->email,
-            'phone_number' => $request->phone_number
+            'phone_number' => $request->phone_number,
+            'latitude' => $request->latitude ? $request->latitude : $data->latitude,
+            'longitude' => $request->longitude? $request->longitude : $data->longitude,
         ]);
         return redirect(url('/provider/profile'))->with('msg', 'تم التعديل بنجاح');
 
