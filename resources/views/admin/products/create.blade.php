@@ -187,42 +187,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label">هل السعر شامل التوصيل ؟</label>
-                                                <div class="col-md-9">
-                                                    <input type="radio" name="delivery"  value="yes"> نعم
-                                                    <input type="radio" name="delivery" id="provider" value="no"> لا
-                                                    @if ($errors->has('delivery'))
-                                                        <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('delivery') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group" id="delivery_by" style="display: none">
-                                                <label class="col-md-3 control-label">من سيقوم بالتوصيل</label>
-                                                <div class="col-md-9">
-                                                    <input type="radio" name="delivery_by" value="provider">  المزود من سيقوم بالتوصيل
-                                                    <input type="radio" name="delivery_by" id="yes" value="app"> التوصيل عن طريق التطبيق
-                                                    @if ($errors->has('delivery_by'))
-                                                        <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('delivery_by') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group" id="delivery_price" style="display: none">
-                                                <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
-                                                <div class="col-md-9">
-                                                    <input type="radio" name="store_receiving"  value="true"> نعم
-                                                    <input type="radio" name="store_receiving"  value="false"> لا
-                                                    @if ($errors->has('store_receiving'))
-                                                        <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
                                             {{--                                            <div class="form-group" >--}}
                                             {{--                                                <label class="col-md-3 control-label">سعر التوصيل </label>--}}
                                             {{--                                                <div class="col-md-9">--}}
@@ -329,25 +293,4 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function () {
-            $("input[name=delivery]").change(function () {
-
-                if ($("#provider").is(':checked')) {
-                    $("#delivery_by").show();
-                } else {
-                    $("#delivery_by").hide();
-                    $("#delivery_price").hide();
-                }
-            });
-            $("input[name=delivery_by]").change(function () {
-
-                if ($("#yes").is(':checked')) {
-                    $("#delivery_price").show();
-                } else {
-                    $("#delivery_price").hide();
-                }
-            });
-        });
-    </script>
 @endsection
