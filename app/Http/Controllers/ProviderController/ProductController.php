@@ -62,7 +62,7 @@ class ProductController extends Controller
             'price_before_discount'=> 'nullable',
             'less_amount'          => 'required',
             'product_requirements' => 'required',
-            'delivery'             => 'required|in:yes,no',
+//            'delivery'             => 'required|in:yes,no',
 //            'delivery_price'       => 'required_if:delivery,yes',
             'photos'               => 'sometimes|array',
             'photos*'              => 'mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000'
@@ -78,7 +78,7 @@ class ProductController extends Controller
             'price_before_discount'=> $request->price_before_discount,
             'less_amount'          => $request->less_amount,
             'product_requirements' => $request->product_requirements,
-            'delivery'             => $request->delivery,
+//            'delivery'             => $request->delivery,
             'accepted'             => 'false',
 //            'delivery_price'       => $request->delivery_price,
         ]);
