@@ -218,8 +218,8 @@
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">هل السعر شامل التوصيل ؟</label>
                                                 <div class="col-md-9">
-                                                    <input type="radio" name="delivery"  value="yes"> نعم
-                                                    <input type="radio" name="delivery" id="provider" value="no"> لا
+                                                    <input type="radio" name="delivery"  value="false"> نعم
+                                                    <input type="radio" name="delivery" id="provider" value="true"> لا
                                                     @if ($errors->has('delivery'))
                                                         <span class="help-block">
                                                             <strong style="color: red;">{{ $errors->first('delivery') }}</strong>
@@ -239,18 +239,32 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="form-group" id="delivery_price" style="display: none">
-                                                <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
-                                                <div class="col-md-9">
-                                                    <input type="radio" name="store_receiving"  value="true"> نعم
-                                                    <input type="radio" name="store_receiving"  value="false"> لا
-                                                    @if ($errors->has('store_receiving'))
-                                                        <span class="help-block">
+                                            <div id="delivery_price" style="display: none">
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
+                                                    <div class="col-md-9">
+                                                        <input type="radio" name="store_receiving"  value="true"> نعم
+                                                        <input type="radio" name="store_receiving"  value="false"> لا
+                                                        @if ($errors->has('store_receiving'))
+                                                            <span class="help-block">
                                                             <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
                                                         </span>
-                                                    @endif
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">سعر التوصيل</label>
+                                                    <div class="col-md-9">
+                                                        <input type="number" name="delivery_price" class="form-control" placeholder="ادخل سعر التوصيل للمزود" value="{{old('delivery_price')}}">
+                                                        @if ($errors->has('delivery_price'))
+                                                            <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('delivery_price') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
+
                                             <div class="form-body">
                                                 <div class="form-group ">
                                                     <label class="control-label col-md-3"> صوره المزود </label>

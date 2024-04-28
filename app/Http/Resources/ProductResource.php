@@ -29,10 +29,6 @@ class ProductResource extends JsonResource
             'price'    => $this->price,
             'less_amount' => $this->less_amount,
             'product_requirements' => strip_tags(str_replace('&nbsp;', ' ', $this->product_requirements)),
-            'store_receiving'  => $this->delivery_by ? ($this->delivery_by == 'app' ? 'true' : 'false') : 'false',
-            'price_with_delivery' => $this->delivery,
-            'delivery_by' => $this->delivery == 'yes' ? null : $this->delivery_by,
-            'delivery_price' => ($this->delivery == 'no' and $this->delivery_by == 'app') ? $this->delivery_price : null,
             'photos' => $this->photos->count() > 0 ? ProductPhoto::collection($this->photos) : null,
             'provider_category' => $this->category == null ? null : new ProviderCategoryResource($this->category),
             'created_at' => $this->created_at->format('Y-m-d')

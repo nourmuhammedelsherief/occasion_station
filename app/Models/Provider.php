@@ -36,6 +36,10 @@ class Provider extends Authenticatable
         'online_payment',
         'tamara_payment',
         'rate',
+        'delivery',
+        'delivery_price',
+        'delivery_by',
+        'store_receiving',
     ];
 
     public function category()

@@ -6,6 +6,7 @@ use App\Models\Permission;
 use App\Http\Controllers\Controller;
 use App\Models\Provider;
 use App\Models\Role;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +34,10 @@ class ProviderController extends Controller
             'phone_number' => 'required',
             'latitude'      => 'nullable',
             'longitude'      => 'nullable',
+            'delivery'             => 'required|in:true,false',
+            'delivery_by'          => 'required_if:delivery,true|in:provider,app',
+            'delivery_price'       => 'required_if:delivery_by,provider',
+            'store_receiving'      => 'required_if:delivery_by,provider|in:true,false',
         ]);
         $data = Provider::find(Auth::id());
         $data->update([
@@ -41,6 +46,10 @@ class ProviderController extends Controller
             'phone_number' => $request->phone_number,
             'latitude' => $request->latitude ? $request->latitude : $data->latitude,
             'longitude' => $request->longitude? $request->longitude : $data->longitude,
+            'store_receiving'      => $request->store_receiving ?: 'false',
+            'delivery'             => $request->delivery,
+            'delivery_by'          => $request->delivery_by?:'app',
+            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
         ]);
         return redirect(url('/provider/profile'))->with('msg', 'تم التعديل بنجاح');
 

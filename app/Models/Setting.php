@@ -14,5 +14,6 @@ class Setting extends Model
         'coltd_token',
         'delivery_price',
         'search_range',
+        'tax'
     ];
 }

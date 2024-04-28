@@ -17,11 +17,7 @@ class Product extends Model
         'price',
         'less_amount',
         'product_requirements',
-        'delivery',
         'recomended',
-        'delivery_price',
-        'delivery_by',
-        'store_receiving',
         'stop',
         'accepted',
     ];

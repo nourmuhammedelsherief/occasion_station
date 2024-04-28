@@ -181,7 +181,7 @@
                         <i class="fa fa-product-hunt" style="color: aqua;"></i>
                         <span class="title">  المنتجات </span>
                         <span class="pull-right-container"></span>
-                        <?php $products = \App\Models\Product::where('recomended', 'false')->count(); ?>
+                        <?php $products = \App\Models\Product::where('recomended', 'false')->whereAccepted('true')->count(); ?>
                         <span class="badge badge-success">{{$products}}</span>
                     </a>
                 </li>

@@ -277,6 +277,57 @@
                                             {{--                                                    </select>--}}
                                             {{--                                                </div>--}}
                                             {{--                                            </div>--}}
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">هل السعر شامل التوصيل ؟</label>
+                                                <div class="col-md-9">
+                                                    <input type="radio" name="delivery" {{$provider->delivery == 'false' ? 'checked' : ''}} value="false"> نعم
+                                                    <input type="radio" name="delivery" {{$provider->delivery == 'true' ? 'checked' : ''}} id="provider" value="true"> لا
+                                                    @if ($errors->has('delivery'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('delivery') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="delivery_by" style="{{$provider->delivery == 'false' ? 'display: none' : 'display: block'}}">
+                                                <label class="col-md-3 control-label">من سيقوم بالتوصيل</label>
+                                                <div class="col-md-9">
+                                                    <input type="radio" name="delivery_by" {{$provider->delivery_by == 'provider' ? 'checked' : ''}} value="provider">  المزود من سيقوم بالتوصيل
+                                                    <input type="radio" name="delivery_by" {{$provider->delivery_by == 'app' ? 'checked' : ''}} id="yes" value="app"> التوصيل عن طريق التطبيق
+                                                    @if ($errors->has('delivery_by'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('delivery_by') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div id="delivery_price" style="{{ ($provider->delivery == 'true' and $provider->delivery_by == 'app') ? 'display: block' : 'display: none'}}">
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
+                                                    <div class="col-md-9">
+                                                        <input type="radio" name="store_receiving" {{$provider->store_receiving == 'true' ? 'checked' : ''}}  value="true"> نعم
+                                                        <input type="radio" name="store_receiving" {{$provider->store_receiving == 'false' ? 'checked' : ''}} value="false"> لا
+                                                        @if ($errors->has('store_receiving'))
+                                                            <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">سعر التوصيل</label>
+                                                    <div class="col-md-9">
+                                                        <input type="number" name="delivery_price" class="form-control" placeholder="ادخل سعر التوصيل للمزود" value="{{$provider->delivery_price}}">
+                                                        @if ($errors->has('delivery_price'))
+                                                            <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('delivery_price') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="form-body">
                                                 <div class="form-group ">
                                                     <label class="control-label col-md-3"> صوره المزود </label>
@@ -598,4 +649,26 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            $("input[name=delivery]").change(function () {
+
+                if ($("#provider").is(':checked')) {
+                    $("#delivery_by").show();
+                } else {
+                    $("#delivery_by").hide();
+                    $("#delivery_price").hide();
+                }
+            });
+            $("input[name=delivery_by]").change(function () {
+
+                if ($("#yes").is(':checked')) {
+                    $("#delivery_price").show();
+                } else {
+                    $("#delivery_price").hide();
+                }
+            });
+        });
+    </script>
+
 @endsection

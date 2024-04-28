@@ -51,8 +51,7 @@ class ProductController extends Controller
             ->whereStop('false')
             ->whereAccepted('true')
             ->orderBy('id' , 'desc')
-            ->paginate(10);
-
+            ->paginate(50);
         $categories = ProviderProductCategory::whereProviderId($request->provider_id)
             ->get();
         foreach ($categories as $category)

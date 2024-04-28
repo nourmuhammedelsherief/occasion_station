@@ -45,15 +45,22 @@ use \App\Http\Controllers\ProviderController\OrderController as ProviderOrderCon
 use \App\Http\Controllers\ProviderController\CommissionController as ProviderCommissionController;
 
 
+use \App\Http\Controllers\Api\OrderController as ApiOrderController;
+
+
 Route::get('/tamara' , function (){
     tamara();
 });
 Route::get('/', ['middleware'=> 'auth:admin', 'uses'=>'AdminController\HomeController@index']);
-Route::get('/check-status/{id?}/{id1?}', 'Api\OrderController@fatooraStatus');
-Route::get('/error-status', 'Api\OrderController@errorStatus');
+
+Route::controller(ApiOrderController::class)->group(function () {
+    Route::get('/check-status/{id?}/{id1?}', 'fatooraStatus');
+    Route::get('/error-status', 'errorStatus');
+});
+
 
 Route::get('/update_users' , function (){
-    $users  = \App\User::all();
+    $users  = \App\Models\User::all();
     foreach ($users as  $user)
     {
         $user->update([

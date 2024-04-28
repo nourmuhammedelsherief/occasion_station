@@ -63,6 +63,7 @@ class CartResource extends JsonResource
             'delivery_address' => $this->delivery_address,
             'more_details' => $this->more_details,
             'activity'     => $activity,
+            'store_receiving' => $this->store_receiving,
             'created_at'     => $this->created_at->format('Y-m-d'),
         ];
     }

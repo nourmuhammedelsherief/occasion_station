@@ -40,18 +40,6 @@ class SettingController extends Controller
         ]);
 
         Setting::where('id', 1)->first()->update($request->all());
-
-        if ($request->delivery_price != null)
-        {
-            $products = Product::where('delivery_price' , '!=' , null)->get();
-            foreach ($products as $product)
-            {
-                $product->update([
-                    'delivery_price' => $request->delivery_price,
-                ]);
-            }
-        }
-
         return Redirect::back()->with('success', 'تم حفظ البيانات بنجاح');
     }
 

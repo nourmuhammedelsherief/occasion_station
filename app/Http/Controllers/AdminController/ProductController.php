@@ -91,10 +91,6 @@ class ProductController extends Controller
             'price_before_discount'=> 'nullable',
             'less_amount'          => 'required',
             'product_requirements' => 'required',
-            'delivery'             => 'required|in:yes,no',
-            'delivery_by'          => 'required_if:delivery,no|in:provider,app',
-//            'delivery_price'       => 'required_if:delivery_by,app',
-            'store_receiving'       => 'required_if:delivery_by,app|in:true,false',
             'photos'               => 'required|array',
             'photos*'              => 'mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000'
         ]);
@@ -109,10 +105,6 @@ class ProductController extends Controller
             'price_before_discount'=> $request->price_before_discount,
             'less_amount'          => $request->less_amount,
             'product_requirements' => $request->product_requirements,
-            'store_receiving'      => $request->store_receiving == null ? 'false' : $request->store_receiving,
-            'delivery'             => $request->delivery,
-            'delivery_by'          => $request->delivery_by == null ? null : $request->delivery_by,
-            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
         ]);
 
         ProviderProductCategory::updateOrCreate(
@@ -190,9 +182,6 @@ class ProductController extends Controller
             'less_amount'          => 'required',
             'product_requirements' => 'required',
 //            'store_receiving'      => 'required|in:true,false',
-            'delivery'             => 'required|in:yes,no',
-            'delivery_by'          => 'required_if:delivery,no|in:provider,app',
-            'store_receiving'       => 'required_if:delivery_by,app|in:true,false',
             'photos'               => 'sometimes|array',
             'photos*'              => 'mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000'
         ]);
@@ -206,10 +195,6 @@ class ProductController extends Controller
             'price_before_discount'=> $request->price_before_discount == null ? $product->price_before_discount : $request->price_before_discount,
             'less_amount'          => $request->less_amount,
             'product_requirements' => $request->product_requirements,
-            'delivery'             => $request->delivery,
-            'store_receiving'      => $request->store_receiving == null ? $product->store_receiving : $request->store_receiving,
-            'delivery_by'          => $request->delivery_by == null ? $product->delivery_by : $request->delivery_by,
-            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
         ]);
         ProviderProductCategory::updateOrCreate(
             [

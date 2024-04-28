@@ -88,23 +88,16 @@ class OrderController extends Controller
 
             } else {
                 // create new order
-                if ($product->delivery_by == 'app') {
-                    $delivery_price = $product->delivery_price == null ? 0 : $product->delivery_price;
-                } else {
-                    $delivery_price = 0;
-                }
                 $order_price = $product->price * $request->product_count;
                 $tax = Setting::find(1)->tax;
-                $delivery_tax = ($delivery_price * $tax) / 100;
                 $order_tax = ($order_price * $tax) / 100;
-                $total_tax = $delivery_tax + $order_tax;
+                $total_tax = $order_tax;
                 $order = Order::create([
                     'cart_id' => $check_provider_cart->id,
                     'provider_id' => $product->provider_id,
                     'user_id' => $request->user()->id,
                     'product_id' => $request->product_id,
                     'order_price' => $order_price,
-                    'delivery_price' => $delivery_price,
                     'status' => 'on_cart',
                     'product_count' => $request->product_count,
                     'tax_value' => $total_tax,
@@ -115,7 +108,6 @@ class OrderController extends Controller
                 $total_price = $items_price + $delivery_price + $cart_tax_value;
                 $check_provider_cart->update([
                     'items_price' => $items_price,
-                    'delivery_price' => $delivery_price,
                     'total_price' => $total_price,
                     'tax_value' => $cart_tax_value,
                 ]);
@@ -123,23 +115,16 @@ class OrderController extends Controller
             }
         } else {
             // create new cart provider and new product order
-            if ($product->delivery_by == 'app') {
-                $delivery_price = $product->delivery_price == null ? 0 : $product->delivery_price;
-            } else {
-                $delivery_price = 0;
-            }
             $order_price = $product->price * $request->product_count;
             $tax = Setting::find(1)->tax;
-            $delivery_tax = ($delivery_price * $tax) / 100;
             $order_tax = ($order_price * $tax) / 100;
-            $total_tax = $delivery_tax + $order_tax;
-            $total_price = $order_price + $delivery_price + $total_tax;
+            $total_tax = $order_tax;
+            $total_price = $order_price + $total_tax;
 
             $cart = Cart::create([
                 'user_id' => $request->user()->id,
                 'provider_id' => $provider->id,
                 'items_price' => $order_price,
-                'delivery_price' => $delivery_price,
                 'total_price' => $total_price,
                 'transfer_photo' => null,
                 'invoice_id' => null,
@@ -154,7 +139,6 @@ class OrderController extends Controller
                 'user_id' => $request->user()->id,
                 'product_id' => $request->product_id,
                 'order_price' => $order_price,
-                'delivery_price' => $delivery_price,
                 'status' => 'on_cart',
                 'product_count' => $request->product_count,
                 'tax_value' => $total_tax,
@@ -194,67 +178,6 @@ class OrderController extends Controller
         }
     }
 
-    public function store_receiving(Request $request)
-    {
-        $rules = [
-            'order_id' => 'required|exists:orders,id',
-            'store_receiving' => 'nullable|in:true,false',
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails())
-            return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
-
-        $order = Order::find($request->order_id);
-        if ($request->store_receiving == 'true' and $order->store_receiving == 'false') {
-            $deliver_price = $order->cart->delivery_price - Setting::first()->delivery_price;
-            $total = $order->cart->total_price - Setting::first()->delivery_price;
-            $order->update([
-                'delivery_price' => 0,
-                'store_receiving' => 'true',
-            ]);
-            $otherOrders = Order::whereProviderId($order->provider_id)
-                ->whereUserId($order->user_id)
-                ->whereStatus('on_cart')
-                ->get();
-            if ($otherOrders->count() > 0) {
-                foreach ($otherOrders as $otherOrder) {
-                    $otherOrder->update([
-                        'delivery_price' => 0,
-                        'store_receiving' => 'true',
-                    ]);
-                }
-            }
-            $order->cart->update([
-                'delivery_price' => $deliver_price,
-                'total_price' => $total,
-            ]);
-        } elseif ($request->store_receiving == 'false' and $order->store_receiving == 'true') {
-            $deliver_price = $order->cart->delivery_price + Setting::first()->delivery_price;
-            $total = $order->cart->total_price + Setting::first()->delivery_price;
-            $order->update([
-                'delivery_price' => 0,
-                'store_receiving' => 'false',
-            ]);
-            $otherOrders = Order::whereProviderId($order->provider_id)
-                ->whereUserId($order->user_id)
-                ->whereStatus('on_cart')
-                ->get();
-            if ($otherOrders->count() > 0) {
-                foreach ($otherOrders as $otherOrder) {
-                    $otherOrder->update([
-                        'delivery_price' => 0,
-                        'store_receiving' => 'false',
-                    ]);
-                }
-            }
-            $order->cart->update([
-                'delivery_price' => $deliver_price,
-                'total_price' => $total,
-            ]);
-        }
-        return ApiController::respondWithSuccess(new OrderResource($order));
-    }
-
     public function complete_cart_orders(Request $request)
     {
         $rules = [
@@ -268,8 +191,8 @@ class OrderController extends Controller
             'delivery_longitude' => 'required',
             'delivery_address' => 'required|string',
             'more_details' => 'sometimes|string',
-            'tamara_instalment' => 'required_if:payment_type,tamara|in:0,2,3,4'
-//            'store_receiving' => 'nullable|in:true,false',
+            'tamara_instalment' => 'required_if:payment_type,tamara|in:0,2,3,4',
+            'store_receiving' => 'nullable|in:true,false',
 //            'provider_id'     => 'required_if:store_receiving,true'
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -285,17 +208,34 @@ class OrderController extends Controller
                 return ApiController::respondWithErrorClient($success);
             }
             if ($cart->orders->count() > 0) {
-                /**
-                 *  bank transfer
-                 */
+                // calculate delivery price if delivery true
+                $provider = $cart->provider;
+                if ($provider->delivery == 'true') {
+                    $delivery_price = $provider->delivery_price ?: Setting::first()->delivery_price;
+                } else {
+                    $delivery_price = 0;
+                }
+                if ($request->store_receiving == 'true' and $provider->store_receiving == 'true' and $cart->store_receiving == 'false')
+                {
+                    $cart->update([
+                       'store_receiving' => 'true',
+                    ]);
+                    $delivery_price = 0;
+                }
+                $tax = Setting::find(1)->tax;
+                $delivery_tax = ($delivery_price * $tax) / 100;
+                $total_tax = $delivery_tax + $cart->tax_value;
+                $total_price = $cart->total_price + $delivery_price + $delivery_tax;
+                if ($cart->delivery_price == null)
+                {
+                    $cart->update([
+                        'delivery_price' => $delivery_price,
+                        'total_price' => $total_price,
+                        'tax_value' => $total_tax,
+                        'store_receiving' => $request->store_receiving ?: 'false',
+                    ]);
+                }
                 if ($request->payment_type == 'bank_transfer') {
-//                    if ($request->store_receiving == 'true') {
-//                        $total = $cart->total_price - $cart->delivery_price;
-//                        $cart->update([
-//                            'delivery_price' => 0,
-//                            'total_price' => $total,
-//                        ]);
-//                    }
                     $cart->update([
                         'status' => 'new_no_paid',
                         'payment_status' => 'done',
@@ -329,28 +269,41 @@ class OrderController extends Controller
                         'message' => 'تم أرسال طلبك بنجاح الي الأدراه',
                     ];
                     return ApiController::respondWithSuccessData($success);
-                }
-                elseif ($request->payment_type == 'online') {
+                } elseif ($request->payment_type == 'online') {
                     // Online Payment
-                    if ($request->store_receiving == 'true') {
-                        $total = $cart->total_price - $cart->delivery_price;
-                        $cart->update([
-                            'delivery_price' => 0,
-                            'total_price' => $total,
-                        ]);
-                    }
                     $amount = $cart->total_price;
                     $charge = $request->charge_id;
                     $user = $request->user();
                     $token = Setting::find(1)->myFatoourah_token;
-                    $data = "{\"PaymentMethodId\":\"$charge\",\"CustomerName\": \"$user->name\",\"DisplayCurrencyIso\": \"SAR\",
-                    \"MobileCountryCode\":\"+966\",\"CustomerMobile\": \"$user->phone_number\",
-                    \"CustomerEmail\": \"customer@email.com\",\"InvoiceValue\": $amount,\"CallBackUrl\": \"https://dashboard.takia-app.com/check-status\",
-                    \"ErrorUrl\": \"https://dashboard.takia-app.com/error-status\",\"Language\": \"ar\",\"CustomerReference\" :\"ref 1\",
-                    \"CustomerCivilId\":12345678,\"UserDefinedField\": \"Custom field\",\"ExpireDate\": \"\",
-                    \"CustomerAddress\" :{\"Block\":\"\",\"Street\":\"\",\"HouseBuildingNo\":\"\",\"Address\":\"\",\"AddressInstructions\":\"\"},
-                    \"InvoiceItems\": [{\"ItemName\": \"$user->name\",\"Quantity\": 1,\"UnitPrice\": $amount}]}";
-                    $fatooraRes = MyFatoorah($token, $data);
+                    $data = array(
+                        "CustomerName" => $user->name,
+                        "PaymentMethodId" => $charge,
+                        "NotificationOption" => "ALL",
+                        "MobileCountryCode" => "966",
+                        "CustomerMobile" => $user->phone_number,
+                        "CustomerEmail" => "mail@company.com",
+                        "InvoiceValue" => $amount,
+                        "DisplayCurrencyIso" => "kwd",
+                        "CallBackUrl" => url('/check-status'),
+                        "ErrorUrl" => url('/error-status'),
+                        "Language" => "ar",
+                        "CustomerReference" => "noshipping-nosupplier",
+                        "CustomerAddress" => array(
+                            "Block" => "string",
+                            "Street" => "string",
+                            "HouseBuildingNo" => "string",
+                            "Address" => "address",
+                            "AddressInstructions" => "string"
+                        ),
+                        "InvoiceItems" => array(
+                            array(
+                                "ItemName" => $user->name,
+                                "Quantity" => 1,
+                                "UnitPrice" => $amount
+                            )
+                        ),
+                    );
+                    $fatooraRes = MyFatoorah($token, json_encode($data));
                     $result = json_decode($fatooraRes);
                     if ($result->IsSuccess === true) {
                         $cart->update([
@@ -368,16 +321,8 @@ class OrderController extends Controller
                         return ApiController::respondWithSuccessData($success);
 
                     }
-                }
-                elseif ($request->payment_type == 'tamara') {
+                } elseif ($request->payment_type == 'tamara') {
                     // payment by tamara
-                    if ($request->store_receiving == 'true') {
-                        $total = $cart->total_price - $cart->delivery_price;
-                        $cart->update([
-                            'delivery_price' => 0,
-                            'total_price' => $total,
-                        ]);
-                    }
                     $amount = $cart->total_price;
                     $user = $request->user();
                     $cart->update([
@@ -430,7 +375,7 @@ class OrderController extends Controller
                     ->pluck('device_token')
                     ->toArray();
                 if ($devicesTokens) {
-                    sendNotification($devicesTokens , $title, $message , null);
+                    sendNotification($devicesTokens, $title, $message, null);
                 }
                 saveNotification($cart->user_id, $title, $message, '3', $cart->id, null);
 
@@ -577,7 +522,7 @@ class OrderController extends Controller
                     ->pluck('device_token')
                     ->toArray();
                 if ($devicesTokens) {
-                    sendNotification($devicesTokens , $title, $message , null);
+                    sendNotification($devicesTokens, $title, $message, null);
                 }
                 saveNotification($cart->user_id, $title, $message, '3', $cart->id, null);
 

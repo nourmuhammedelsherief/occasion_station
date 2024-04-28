@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    عرض بيانات  الطلب
+    عرض بيانات الطلب
 @endsection
 
 @section('styles')
@@ -111,6 +111,9 @@
                         <p> سعر المنتجات : <span> {{$order->items_price}}  ريال</span></p>
                         @if($order->delivery_price > 0)
                             <p>سعر التوصيل : <span> {{$order->delivery_price}}  ريال</span></p>
+                        @endif
+                        @if($order->store_receiving == 'true')
+                            <p> سيقوم العميل باستلام المنتج من المزود </p>
                         @endif
                         @if($order->tax_value > 0)
                             <p> قيمة الضريبة : <span> {{$order->tax_value}}  ريال</span></p>
@@ -380,27 +383,6 @@
                                                         @endif
 
                                                     </p>
-                                                    @if($item->store_receiving == 'true')
-                                                        استلام المنتج من المتجر
-                                                    @else
-                                                        <p> التوصيل :
-                                                            @if($item->product->delivery == 'yes')
-                                                                السعر شامل التوصيل
-                                                            @elseif($item->product->delivery == 'no')
-                                                                @if($item->product->delivery_by == 'app')
-                                                                    التوصيل عن طريق التطبيق
-                                                                    <br>
-                                                                    @if($item->product->delivery_price > 0)
-                                                                        سعر التوصيل :
-                                                                        {{$item->product->delivery_price}}
-                                                                        ريال
-                                                                    @endif
-                                                                @else
-                                                                    التوصيل عن طريق المزود
-                                                                @endif
-                                                            @endif
-                                                        </p>
-                                                    @endif
 
                                                 </div>
                                                 <div class="modal-footer">

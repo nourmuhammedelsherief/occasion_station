@@ -32,11 +32,6 @@ class ProductCollection extends ResourceCollection
                     'price'    => $query->price,
                     'less_amount' => $query->less_amount,
                     'product_requirements' => strip_tags(str_replace('&nbsp;', ' ', $query->product_requirements)),
-//                    'store_receiving'  => $query->store_receiving,
-                    'store_receiving'  => $query->delivery_by ? ($query->delivery_by == 'app' ? 'true' : 'false') : 'false',
-                    'price_with_delivery' => $query->delivery,
-                    'delivery_by' => $query->delivery == 'yes' ? null : $query->delivery_by,
-                    'delivery_price' => ($query->delivery == 'no' and $query->delivery_by == 'app') ? $query->delivery_price : null,
                     'photos' => $query->photos->count() > 0 ? ProductPhoto::collection($query->photos) : null,
                     'provider_category' =>$query->category == null ? null : new ProviderCategoryResource($query->category),
                     'created_at' => $query->created_at->format('Y-m-d')

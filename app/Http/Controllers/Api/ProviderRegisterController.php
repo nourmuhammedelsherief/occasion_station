@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\NotificationCollection;
-use App\UserNotification;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
-use App\User;
-use App\ProviderRegister;
+use App\Models\User;
+use App\Models\ProviderRegister;
 use App;
 use Auth;
 

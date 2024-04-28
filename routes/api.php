@@ -9,6 +9,7 @@ use \App\Http\Controllers\Api\OrderController;
 use \App\Http\Controllers\Api\ApiController;
 use \App\Http\Controllers\Api\FavoriteController;
 use \App\Http\Controllers\Api\ProviderRateController;
+use \App\Http\Controllers\Api\ProviderRegisterController;
 
 
 /*
@@ -69,7 +70,9 @@ Route::prefix('v1')->group(function () {
         /**
          *  providers registers routes
         */
-        Route::post('/provider_register_request', 'Api\ProviderRegister@provider_register_request');
+        Route::controller(ProviderRegisterController::class)->group(function () {
+            Route::post('/provider_register_request', 'provider_register_request');
+        });
 
         /**
          * End providers registers routes

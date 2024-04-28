@@ -202,42 +202,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label">هل السعر شامل التوصيل ؟</label>
-                                                <div class="col-md-9">
-                                                    <input type="radio" name="delivery" {{$product->delivery == 'yes' ? 'checked' : ''}} value="yes"> نعم
-                                                    <input type="radio" name="delivery" {{$product->delivery == 'no' ? 'checked' : ''}} id="provider" value="no"> لا
-                                                    @if ($errors->has('delivery'))
-                                                        <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('delivery') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group" id="delivery_by" style="display: {{$product->delivery == 'yes' ? 'none' : 'block'}}">
-                                                <label class="col-md-3 control-label">من سيقوم بالتوصيل</label>
-                                                <div class="col-md-9">
-                                                    <input type="radio" name="delivery_by" {{$product->delivery_by == 'provider' ? 'checked' : ''}}  value="provider">  المزود من سيقوم بالتوصيل
-                                                    <input type="radio" name="delivery_by" {{$product->delivery_by == 'app' ? 'checked' : ''}} id="yes" value="app"> التوصيل عن طريق التطبيق
-                                                    @if ($errors->has('delivery_by'))
-                                                        <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('delivery_by') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group" id="delivery_price" style="display: {{$product->delivery_by == 'app' ? 'block' : 'none'}}">
-                                                <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
-                                                <div class="col-md-9">
-                                                    <input type="radio" name="store_receiving" {{$product->store_receiving == 'true' ? 'checked' : ''}} value="true"> نعم
-                                                    <input type="radio" name="store_receiving" {{$product->store_receiving == 'false' ? 'checked' : ''}} value="false"> لا
-                                                    @if ($errors->has('store_receiving'))
-                                                        <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
                                             {{--                                            <div class="form-group" id="delivery_price" style="display: {{$product->delivery_by == 'app' ? 'block' : 'none'}}">--}}
                                             {{--                                                <label class="col-md-3 control-label">سعر التوصيل </label>--}}
                                             {{--                                                <div class="col-md-9">--}}

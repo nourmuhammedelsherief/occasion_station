@@ -34,6 +34,10 @@ class ProviderResource extends JsonResource
             'online_payment' => $this->online_payment,
             'tamara_payment' => $this->tamara_payment,
             'rate'           => $this->rate,
+            'delivery'       => $this->delivery,
+            'delivery_by'    => $this->delivery_by,
+            'store_receiving' => $this->store_receiving,
+            'delivery_price'  => $this->delivery_price,
             'created_at'     => $this->created_at->format('Y-m-d'),
         ];
     }

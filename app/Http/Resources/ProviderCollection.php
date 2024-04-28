@@ -38,6 +38,10 @@ class ProviderCollection extends ResourceCollection
                     'online_payment' => $query->online_payment,
                     'tamara_payment' => $query->tamara_payment,
                     'rate'           => $query->rate,
+                    'delivery'       => $query->delivery,
+                    'delivery_by'    => $query->delivery_by,
+                    'store_receiving' => $query->store_receiving,
+                    'delivery_price'  => $query->delivery_price,
                     'created_at'     => $query->created_at->format('Y-m-d'),
                 ];
             }),

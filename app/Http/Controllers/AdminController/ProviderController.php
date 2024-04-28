@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Provider;
 use App\Models\ProviderCategory;
+use App\Models\Setting;
 use App\Models\SubCategory;
 use App\Models\ProviderMainCategory;
 use Illuminate\Http\Request;
@@ -76,6 +77,10 @@ class ProviderController extends Controller
             'bank_payment'   => 'sometimes',
             'online_payment' => 'sometimes',
             'tamara_payment' => 'sometimes',
+            'delivery'             => 'required|in:true,false',
+            'delivery_by'          => 'required_if:delivery,true|in:provider,app',
+            'delivery_price'       => 'required_if:delivery_by,app',
+            'store_receiving'      => 'required_if:delivery_by,app|in:true,false',
         ]);
         // create new provider
         $provider = Provider::create([
@@ -93,6 +98,10 @@ class ProviderController extends Controller
             'online_payment' => $request->online_payment ?: 'false',
             'tamara_payment' => $request->tamara_payment ?: 'false',
 //            'category_id' => $request->category_id,
+            'store_receiving'      => $request->store_receiving == null ? 'false' : $request->store_receiving,
+            'delivery'             => $request->delivery,
+            'delivery_by'          => $request->delivery_by?:'app',
+            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
             'photo'   => $request->file('photo') == null ? null : UploadImage($request->file('photo') , 'photo' , '/uploads/providers'),
             'logo'    => $request->file('logo') == null ? null : UploadImage($request->file('logo') , 'logo' , '/uploads/providers/logos')
         ]);
@@ -183,6 +192,10 @@ class ProviderController extends Controller
             'bank_payment'   => 'sometimes',
             'online_payment' => 'sometimes',
             'tamara_payment' => 'sometimes',
+            'delivery'             => 'required|in:true,false',
+            'delivery_by'          => 'required_if:delivery,true|in:provider,app',
+            'delivery_price'       => 'required_if:delivery_by,app',
+            'store_receiving'      => 'required_if:delivery_by,app|in:true,false',
         ]);
         $provider->update([
             'name'   => $request->name,
@@ -198,6 +211,11 @@ class ProviderController extends Controller
             'bank_payment'   => $request->bank_payment ?: 'false',
             'online_payment' => $request->online_payment ?: 'false',
             'tamara_payment' => $request->tamara_payment ?: 'false',
+            'store_receiving'      => $request->store_receiving == null ? 'false' : $request->store_receiving,
+            'delivery'             => $request->delivery,
+            'delivery_by'          => $request->delivery_by?:'app',
+            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
+
 //
 //            'category_id' => $request->category_id,
             'photo'   => $request->file('photo') == null ? $provider->photo : UploadImageEdit($request->file('photo') , 'photo' , '/uploads/providers' , $provider->photo),

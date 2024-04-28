@@ -66,6 +66,7 @@ class CartCollection extends ResourceCollection
                     'delivery_address' => $query->delivery_address,
                     'more_details' => $query->more_details,
                     'activity'     => $activity,
+                    'store_receiving' => $query->store_receiving,
                     'created_at'     => $query->created_at->format('Y-m-d'),
                 ];
             }),

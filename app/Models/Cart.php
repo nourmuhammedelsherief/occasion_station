@@ -28,6 +28,7 @@ class Cart extends Model
         'tamara_payment',
         'tamara_order_id',
         'tamara_checkout_id',
+        'store_receiving',
     ];
 
     public function user()

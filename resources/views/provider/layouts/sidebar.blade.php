@@ -35,7 +35,7 @@
                     <span class="title">  منتجاتي </span>
                     <span class="pull-right-container"></span>
                     @if(Auth::guard('provider')->user() != null)
-                        <?php $products = \App\Models\Product::whereProviderId(\Illuminate\Support\Facades\Auth::guard('provider')->user()->id)->count(); ?>
+                        <?php $products = \App\Models\Product::whereProviderId(\Illuminate\Support\Facades\Auth::guard('provider')->user()->id)->whereAccepted('true')->count(); ?>
                         <span class="badge badge-success">{{$products}}</span>
                     @endif
                 </a>
