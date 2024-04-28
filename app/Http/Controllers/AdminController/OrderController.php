@@ -222,7 +222,7 @@ class OrderController extends Controller
         if ($status == null) {
             if ($admin != null && $admin->admin_category_id == 4) {
                 // the main Admin
-                $orders = Cart::whereNotIn('status', ['opened', 'sent', 'on_cart', 'new_no_paid'])
+                $orders = Cart::whereNotIn('status', ['opened', 'sent', 'new_no_paid'])
                     ->orderBy('created_at', 'desc')
                     ->paginate(100);
             } elseif ($admin != null && $admin->admin_category_id == 5) {
@@ -231,7 +231,7 @@ class OrderController extends Controller
                     ->whereHas('admin_orders', function ($q) use ($admin) {
                         $q->where('admin_id', $admin->id);
                     })
-                    ->whereNotIn('status', ['opened', 'sent', 'on_cart', 'new_no_paid'])
+                    ->whereNotIn('status', ['opened', 'sent', 'new_no_paid'])
                     ->orderBy('created_at', 'desc')
                     ->paginate(100);
             }

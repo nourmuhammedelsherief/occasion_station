@@ -94,9 +94,9 @@
                                         </label>
                                     </td>
                                     <td><?php echo ++$i ?></td>
-                                    <td> {{$order->cart_id}} </td>
+                                    <td> {{$order->id}} </td>
                                     <td> {{$order->user->name}} </td>
-                                    <td> {{$order->order_price}} </td>
+                                    <td> {{$order->total_price}} </td>
                                     <td> {{$order->delivery_date}} </td>
 
                                     <td>

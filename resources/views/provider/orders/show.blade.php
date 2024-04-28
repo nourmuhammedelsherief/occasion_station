@@ -1,7 +1,7 @@
 @extends('provider.layouts.master')
 
 @section('title')
-    عرض بيانات  الطلب
+    عرض بيانات الطلب
 @endsection
 
 @section('styles')
@@ -25,7 +25,11 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="{{route('showProviderOrder' , $order->id)}}">عرض بيانات  الطلب</a>
+                @if(auth()->guard('admin')->user()->admin_category_id == 4)
+                    <a href="{{route('showOrder' , $order->id)}}">عرض بيانات الطلب</a>
+                @elseif(auth()->guard('admin')->user()->admin_category_id != 4)
+                    <a href="{{route('showOrderE' , $order->id)}}">عرض بيانات الطلب</a>
+                @endif
                 <i class="fa fa-circle"></i>
             </li>
             <li>
@@ -34,8 +38,8 @@
         </ul>
     </div>
 
-    <h1 class="page-title">عرض  عرض بيانات  الطلب
-        <small>عرض  عرض بيانات  الطلب</small>
+    <h1 class="page-title">عرض عرض بيانات الطلب
+        <small>عرض عرض بيانات الطلب</small>
     </h1>
 @endsection
 
@@ -46,9 +50,7 @@
         </div>
     @endif
     @include('flash::message')
-    <a href="{{route('MyOrder' , $order->status)}}" class="btn btn-info"> عوده لصفحه الطلبات </a>
 
-    <hr>
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -56,154 +58,261 @@
 
                 <div class="portlet-body">
                     <div class="table-toolbar">
-                        <h3 class="text-center"> بيانات  الطلب </h3>
-                        <p>  رقم الطلب : <span> {{$order->cart_id}}  </span> </p>
-                        <p> سعر الطلب : <span> {{$order->order_price}}  ريال</span> </p>
-                        <p>     تفاصيل أضافية : <span> {{$order->cart->more_details}}  </span> </p>
-                    </div>
-                    <div class="table-toolbar">
-                        <h3 class="text-center"> بيانات التوصيل </h3>
-                        <p>   تاريخ توصيل الطلب : <span> {{$order->cart->delivery_date}}  </span> </p>
-                        <p>   وقت توصيل الطلب : <span> {{$order->cart->delivery_time}}  </span> </p>
-                        <p>     عنوان الأستلام : <span> {{$order->cart->delivery_address}}  </span> </p>
-                        <p>      الموقع علي الخريطة :
-                            @if($order->cart->delivery_latitude != null && $order->cart->delivery_longitude != null)
-                                <a type="button"  class="btn btn-info" data-toggle="modal"
-                                   data-target="#exampleModalScrollable{{$order->id}}">
-                                    عرض الموقع
-                                </a>
-                        <div class="modal fade" id="exampleModalScrollable{{$order->id}}" tabindex="-1"
-                             role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض موقع  أستلام الطلب </h5>
-                                        <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input type="text" id="lat" name="latitude" readonly="yes" required value="{{$order->cart->delivery_latitude}}" />
-                                        <input type="text" id="lng" name="longitude" readonly="yes" required value="{{$order->cart->delivery_longitude}}" />
-                                        <div id="map"></div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">أغلاق
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @else
-                            لم يحدد بعد
-                            @endif
+                        <h3 class="text-center"> بيانات الطلب </h3>
+                        <p> رقم الطلب : <span> {{$order->id}}  </span></p>
+                        <p> تاريخ الطلب : <span> {{$order->created_at->format('Y-m-d H:i:s')}}  </span></p>
+                        <p> سعر المنتجات : <span> {{$order->items_price}}  ريال</span></p>
+                        @if($order->delivery_price > 0)
+                            <p>سعر التوصيل : <span> {{$order->delivery_price}}  ريال</span></p>
+                        @endif
+                        @if($order->store_receiving == 'true')
+                            <p> سيقوم العميل باستلام المنتج من المزود </p>
+                        @endif
+                        @if($order->tax_value > 0)
+                            <p> قيمة الضريبة : <span> {{$order->tax_value}}  ريال</span></p>
+                        @endif
+                        <p> السعر ألإجمالي : <span> {{$order->total_price}}  ريال</span></p>
+                        <p> تفاصيل أضافية : <span> {{$order->more_details}}  </span></p>
+                        @if($order->tamara_payment == 'true')
+                            <p> الدفع بواسطه : <span> تمارا  </span></p>
+                            <p>
+                                نوع الدفع :
+                                @if($order->tamara_instalment == 0)
+                                    دفعه واحده
+                                @elseif($order->tamara_instalment == 2)
+                                    علي دفعتين
+                                @elseif($order->tamara_instalment == 3)
+                                    علي ثلاث دفعات
+                                @elseif($order->tamara_instalment == 4)
+                                    علي اربع دفعات
+                                @endif
                             </p>
-
+                            <p> رقم الطلب في تمارا هو : <span> {{$order->tamara_order_id}}  </span></p>
+                        @endif
                     </div>
-                </div>
-            </div>
-            <h3 class="text-center"> المنتج </h3>
-            <div class="portlet light bordered table-responsive">
-                <div class="portlet-body">
+                    {{--                    <div class="table-toolbar">--}}
+                    {{--                        <h3 class="text-center"> بيانات الدفع </h3>--}}
+                    {{--                        @if($order->tamara_payment == 'true')--}}
+                    {{--                            <p> الدفع بواسطه : <span> تمارا  </span></p>--}}
+                    {{--                            <p>--}}
+                    {{--                                نوع الدفع :--}}
+                    {{--                                @if($order->tamara_instalment == 0)--}}
+                    {{--                                    دفعه واحده--}}
+                    {{--                                @elseif($order->tamara_instalment == 2)--}}
+                    {{--                                    علي دفعتين--}}
+                    {{--                                @elseif($order->tamara_instalment == 3)--}}
+                    {{--                                    علي ثلاث دفعات--}}
+                    {{--                                @elseif($order->tamara_instalment == 4)--}}
+                    {{--                                    علي اربع دفعات--}}
+                    {{--                                @endif--}}
+                    {{--                            </p>--}}
+                    {{--                            <p> رقم الطلب في تمارا هو  : <span> {{$order->tamara_order_id}}  </span></p>--}}
+                    {{--                        @elseif($order->tamara_payment == 'true' and $order->payment_type == 'bank_transfer')--}}
+                    {{--                            <p> نوع الدفع : <span> تحويل بنكي </span></p>--}}
+                    {{--                            <p> صورة التحويل البنكي : <span>--}}
+                    {{--                                    @if($order->transfer_photo != null)--}}
+                    {{--                                        <a type="button" class="btn btn-success" data-toggle="modal"--}}
+                    {{--                                           data-target="#exampleModalScrollableUser{{$order->id}}">--}}
+                    {{--                                                عرض--}}
+                    {{--                                               <i class="fa fa-eye"></i>--}}
+                    {{--                                            </a>--}}
+                    {{--                                           <div class="modal fade" id="exampleModalScrollableUser{{$order->id}}" tabindex="-1"--}}
+                    {{--                                             role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">--}}
+                    {{--                                            <div class="modal-dialog modal-dialog-scrollable" role="document">--}}
+                    {{--                                                <div class="modal-content">--}}
+                    {{--                                                    <div class="modal-header">--}}
+                    {{--                                                        <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض صوه التحويل البنكي للطلب</h5>--}}
+                    {{--                                                        <button type="button" class="close" data-dismiss="modal"--}}
+                    {{--                                                                aria-label="Close">--}}
+                    {{--                                                            <span aria-hidden="true">&times;</span>--}}
+                    {{--                                                        </button>--}}
+                    {{--                                                    </div>--}}
+                    {{--                                                    <div class="modal-body">--}}
+                    {{--                                                        <img src="{{asset('/uploads/transfers/' . $order->transfer_photo)}}">--}}
+                    {{--                                                    </div>--}}
+                    {{--                                                    <div class="modal-footer">--}}
+                    {{--                                                        <button type="button" class="btn btn-secondary"--}}
+                    {{--                                                                data-dismiss="modal">أغلاق--}}
+                    {{--                                                        </button>--}}
+                    {{--            --}}
+                    {{--                                                    </div>--}}
+                    {{--                                                </div>--}}
+                    {{--                                            </div>--}}
+                    {{--                                        </div>--}}
+                    {{--                                    @endif--}}
+                    {{--                                </span>--}}
+                    {{--                            </p>--}}
+                    {{--                        @elseif($order->tamara_payment == 'true' and $order->payment_type == 'online')--}}
+                    {{--                        @endif--}}
+                    {{--                        <p> تاريخ الطلب : <span> {{$order->created_at->format('Y-m-d H:i:s')}}  </span></p>--}}
+                    {{--                        <p> سعر المنتجات : <span> {{$order->items_price}}  ريال</span></p>--}}
+                    {{--                        @if($order->delivery_price > 0)--}}
+                    {{--                            <p>سعر التوصيل : <span> {{$order->delivery_price}}  ريال</span></p>--}}
+                    {{--                        @endif--}}
+                    {{--                        @if($order->tax_value > 0)--}}
+                    {{--                            <p> قيمة الضريبة : <span> {{$order->tax_value}}  ريال</span></p>--}}
+                    {{--                        @endif--}}
+                    {{--                        <p> السعر ألإجمالي : <span> {{$order->total_price}}  ريال</span></p>--}}
+                    {{--                        <p> تفاصيل أضافية : <span> {{$order->more_details}}  </span></p>--}}
+
+                    {{--                    </div>--}}
                     <div class="table-toolbar">
-                        <h3 class="text-center"> {{$order->product->name}} </h3>
-                        <p>      المستخدم :
-                            @if($order->user != null)
-                                <a type="button"  class="btn btn-info" data-toggle="modal"
-                                   data-target="#exampleModalScrollable{{$order->user->id}}">
-                                    عرض
-                                </a>
-                        <div class="modal fade" id="exampleModalScrollable{{$order->user->id}}" tabindex="-1"
-                             role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض بيانات  المستخدم </h5>
-                                        <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p> الأسم : {{$order->user->name}} </p>
-                                        <p> الجوال : {{$order->user->phone_number}} </p>
-                                        <p> المدينه : {{$order->user->city == null ? 'لم تحدد المدينه  بعد' : $order->user->city->name}} </p>
+                        <h3 class="text-center"> بيانات العميل </h3>
+                        <p> اسم العميل : <span> {{$order->user->name}}  </span></p>
+                        <p> رقم جوال العميل : <span> {{$order->user->phone_number}}  </span></p>
+                        <p> تاريخ توصيل الطلب : <span> {{$order->delivery_date}}  </span></p>
+                        <p> وقت توصيل الطلب : <span> {{$order->delivery_time}}  </span></p>
+                        <p> عنوان استلام العميل : <span> {{$order->delivery_address}}  </span></p>
+                        <p> موقع العميل علي الخريطة :
+                        @if($order->delivery_latitude != null && $order->delivery_longitude != null)
+                            {{--                                <a type="button" class="btn btn-info" data-toggle="modal"--}}
+                            {{--                                   data-target="#exampleModalScrollable{{$order->id}}">--}}
+                            {{--                                    عرض الموقع--}}
+                            {{--                                </a>--}}
+                            <?php $location = 'https://www.google.com/maps?q=' . $order->delivery_latitude . ',' . $order->delivery_longitude; ?>
+                            <p><a href="{{$location}}" target="_blank"> {{$location}} </a></p>
+                            <div class="modal fade" id="exampleModalScrollable{{$order->id}}" tabindex="-1"
+                                 role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض موقع أستلام
+                                                الطلب </h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="text" id="lat" name="latitude" readonly="yes" required
+                                                   value="{{$order->delivery_latitude}}"/>
+                                            <input type="text" id="lng" name="longitude" readonly="yes" required
+                                                   value="{{$order->delivery_longitude}}"/>
+                                            <div id="map"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">أغلاق
+                                            </button>
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">أغلاق
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @else
-                            لم يحدد بعد
-                            @endif
-                            </p>
-
-
-
-                                <p>      المنتج :
-                                    @if($order->product != null)
-                                        <a type="button"  class="btn btn-info" data-toggle="modal"
-                                           data-target="#exampleModalScrollable{{$order->product->id}}">
-                                            عرض
-                                        </a>
-                                <div class="modal fade" id="exampleModalScrollable{{$order->product->id}}" tabindex="-1"
-                                     role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض بيانات المنتج </h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p> أسم المنتج : {{$order->product->name}} </p>
-                                                <p>  السعر : {{$order->product->price}} ريال </p>
-                                                <p>  أقل كميه للطلب : {{$order->product->less_amount}} </p>
-                                                <p>  النشاط :
-                                                    @if($order->product->activity == 'sale')
-                                                        بيع
-                                                    @else
-                                                        تأجير
-                                                    @endif
-
-                                                </p>
-                                                <p>  التوصيل :
-                                                    @if($order->product->delivery == 'yes')
-                                                        يوجد توصيل
-                                                    @else
-                                                        لا يوجد توصيل
-                                                    @endif
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">أغلاق
-                                                </button>
-
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                @else
-                                    لم يحدد بعد
-                                    @endif
-                                    </p>
-
+                            </div>
+                        @else
+                            لم يحدد بعد
+                            @endif
+                            </p>
 
                     </div>
                 </div>
             </div>
+            <h3 class="text-center"> المنتجات </h3>
+            @if($order->orders->count() > 0)
+                @foreach($order->orders as $item)
+                    <div class="portlet light bordered table-responsive">
+                        <div class="portlet-body">
+                            <div class="table-toolbar">
+                                <h3 class="text-center"> {{$item->product->name}} </h3>
+                                {{--                                <p> المستخدم :--}}
+                                {{--                                    @if($item->user != null)--}}
+                                {{--                                        <a type="button" class="btn btn-info" data-toggle="modal"--}}
+                                {{--                                           data-target="#exampleModalScrollable{{$item->user->id}}">--}}
+                                {{--                                            عرض--}}
+                                {{--                                        </a>--}}
+                                {{--                                <div class="modal fade" id="exampleModalScrollable{{$item->user->id}}" tabindex="-1"--}}
+                                {{--                                     role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">--}}
+                                {{--                                    <div class="modal-dialog modal-dialog-scrollable" role="document">--}}
+                                {{--                                        <div class="modal-content">--}}
+                                {{--                                            <div class="modal-header">--}}
+                                {{--                                                <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض بيانات--}}
+                                {{--                                                    المستخدم </h5>--}}
+                                {{--                                                <button type="button" class="close" data-dismiss="modal"--}}
+                                {{--                                                        aria-label="Close">--}}
+                                {{--                                                    <span aria-hidden="true">&times;</span>--}}
+                                {{--                                                </button>--}}
+                                {{--                                            </div>--}}
+                                {{--                                            <div class="modal-body">--}}
+                                {{--                                                <p> الأسم : {{$item->user->name}} </p>--}}
+                                {{--                                                <p> الجوال : {{$item->user->phone_number}} </p>--}}
+                                {{--                                                <p> المدينه--}}
+                                {{--                                                    : {{$item->user->city == null ? 'لم تحدد المدينه  بعد' : $item->user->city->name}} </p>--}}
+
+                                {{--                                            </div>--}}
+                                {{--                                            <div class="modal-footer">--}}
+                                {{--                                                <button type="button" class="btn btn-secondary"--}}
+                                {{--                                                        data-dismiss="modal">أغلاق--}}
+                                {{--                                                </button>--}}
+
+                                {{--                                            </div>--}}
+                                {{--                                        </div>--}}
+                                {{--                                    </div>--}}
+                                {{--                                </div>--}}
+                                {{--                                @else--}}
+                                {{--                                    لم يحدد بعد--}}
+                                {{--                                    @endif--}}
+                                {{--                                    </p>--}}
+
+
+                                    <p> المنتج :
+                                        @if($item->product != null)
+                                            <a type="button" class="btn btn-info" data-toggle="modal"
+                                               data-target="#exampleModalScrollable{{$item->product->id}}">
+                                                عرض
+                                            </a>
+                                    <div class="modal fade" id="exampleModalScrollable{{$item->product->id}}"
+                                         tabindex="-1"
+                                         role="dialog" aria-labelledby="exampleModalScrollableTitle"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض
+                                                        بيانات المنتج </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p> أسم المنتج : {{$item->product->name}} </p>
+                                                    <p> السعر : {{$item->product->price}} ريال </p>
+                                                    {{--                                                        <p> أقل كميه للطلب : {{$item->product->less_amount}} </p>--}}
+                                                    <p> الكميه في الطلب : {{$item->product_count}} </p>
+                                                    <p> النشاط :
+                                                        @if($item->product->activity == 'sale')
+                                                            بيع
+                                                        @elseif($item->product->activity == 'rent')
+                                                            تأجير
+                                                        @else
+                                                            بيع / تأجير
+                                                        @endif
+
+                                                    </p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">أغلاق
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @else
+                                        لم يحدد بعد
+                                        @endif
+                                        </p>
+
+
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                لا يوجد منتجات في هذا الطلب
+            @endif
         </div>
     </div>
 
@@ -241,35 +350,33 @@
         });
     </script>
     <script>
-        function getLocation()
-        {
-            if (navigator.geolocation)
-            {
+        function getLocation() {
+            if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
             }
-            else{x.innerHTML="Geolocation is not supported by this browser.";}
         }
 
-        function showPosition(position)
-        {
-            lat= position.coords.latitude;
-            lon= position.coords.longitude;
+        function showPosition(position) {
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
 
             document.getElementById('lat').value = lat; //latitude
             document.getElementById('lng').value = lon; //longitude
-            latlon=new google.maps.LatLng(lat, lon)
-            mapholder=document.getElementById('mapholder')
+            latlon = new google.maps.LatLng(lat, lon)
+            mapholder = document.getElementById('mapholder')
             //mapholder.style.height='250px';
             //mapholder.style.width='100%';
 
-            var myOptions={
-                center:latlon,zoom:14,
-                mapTypeId:google.maps.MapTypeId.ROADMAP,
-                mapTypeControl:false,
-                navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+            var myOptions = {
+                center: latlon, zoom: 14,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+                navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL}
             };
-            var map = new google.maps.Map(document.getElementById("map"),myOptions);
-            var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+            var map = new google.maps.Map(document.getElementById("map"), myOptions);
+            var marker = new google.maps.Marker({position: latlon, map: map, title: "You are here!"});
         }
 
     </script>
@@ -278,8 +385,8 @@
 
         function initMap() {
 
-            var latitude = {{$order->cart->delivery_latitude}}; // YOUR LATITUDE VALUE
-            var longitude =  {{$order->cart->delivery_longitude}};  // YOUR LONGITUDE VALUE
+            var latitude = {{$order->delivery_latitude}}; // YOUR LATITUDE VALUE
+            var longitude = {{$order->delivery_longitude}};  // YOUR LONGITUDE VALUE
 
 
             var myLatLng = {lat: latitude, lng: longitude};
@@ -290,8 +397,6 @@
                 gestureHandling: 'true',
                 zoomControl: false// disable the default map zoom on double click
             });
-
-
 
 
             var marker = new google.maps.Marker({
@@ -306,11 +411,11 @@
 
 
             //Listen for any clicks on the map.
-            google.maps.event.addListener(map, 'click', function(event) {
+            google.maps.event.addListener(map, 'click', function (event) {
                 //Get the location that the user clicked.
                 var clickedLocation = event.latLng;
                 //If the marker hasn't been added.
-                if(marker === false){
+                if (marker === false) {
                     //Create the marker.
                     marker = new google.maps.Marker({
                         position: clickedLocation,
@@ -318,10 +423,10 @@
                         draggable: true //make it draggable
                     });
                     //Listen for drag events!
-                    google.maps.event.addListener(marker, 'dragend', function(event){
+                    google.maps.event.addListener(marker, 'dragend', function (event) {
                         markerLocation();
                     });
-                } else{
+                } else {
                     //Marker has already been added, so just change its location.
                     marker.setPosition(clickedLocation);
                 }
@@ -330,8 +435,7 @@
             });
 
 
-
-            function markerLocation(){
+            function markerLocation() {
                 //Get location.
                 var currentLocation = marker.getPosition();
                 //Add lat and lng values to a field that we can save.
@@ -340,6 +444,7 @@
             }
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFUMq5htfgLMNYvN4cuHvfGmhe8AwBeKU&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFUMq5htfgLMNYvN4cuHvfGmhe8AwBeKU&callback=initMap"
+            async defer></script>
 
 @endsection

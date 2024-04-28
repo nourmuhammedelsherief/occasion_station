@@ -88,7 +88,7 @@
                             <th> الاسم </th>
                             <th> السعر </th>
                             <th> أقل كميه </th>
-                            <th> التوصيل </th>
+{{--                            <th> التوصيل </th>--}}
                             <th> موصي به  </th>
                             <th> العمليات</th>
                         </tr>
@@ -110,17 +110,7 @@
                                     <td> {{$product->name}} </td>
                                     <td> {{$product->price}} </td>
                                     <td> {{$product->less_amount}} </td>
-                                    <td>
-                                        @if($product->delivery == 'yes')
-                                            السعر شامل التوصيل
-                                        @else
-                                            @if($product->delivery_by == 'provider')
-                                                عن طريق المزود
-                                            @else
-                                                عن طريق التطبيق
-                                            @endif
-                                        @endif
-                                    </td>
+
                                     <td>
                                         <a class="btn btn-success" href="{{route('recommendProduct' , [$product->id , 'true'])}}">  توصيه </a>
                                     </td>
