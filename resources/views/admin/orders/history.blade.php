@@ -91,7 +91,7 @@
                                         @if($note->notes != null)
                                             <a type="button"  data-toggle="modal"
                                                data-target="#exampleModalScrollable{{$note->id}}">
-                                                {!! str_limit($note->notes , 65) !!}
+                                                {!! \Illuminate\Support\Str::limit($note->notes ?? '',65,' ...') !!}
                                             </a>
                                             <div class="modal fade" id="exampleModalScrollable{{$note->id}}" tabindex="-1"
                                                  role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
