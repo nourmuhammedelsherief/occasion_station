@@ -107,6 +107,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/products_search' , 'products_search');
             Route::get('/product_details/{product_id}' , 'product_details');
             Route::post('/home_screen' , 'home_screen');
+            Route::post('/recommended_products' , 'recommended_products');
         });
 
 

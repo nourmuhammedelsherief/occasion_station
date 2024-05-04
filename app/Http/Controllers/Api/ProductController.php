@@ -51,7 +51,7 @@ class ProductController extends Controller
             ->whereStop('false')
             ->whereAccepted('true')
             ->orderBy('id' , 'desc')
-            ->paginate(50);
+            ->paginate(10);
         $categories = ProviderProductCategory::whereProviderId($request->provider_id)
             ->get();
         foreach ($categories as $category)
@@ -112,6 +112,11 @@ class ProductController extends Controller
 
     public function home_screen(Request $request)
     {
+        return ApiController::respondWithSuccessData(new HomeResource(1));
+    }
+
+    public function recommended_products(Request $request)
+    {
         $rules = [
             'google_city_id' => 'required'
         ];
@@ -119,9 +124,6 @@ class ProductController extends Controller
         if ($validator->fails())
             return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
 
-//        $range = Setting::find(1)->search_range;
-//        $lat = $request->latitude;
-//        $lon = $request->longitude;
         $products = Product::with('provider')
             ->whereHas('provider', function ($q) use ($request) {
                 $q->with('city');
@@ -132,16 +134,8 @@ class ProductController extends Controller
             ->where('recomended' , 'true')
             ->whereStop('false')
             ->whereAccepted('true')
-            ->get();
-        return ApiController::respondWithSuccessData(new HomeResource($products));
-        // if ($products->count() > 0) {
-        //     return ApiController::respondWithSuccessData(new HomeResource($products));
-        // } else {
-        //     $errors = [
-        //         'message' => 'لا توجد منتجات'
-        //     ];
-        //     return ApiController::respondWithErrorClient($errors);
-        // }
+            ->paginate(10);
+        return ApiController::respondWithSuccessData(new ProductCollection($products));
     }
 
     public function product_details($id)
