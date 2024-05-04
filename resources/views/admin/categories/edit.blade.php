@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    {{trans('messages.Sections')}}
+     الأقسام الرئيسيه
 @endsection
 @section('styles')
     <link rel="stylesheet" href="{{ URL::asset('admin/css/bootstrap-fileinput.css') }}">
@@ -16,17 +16,17 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="{{url('/admin/categories')}}">{{trans('messages.Sections')}}</a>
+                <a href="{{url('/admin/categories')}}"> الأقسام الرئيسيه</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>عرض  {{trans('messages.Sections')}}</span>
+                <span>عرض   الأقسام الرئيسيه</span>
             </li>
         </ul>
     </div>
 
-    <h1 class="page-title">عرض  {{trans('messages.Sections')}}
-        <small>تعديل {{trans('messages.Sections')}}</small>
+    <h1 class="page-title">عرض   الأقسام الرئيسيه
+        <small>تعديل  الأقسام الرئيسيه</small>
     </h1>
 @endsection
 
@@ -42,7 +42,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="icon-anchor font-green-sharp"></i>
-                            <span class="caption-subject font-green-sharp bold uppercase">تعديل {{trans('messages.Sections')}}</span>
+                            <span class="caption-subject font-green-sharp bold uppercase">تعديل  الأقسام الرئيسيه</span>
                         </div>
 
                     </div>
