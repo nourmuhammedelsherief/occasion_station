@@ -14,7 +14,7 @@
     <style>
         #map {
             height: 500px;
-            width: 800px;
+            width: 650px;
         }
     </style>
 @endsection
@@ -67,12 +67,23 @@
                     <div class="portlet-body form">
                         <div class="btn-group"></div>
                         <div class="form-group">
-                            <label for="username" class="col-lg-3 control-label">@lang('messages.name')</label>
+                            <label for="username" class="col-lg-3 control-label">@lang('messages.name_ar')</label>
                             <div class="col-lg-9">
-                                <input id="username" name="name" type="text" value="{{ $data->name }}" class="form-control" placeholder="@lang('messages.name')">
+                                <input id="username" name="name" type="text" value="{{ $data->name }}" class="form-control" placeholder="@lang('messages.name_ar')">
                                 @if ($errors->has('name'))
                                     <span class="help-block">
                                        <strong style="color: red;">{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="username" class="col-lg-3 control-label">@lang('messages.name_en')</label>
+                            <div class="col-lg-9">
+                                <input id="name_en" name="name_en" type="text" value="{{ $data->name_en }}" class="form-control" placeholder="@lang('messages.name_en')">
+                                @if ($errors->has('name_en'))
+                                    <span class="help-block">
+                                       <strong style="color: red;">{{ $errors->first('name_en') }}</strong>
                                     </span>
                                 @endif
                             </div>

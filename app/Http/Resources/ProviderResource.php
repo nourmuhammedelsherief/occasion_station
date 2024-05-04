@@ -17,7 +17,7 @@ class ProviderResource extends JsonResource
         return [
             'id'             => $this->id,
             'city'           => new CityResource($this->city),
-            'name'           => $this->name,
+            'name'           => app()->getLocale() == 'ar' ? $this->name : ($this->name_en ?: $this->name),
             'phone_number'   => $this->phone_number,
             'email'          => $this->email,
             'address'        => $this->address,

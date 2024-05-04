@@ -21,7 +21,7 @@ class ProviderCollectionTest extends ResourceCollection
                 return [
                     'id'             => $query->provider_id,
                     'city'           => new CityResource($query->city),
-                    'name'           => $query->name,
+                    'name'           => app()->getLocale() == 'ar' ? $query->name : ($query->name_en ?: $query->name),
                     'phone_number'   => $query->phone_number,
                     'email'          => $query->email,
                     'address'        => $query->address,

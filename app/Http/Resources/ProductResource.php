@@ -22,7 +22,7 @@ class ProductResource extends JsonResource
             'id'    => $this->id,
             'provider' => new ProviderResource($this->provider),
             'activity'  => activity($this->activity),
-            'name'     => $this->name,
+            'name'     => app()->getLocale() == 'ar' ? $this->name : ($this->name_en?:$this->name_ar),
             'description' => strip_tags(str_replace('&nbsp;', ' ', $this->description)),
             'price_before_discount_boolean' => ($this->price_before_discount == 0 or $this->price_before_discount == null) ? 'false' : 'true',
             'price_before_discount' => $this->price_before_discount,

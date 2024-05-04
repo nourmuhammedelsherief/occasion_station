@@ -38,13 +38,15 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request , [
-            'name'   => 'required',
+            'name'      => 'required|string|max:191',
+            'name_en'   => 'required|string|max:191',
             'icon'   => 'required|mimes:jpg,png,gif,tif,bmp,psd,jpeg|max:5000',
         ]);
         // store new  category
         Category::create([
-            'name'   => $request->name,
-            'icon'   => $request->file('icon') == null ? null : UploadImage($request->file('icon') , 'icon' , '/uploads/categories'),
+            'name'     => $request->name,
+            'name_en'  => $request->name_en,
+            'icon'     => $request->file('icon') == null ? null : UploadImage($request->file('icon') , 'icon' , '/uploads/categories'),
         ]);
         flash('تم أضافه  القسم  بنجاح')->success();
         return redirect()->route('Category');
@@ -84,11 +86,13 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $this->validate($request , [
-            'name'   => 'required',
+            'name'      => 'required|string|max:191',
+            'name_en'   => 'required|string|max:191',
             'icon'   => 'nullable|mimes:jpg,png,gif,tif,bmp,psd,jpeg|max:5000',
         ]);
         $category->update([
             'name'   => $request->name,
+            'name_en'  => $request->name_en,
             'icon'   => $request->file('icon') == null ? $category->icon : UploadImageEdit($request->file('icon') , 'icon' , '/uploads/categories' , $category->icon),
         ]);
         flash('تم تعديل  القسم  بنجاح')->success();

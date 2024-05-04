@@ -27,7 +27,8 @@ class ProviderController extends Controller
     public function my_profile_edit(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|string|max:191',
+            'name_en' => 'required|string|max:191',
             'email' => 'required|string|email|max:255|unique:providers,email,' . Auth::id(),
 //            'password' => 'required|string|min:6|confirmed',
 //            'password_confirm' => 'required_with:password|same:password|min:4',
@@ -42,6 +43,7 @@ class ProviderController extends Controller
         $data = Provider::find(Auth::id());
         $data->update([
             'name' => $request->name,
+            'name_en' => $request->name_en,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'latitude' => $request->latitude ? $request->latitude : $data->latitude,

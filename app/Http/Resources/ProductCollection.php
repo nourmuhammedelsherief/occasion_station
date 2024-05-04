@@ -25,7 +25,7 @@ class ProductCollection extends ResourceCollection
                     'id'    => $query->id,
                     'provider' => new ProviderResource($query->provider),
                     'activity'  => activity($query->activity),
-                    'name'     => $query->name,
+                    'name'     => app()->getLocale() == 'ar' ? $query->name : ($query->name_en?:$query->name),
                     'description' => strip_tags(str_replace('&nbsp;', ' ', $query->description)),
                     'price_before_discount_boolean' => ($query->price_before_discount == 0 or $query->price_before_discount == null) ? 'false' : 'true',
                     'price_before_discount' => $query->price_before_discount,

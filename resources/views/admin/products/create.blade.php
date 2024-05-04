@@ -89,15 +89,28 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">أسم المنتج </label>
+                                                <label class="col-md-3 control-label">أسم المنتج بالعربي</label>
                                                 <div class="col-md-9">
                                                     <input type="text" name="name" class="form-control"
-                                                           placeholder="أكتب أسم  المنتج" value="{{old('name')}}"
+                                                           placeholder="أكتب أسم  المنتج باللغة العربية" value="{{old('name')}}"
                                                            required>
                                                     @if ($errors->has('name'))
                                                         <span class="help-block">
-                                               <strong style="color: red;">{{ $errors->first('name') }}</strong>
-                                            </span>
+                                                            <strong style="color: red;">{{ $errors->first('name') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">أسم المنتج بالانجليزي</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" name="name_en" class="form-control"
+                                                           placeholder="أكتب أسم  المنتج باللغة الانجليزية" value="{{old('name_en')}}"
+                                                           required>
+                                                    @if ($errors->has('name_en'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('name_en') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>

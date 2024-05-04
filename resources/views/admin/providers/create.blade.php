@@ -71,31 +71,44 @@
                                                             <option value="{{$city->id}}"> {{$city->name}} </option>
                                                         @endforeach
                                                     </select>
-                                                    @if ($errors->has('name'))
+                                                    @if ($errors->has('city_id'))
                                                         <span class="help-block">
-                                               <strong style="color: red;">{{ $errors->first('name') }}</strong>
+                                               <strong style="color: red;">{{ $errors->first('city_id') }}</strong>
                                             </span>
                                                     @endif
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">اسم المزود </label>
+                                                <label class="col-md-3 control-label">اسم المزود بالعربي </label>
                                                 <div class="col-md-9">
                                                     <input type="text" name="name" class="form-control"
-                                                           placeholder="أكتب أسم  المزود" value="{{old('name')}}"
+                                                           placeholder="أكتب أسم  المزود باللغة العربية" value="{{old('name')}}"
                                                            required>
                                                     @if ($errors->has('name'))
                                                         <span class="help-block">
-                                               <strong style="color: red;">{{ $errors->first('name') }}</strong>
-                                            </span>
+                                                            <strong style="color: red;">{{ $errors->first('name') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label"> البريد الألكتروني </label>
+                                                <label class="col-md-3 control-label">اسم المزود بالانجليزي </label>
+                                                <div class="col-md-9">
+                                                    <input type="text" name="name_en" class="form-control"
+                                                           placeholder="أكتب أسم  المزود باللغة ألانجليزية" value="{{old('name_en')}}"
+                                                           required>
+                                                    @if ($errors->has('name_en'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('name_en') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label"> البريد الإلكتروني </label>
                                                 <div class="col-md-9">
                                                     <input type="email" name="email" class="form-control"
-                                                           placeholder="البريد الألكتروني للمزود"
+                                                           placeholder="البريد الإلكتروني للمزود"
                                                            value="{{old('email')}}" required>
                                                     @if ($errors->has('email'))
                                                         <span class="help-block">
@@ -151,12 +164,13 @@
                                                            value="{{old('password_confirmation')}}" required>
                                                     @if ($errors->has('password_confirmation'))
                                                         <span class="help-block">
-                                               <strong
-                                                   style="color: red;">{{ $errors->first('password_confirmation') }}</strong>
-                                            </span>
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('password_confirmation') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label"> النشاط </label>
                                                 <div class="col-md-9">

@@ -59,4 +59,6 @@ return [
     'productAdded' => 'Product Added Successfully Waiting The Review From Management',
     'confirm_code' => 'Confirmation Code At Takia Is : ',
     'user_not_found' => 'User Not Found',
+    'name_ar' => 'Name In Arabic',
+    'name_en' => 'Name In English',
 ];

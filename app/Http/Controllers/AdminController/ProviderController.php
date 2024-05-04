@@ -60,6 +60,7 @@ class ProviderController extends Controller
     {
         $this->validate($request , [
             'name'    => 'required|string|max:191',
+            'name_en'   => 'required|string|max:191',
             'city_id' => 'required|exists:cities,id',
             'email'   => 'required|email|unique:providers,email',
             'phone_number' => 'required|unique:providers,phone_number',
@@ -81,10 +82,12 @@ class ProviderController extends Controller
             'delivery_by'          => 'required_if:delivery,true|in:provider,app',
             'delivery_price'       => 'required_if:delivery_by,app',
             'store_receiving'      => 'required_if:delivery_by,app|in:true,false',
+
         ]);
         // create new provider
         $provider = Provider::create([
             'name'   => $request->name,
+            'name_en'   => $request->name_en,
             'city_id' => $request->city_id,
             'email'  => $request->email,
             'phone_number' => $request->phone_number,
@@ -175,6 +178,7 @@ class ProviderController extends Controller
         $provider = Provider::findOrFail($id);
         $this->validate($request , [
             'name'    => 'required|string|max:191',
+            'name_en'    => 'required|string|max:191',
             'city_id' => 'required|exists:cities,id',
             'email'   => 'required|email|unique:providers,email,'.$id,
             'phone_number' => 'required|unique:providers,phone_number,'.$id,
@@ -194,11 +198,12 @@ class ProviderController extends Controller
             'tamara_payment' => 'sometimes',
             'delivery'             => 'required|in:true,false',
             'delivery_by'          => 'required_if:delivery,true|in:provider,app',
-            'delivery_price'       => 'required_if:delivery_by,app',
+            'delivery_price'       => 'required_if:delivery,true,delivery_by,app',
             'store_receiving'      => 'required_if:delivery_by,app|in:true,false',
         ]);
         $provider->update([
             'name'   => $request->name,
+            'name_en'   => $request->name_en,
             'email'  => $request->email,
             'city_id' => $request->city_id,
             'phone_number' => $request->phone_number,

@@ -40,6 +40,7 @@ class Provider extends Authenticatable
         'delivery_price',
         'delivery_by',
         'store_receiving',
+        'name_en',
     ];
 
     public function category()

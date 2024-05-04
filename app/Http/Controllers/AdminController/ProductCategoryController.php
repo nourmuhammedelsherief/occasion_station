@@ -16,8 +16,8 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        $categories = ProductCategory::orderBy('id' , 'desc')->paginate(100);
-        return view('admin.product_categories.index' , compact('categories'));
+        $categories = ProductCategory::orderBy('id', 'desc')->paginate(100);
+        return view('admin.product_categories.index', compact('categories'));
     }
 
     /**
@@ -33,17 +33,19 @@ class ProductCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request , [
-            'name'   => 'required',
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'name_en' => 'required|string|max:191',
         ]);
         // store new  category
         ProductCategory::create([
-            'name'   => $request->name,
+            'name' => $request->name,
+            'name_en' => $request->name_en,
         ]);
         flash('تم أضافه  القسم  بنجاح')->success();
         return redirect()->route('ProductCategory');
@@ -52,7 +54,7 @@ class ProductCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -63,30 +65,32 @@ class ProductCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $category = ProductCategory::findOrFail($id);
-        return view('admin.product_categories.edit' , compact('category'));
+        return view('admin.product_categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $category = ProductCategory::findOrFail($id);
-        $this->validate($request , [
-            'name'   => 'required',
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'name_en' => 'required|string|max:191',
         ]);
         $category->update([
-            'name'   => $request->name,
+            'name' => $request->name,
+            'name_en' => $request->name_en,
         ]);
         flash('تم تعديل  القسم  بنجاح')->success();
         return redirect()->route('ProductCategory');
@@ -95,7 +99,7 @@ class ProductCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

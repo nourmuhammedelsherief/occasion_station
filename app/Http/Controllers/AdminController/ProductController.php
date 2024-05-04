@@ -83,6 +83,7 @@ class ProductController extends Controller
     {
         $this->validate($request , [
             'name'                 => 'required|string|max:191',
+            'name_en'              => 'required|string|max:191',
             'provider_id'          => 'required|exists:providers,id',
             'category_id'          => 'required|exists:product_categories,id',
             'activity'             => 'required|in:rent,sale',
@@ -99,6 +100,7 @@ class ProductController extends Controller
             'provider_id'          => $request->provider_id,
             'category_id'          => $request->category_id,
             'name'                 => $request->name,
+            'name_en'              => $request->name_en,
             'activity'             => $request->activity,
             'description'          => $request->description,
             'price'                => $request->price,
@@ -175,6 +177,7 @@ class ProductController extends Controller
             'provider_id'          => 'required|exists:providers,id',
             'category_id'          => 'required|exists:product_categories,id',
             'name'                 => 'required|string|max:191',
+            'name_en'              => 'required|string|max:191',
             'activity'             => 'required|in:rent,sale',
             'description'          => 'sometimes|string',
             'price'                => 'required',
@@ -189,6 +192,7 @@ class ProductController extends Controller
             'provider_id'          => $request->provider_id,
             'category_id'          => $request->category_id,
             'name'                 => $request->name,
+            'name_en'              => $request->name_en,
             'activity'             => $request->activity,
             'description'          => $request->description == null ? $product->description : $request->description,
             'price'                => $request->price,

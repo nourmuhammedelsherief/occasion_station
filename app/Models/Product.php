@@ -12,6 +12,7 @@ class Product extends Model
         'category_id',
         'activity',    // rent , sale
         'name',
+        'name_en',
         'description',
         'price_before_discount',
         'price',

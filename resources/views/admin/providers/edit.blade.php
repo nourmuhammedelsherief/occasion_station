@@ -81,10 +81,10 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">اسم المزود </label>
+                                                <label class="col-md-3 control-label">اسم المزود بالعربي</label>
                                                 <div class="col-md-9">
                                                     <input type="text" name="name" class="form-control"
-                                                           placeholder="أكتب أسم  المزود" value="{{$provider->name}}"
+                                                           placeholder="أكتب أسم  المزود باللغة العربية" value="{{$provider->name}}"
                                                            required>
                                                     @if ($errors->has('name'))
                                                         <span class="help-block">
@@ -94,10 +94,23 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label"> البريد الألكتروني </label>
+                                                <label class="col-md-3 control-label">اسم المزود بالانجليزي </label>
+                                                <div class="col-md-9">
+                                                    <input type="text" name="name_en" class="form-control"
+                                                           placeholder="أكتب أسم  المزود باللغة ألانجليزية" value="{{$provider->name_en}}"
+                                                           required>
+                                                    @if ($errors->has('name_en'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('name_en') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label"> البريد الإلكتروني </label>
                                                 <div class="col-md-9">
                                                     <input type="email" name="email" class="form-control"
-                                                           placeholder="البريد الألكتروني للمزود"
+                                                           placeholder="البريد الإلكتروني للمزود"
                                                            value="{{$provider->email}}" required>
                                                     @if ($errors->has('email'))
                                                         <span class="help-block">
