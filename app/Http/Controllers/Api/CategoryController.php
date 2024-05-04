@@ -105,7 +105,7 @@ class CategoryController extends Controller
                 ->whereStop('false')
                 ->orderBy('rate', 'DESC')
                 ->orderBy(DB::raw("3959 * acos( cos( radians({$request->input('latitude')}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(-{$request->input('longitude')}) ) + sin( radians({$request->input('latitude')}) ) * sin(radians(latitude)) )"), 'ASC')
-                ->paginate(50);
+                ->paginate(10);
         } elseif ($request->rate_order and $request->latitude == null) {
             $providers = Provider::with('provider_categories', 'city')
                 ->join('providers_main_categories', 'providers_main_categories.provider_id', '=', 'providers.id')
@@ -128,7 +128,7 @@ class CategoryController extends Controller
                 ->where('providers_main_categories.category_id', $request->category_id)
                 ->whereStop('false')
                 ->orderBy('rate', 'DESC')
-                ->paginate(50);
+                ->paginate(10);
         } elseif ($request->latitude and $request->rate_order == null) {
             $providers = Provider::with('provider_categories', 'city')
                 ->join('providers_main_categories', 'providers_main_categories.provider_id', '=', 'providers.id')
@@ -151,7 +151,7 @@ class CategoryController extends Controller
                 ->where('providers_main_categories.category_id', $request->category_id)
                 ->whereStop('false')
                 ->orderBy(DB::raw("3959 * acos( cos( radians({$request->input('latitude')}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(-{$request->input('longitude')}) ) + sin( radians({$request->input('latitude')}) ) * sin(radians(latitude)) )"), 'ASC')
-                ->paginate(50);
+                ->paginate(10);
         } else {
             $providers = Provider::with('provider_categories', 'city')
                 ->join('providers_main_categories', 'providers_main_categories.provider_id', '=', 'providers.id')
@@ -173,7 +173,7 @@ class CategoryController extends Controller
                 })
                 ->where('providers_main_categories.category_id', $request->category_id)
                 ->whereStop('false')
-                ->paginate(50);
+                ->paginate(10);
         }
         if ($providers->count() > 0) {
             return ApiController::respondWithSuccessData(new ProviderCollectionTest($providers));

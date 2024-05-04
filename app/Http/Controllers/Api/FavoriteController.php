@@ -140,7 +140,7 @@ class FavoriteController extends Controller
         $favorite_providers = Provider::with('favorites')
             ->whereHas('favorites' , function ($q) use ($user){
                 $q->whereUserId($user->id);
-            })->paginate(50);
+            })->paginate(10);
 
         if ($favorite_providers->count() > 0) {
             return ApiController::respondWithSuccessData(new ProviderCollectionTest($favorite_providers));
@@ -157,7 +157,7 @@ class FavoriteController extends Controller
         $favorite_products = Product::with('favorites')
             ->whereHas('favorites' , function ($q) use ($user){
                 $q->whereUserId($user->id);
-            })->paginate(50);
+            })->paginate(10);
 
         if ($favorite_products->count() > 0) {
             return ApiController::respondWithSuccessData(new ProductCollection($favorite_products));

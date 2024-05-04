@@ -44,7 +44,7 @@ class ProviderRateController extends Controller
     public function provider_rates($id)
     {
         $provider = Provider::find($id);
-        $rates = $provider->rates()->paginate(50);
+        $rates = $provider->rates()->paginate(10);
         return ApiController::respondWithSuccessData(new ProviderRateCollection($rates));
 
     }
