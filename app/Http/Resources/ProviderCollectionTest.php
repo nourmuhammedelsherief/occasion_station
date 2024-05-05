@@ -19,7 +19,7 @@ class ProviderCollectionTest extends ResourceCollection
             'current_page' => $this->currentPage(),
             'data' => $this->collection->transform(function ($query){
                 return [
-                    'id'             => $query->provider_id,
+                    'id'             => $query->id,
                     'city'           => new CityResource($query->city),
                     'name'           => app()->getLocale() == 'ar' ? $query->name : ($query->name_en ?: $query->name),
                     'phone_number'   => $query->phone_number,
