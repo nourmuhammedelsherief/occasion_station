@@ -22,7 +22,7 @@ class HomeResource extends JsonResource
         return [
             'categories' => CategoryResource::collection(Category::orderBy(DB::raw('ISNULL(arrange), arrange'), 'ASC')->get()),
             'sliders'    => SliderResource::collection(Slider::all()),
-//            'products'   => ProductResource::collection($this),
+            'products'   => ProductResource::collection(Product::all()->take(1)),
             'contact_number' => Setting::first()->contact_number,
             'whatsaaAppMessage' => Setting::first()->contact_text,
         ];
