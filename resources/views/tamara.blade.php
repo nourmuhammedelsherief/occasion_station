@@ -11,6 +11,7 @@
         <div class="col-md-10">
             <div style="text-align: center;">
                 <img src="{{asset('uploads/tamara.jpg')}}" width="80%" alt="success" />
+                success
             </div>
         </div>
 {{--        <a href="{{url('/')}}" class="btn btn-primary"> الرجوع للرئيسية</a>--}}
