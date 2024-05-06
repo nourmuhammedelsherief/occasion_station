@@ -216,7 +216,7 @@ class ProviderController extends Controller
             'bank_payment'   => $request->bank_payment ?: 'false',
             'online_payment' => $request->online_payment ?: 'false',
             'tamara_payment' => $request->tamara_payment ?: 'false',
-            'store_receiving'      => $request->store_receiving == null ? 'false' : $request->store_receiving,
+            'store_receiving'      => $request->store_receiving == null ? 'false' : ($request->delivery == 'false' ? 'false' : $request->store_receiving),
             'delivery'             => $request->delivery,
             'delivery_by'          => $request->delivery_by?:'app',
             'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,

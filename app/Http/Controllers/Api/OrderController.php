@@ -40,12 +40,12 @@ class OrderController extends Controller
         $provider = $product->provider;
         if ($product == null) {
             $errors = [
-                'message' => ' لا يوجد هذا المنتج'
+                'message' => trans('messages.not_found')
             ];
             return ApiController::respondWithErrorClient($errors);
         } elseif ($product->less_amount > $request->product_count) {
             $errors = [
-                'message' => 'أقل كميه لهذا  المنتج هي ' . $product->less_amount,
+                'message' => trans('messages.less_amount') . $product->less_amount,
             ];
             return ApiController::respondWithErrorClient($errors);
         }
@@ -146,7 +146,7 @@ class OrderController extends Controller
 
         }
         $success = [
-            'message' => 'تم أضافه  العنصر الي السلة بنجاح',
+            'message' => trans('messages.cartItemAdded'),
             'cart_id' => $cart->id,
         ];
         return ApiController::respondWithSuccessData($success);
@@ -203,7 +203,7 @@ class OrderController extends Controller
         if ($cart) {
             if ($cart->status != 'opened') {
                 $success = [
-                    'message' => ' السلة فارغه',
+                    'message' => trans('messages.emptyCart'),
                 ];
                 return ApiController::respondWithErrorClient($success);
             }
@@ -262,11 +262,11 @@ class OrderController extends Controller
                         $provider = Provider::find($order->provider_id);
                         $provider->notify(new NewAdminNotification($order->id));
                     }
-                    $msg = 'هناك طلب جديد من العميل : ' . $cart->user->name;
+                    $msg = trans('messages.userNewOrder') . $cart->user->name;
                     $data = ['msg' => $msg];
                     Mail::to(Setting::first()->email)->send(new NotifyMail($msg));
                     $success = [
-                        'message' => 'تم أرسال طلبك بنجاح الي الأدراه',
+                        'message' => trans('messages.is_joinTrue'),
                     ];
                     return ApiController::respondWithSuccessData($success);
                 } elseif ($request->payment_type == 'online') {
@@ -368,8 +368,8 @@ class OrderController extends Controller
                     'payment_type' => 'online',
                     'invoice_id' => null,
                 ]);
-                $title = 'الطلبات';
-                $message = 'نشكر لكم تسوقكم وتم أستلام طلبك';
+                $title = trans('messages.orders');
+                $message = trans('messages.thanksForShopping');
                 $devicesTokens = UserDevice::where('user_id', $cart->user_id)
                     ->get()
                     ->pluck('device_token')
@@ -650,7 +650,7 @@ class OrderController extends Controller
     {
         $user = $request->user();
         $rules = [
-            'provider_id' => 'required|exists:providers,id',
+//            'provider_id' => 'required|exists:providers,id',
             'status' => 'sometimes|in:new_paid,new_no_paid,works_on,completed,canceled,all',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -661,19 +661,19 @@ class OrderController extends Controller
         if ($request->status == 'all') {
             $carts = Cart::whereNotIn('status', ['opened', 'sent', 'on_cart'])
                 ->whereUserId($user->id)
-                ->whereProviderId($provider->id)
+//                ->whereProviderId($provider->id)
                 ->orderBy('id', 'desc')
                 ->paginate(10);
         } elseif ($request->status != null) {
             $carts = Cart::whereUserId($user->id)
                 ->where('status', $request->status)
-                ->whereProviderId($provider->id)
+//                ->whereProviderId($provider->id)
                 ->orderBy('id', 'desc')
                 ->paginate(10);
         } else {
             $carts = Cart::whereNotIn('status', ['opened', 'sent', 'on_cart'])
                 ->whereUserId($user->id)
-                ->whereProviderId($provider->id)
+//                ->whereProviderId($provider->id)
                 ->orderBy('id', 'desc')
                 ->paginate(10);
         }

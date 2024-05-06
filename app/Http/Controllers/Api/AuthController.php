@@ -520,7 +520,7 @@ class AuthController extends Controller
             return ApiController::respondWithSuccess(new App\Http\Resources\User($user));
         }else{
             $errors = [
-                'message' => 'لا يوجد هذا المستخدم'
+                'message' => trans('messages.not_found')
             ];
             return ApiController::respondWithErrorArray(array($errors));
         }

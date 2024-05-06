@@ -30,7 +30,7 @@ class CategoryController extends Controller
             return ApiController::respondWithSuccessData(CategoryResource::collection($categories));
         } else {
             $errors = [
-                'message' => 'لا يوجد أقسام'
+                'message' => trans('messages.no_categories')
             ];
             return ApiController::respondWithErrorClient($errors);
         }
@@ -43,7 +43,7 @@ class CategoryController extends Controller
             return ApiController::respondWithSuccessData(CityResource::collection($cities));
         } else {
             $errors = [
-                'message' => 'لا يوجد مدن'
+                'message' => trans('messages.no_cities')
             ];
             return ApiController::respondWithErrorClient($errors);
         }
@@ -56,7 +56,7 @@ class CategoryController extends Controller
             return ApiController::respondWithSuccessData(SubCategoryResource::collection($sub_categories));
         } else {
             $errors = [
-                'message' => ' لا يوجد أقسام فرعية'
+                'message' => trans('messages.no_sub_categories')
             ];
             return ApiController::respondWithErrorClient($errors);
         }
@@ -179,7 +179,7 @@ class CategoryController extends Controller
             return ApiController::respondWithSuccessData(new ProviderCollectionTest($providers));
         } else {
             $errors = [
-                'message' => ' لا يوجد مزودين خدمات'
+                'message' => trans('messages.no_providers')
             ];
             return ApiController::respondWithErrorClient($errors);
         }
