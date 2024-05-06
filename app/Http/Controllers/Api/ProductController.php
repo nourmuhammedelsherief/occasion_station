@@ -104,7 +104,7 @@ class ProductController extends Controller
             return ApiController::respondWithSuccessData(new ProductCollection($products));
         } else {
             $errors = [
-                'message' => ' لا يوجد منتجات '
+                'message' => trans('messages.no_products_found')
             ];
             return ApiController::respondWithErrorClient($errors);
         }
@@ -161,7 +161,7 @@ class ProductController extends Controller
             return ApiController::respondWithSuccessData($data);
         } else {
             $errors = [
-                'message' => ' لا يوجد هذا المنتج'
+                'message' => trans('messages.not_found')
             ];
             return ApiController::respondWithErrorClient($errors);
         }

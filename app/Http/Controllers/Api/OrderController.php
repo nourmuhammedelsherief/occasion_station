@@ -694,7 +694,7 @@ class OrderController extends Controller
             return ApiController::respondWithSuccessData(new CartResource($order));
         } else {
             $errors = [
-                'message' => 'هذا الطلب غير موجود'
+                'message' => trans('messages.not_found')
             ];
             return ApiController::respondWithErrorClient($errors);
         }
@@ -714,7 +714,7 @@ class OrderController extends Controller
         if ($cart) {
             if ($cart->status == 'sent') {
                 $errors = [
-                    'message' => ' السلة فارغه',
+                    'message' => trans('messages.emptyCart'),
                 ];
                 return ApiController::respondWithErrorClient($errors);
             }
@@ -744,19 +744,19 @@ class OrderController extends Controller
                     $cart->delete();
                 }
                 $success = [
-                    'message' => 'تم حذف العنصر من السلة بنجاح',
+                    'message' => trans('messages.itemDeleted'),
                 ];
                 return ApiController::respondWithSuccessData($success);
             } else {
                 $cart->delete();
                 $errors = [
-                    'message' => ' السلة فارغه',
+                    'message' => trans('messages.emptyCart'),
                 ];
                 return ApiController::respondWithErrorClient($errors);
             }
         } else {
             $errors = [
-                'message' => ' السلة فارغه',
+                'message' => trans('messages.emptyCart'),
             ];
             return ApiController::respondWithErrorClient($errors);
         }

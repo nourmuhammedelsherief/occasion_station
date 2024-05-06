@@ -339,4 +339,5 @@ return [
     'cartItemAdded' => 'Item Added To Cart Successfully',
     'userNewOrder' => 'New Order From Client',
     'thanksForShopping' => 'Thank For Shopping',
+    'itemDeleted' => 'Cart Item Deleted Successfully',
 ];
