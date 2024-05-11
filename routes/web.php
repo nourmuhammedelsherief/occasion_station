@@ -34,6 +34,8 @@ use \App\Http\Controllers\AdminController\SettingController;
 use \App\Http\Controllers\AdminController\PageController;
 use \App\Http\Controllers\AdminController\OrderController;
 use \App\Http\Controllers\AdminController\ProviderRateController;
+use \App\Http\Controllers\AdminController\ProductSizeController;
+use \App\Http\Controllers\AdminController\ProductOptionController;
 
 // provider controller
 use \App\Http\Controllers\ProviderController\HomeController as ProviderHomeController;
@@ -43,6 +45,8 @@ use \App\Http\Controllers\ProviderController\ProviderController as ProviderProvi
 use \App\Http\Controllers\ProviderController\ProductController as ProviderProductController;
 use \App\Http\Controllers\ProviderController\OrderController as ProviderOrderController;
 use \App\Http\Controllers\ProviderController\CommissionController as ProviderCommissionController;
+use \App\Http\Controllers\ProviderController\ProviderProductSizeController;
+use \App\Http\Controllers\ProviderController\ProviderProductOptionController;
 
 
 use \App\Http\Controllers\Api\OrderController as ApiOrderController;
@@ -282,7 +286,7 @@ Route::prefix('admin')->group(function () {
             Route::get('providers/rates/delete/{id}','destroy')->name('deleteProviderRate');
         });
 
-        Route::get('get/sub_categories/{id}','AdminController\ProviderController@sub_categories')->name('sub_categories');
+        Route::get('get/sub_categories/{id}', [ProviderController::class, 'sub_categories'])->name('sub_categories');
 
 
         // products  Routes
@@ -300,8 +304,26 @@ Route::prefix('admin')->group(function () {
             Route::get('products/images/remove/{id}','imageProductRemove')->name('imageProductRemove');
             Route::get('get_provider/{id}','get_provider')->name('get_provider');
             Route::get('AcceptProduct/{id}','AcceptProduct')->name('AcceptProduct');
-
         });
+        // product sizes routes
+        Route::controller(ProductSizeController::class)->group(function () {
+            Route::get('product_sizes/{id}','index')->name('ProductSize');
+            Route::get('product_sizes/{id}/create','create')->name('createProductSize');
+            Route::post('product_sizes/{id}/store','store')->name('storeProductSize');
+            Route::get('product_sizes/edit/{id}','edit')->name('editProductSize');
+            Route::post('product_sizes/update/{id}','update')->name('updateProductSize');
+            Route::get('product_sizes/delete/{id}','destroy')->name('deleteProductSize');
+        });
+        // product options routes
+        Route::controller(ProductOptionController::class)->group(function () {
+            Route::get('product_options/{id}','index')->name('ProductOption');
+            Route::get('product_options/{id}/create','create')->name('createProductOption');
+            Route::post('product_options/{id}/store','store')->name('storeProductOption');
+            Route::get('product_options/edit/{id}','edit')->name('editProductOption');
+            Route::post('product_options/update/{id}','update')->name('updateProductOption');
+            Route::get('product_options/delete/{id}','destroy')->name('deleteProductOption');
+        });
+
 
 
         // products  Routes
@@ -315,6 +337,8 @@ Route::prefix('admin')->group(function () {
             Route::get('admin_categories/images/remove/{id}','imageProductRemove')->name('imageProductRemove');
 
         });
+
+
 
         // Admins Route
         Route::resource('/admins',AdminController::class);
@@ -482,7 +506,25 @@ Route::prefix('provider')->group(function () {
             Route::get('products/edit/{id}','edit')->name('editMyProduct');
             Route::post('products/update/{id}','update')->name('updateMyProduct');
             Route::get('products/delete/{id}','destroy')->name('deleteMyProduct');
+        });
+        // product sizes routes
+        Route::controller(ProviderProductSizeController::class)->group(function () {
+            Route::get('provider_product_sizes/{id}','index')->name('ProviderProductSize');
+            Route::get('provider_product_sizes/{id}/create','create')->name('createProviderProductSize');
+            Route::post('provider_product_sizes/{id}/store','store')->name('storeProviderProductSize');
+            Route::get('provider_product_sizes/edit/{id}','edit')->name('editProviderProductSize');
+            Route::post('provider_product_sizes/update/{id}','update')->name('updateProviderProductSize');
+            Route::get('provider_product_sizes/delete/{id}','destroy')->name('deleteProviderProductSize');
 
+        });
+        // product options routes
+        Route::controller(ProviderProductOptionController::class)->group(function () {
+            Route::get('provider_product_options/{id}','index')->name('ProviderProductOption');
+            Route::get('provider_product_options/{id}/create','create')->name('createProviderProductOption');
+            Route::post('provider_product_options/{id}/store','store')->name('storeProviderProductOption');
+            Route::get('provider_product_options/edit/{id}','edit')->name('editProviderProductOption');
+            Route::post('provider_product_options/update/{id}','update')->name('updateProviderProductOption');
+            Route::get('provider_product_options/delete/{id}','destroy')->name('deleteProviderProductOption');
         });
 
         // order routes

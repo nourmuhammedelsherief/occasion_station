@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    المنتجات (الموصي بها)
+    @lang('messages.product_sizes')
 @endsection
 
 @section('styles')
@@ -19,17 +19,17 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="{{url('/admin/products')}}">المنتجات (الموصي بها)</a>
+                <a href="{{url('/admin/product_sizes' , $product->id)}}">@lang('messages.product_sizes')</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>  عرض  المنتجات (الموصي بها)</span>
+                <span>  عرض  @lang('messages.product_sizes')</span>
             </li>
         </ul>
     </div>
 
-    <h1 class="page-title">عرض المنتجات (الموصي بها)
-        <small>عرض المنتجات (الموصي بها)</small>
+    <h1 class="page-title">عرض  @lang('messages.product_sizes')
+        <small>عرض  @lang('messages.product_sizes') ({{app()->getLocale() == 'ar' ? $product->name : $product->name_en}})</small>
     </h1>
 @endsection
 
@@ -51,9 +51,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="btn-group">
-                                    <a href="{{route('createProduct')}}">
+                                    <a href="{{route('createProductSize' , $product->id)}}">
                                         <button id="sample_editable_1_new"
-                                                class="btn sbold green"> أضافه جديد
+                                                class="btn sbold green"> أضافه حجم جديد
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </a>
@@ -72,21 +72,18 @@
                                 </label>
                             </th>
                             <th></th>
-                            <th> المزود</th>
-                            <th> القسم </th>
-                            <th> الاسم</th>
-                            <th> السعر</th>
-                            <th> أقل كميه</th>
-                            <th> @lang('messages.product_sizes') </th>
-                            <th> @lang('messages.product_options') </th>
-                            <th> موصي به</th>
+                            <th> الاسم </th>
+                            <th> السعر </th>
                             <th> العمليات</th>
+                            @if(Auth::guard('admin')->user()->role == 'admin' || Auth::guard('admin')->user()->role == 'editor')
+
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
                         <?php $i = 0 ?>
-                        @foreach($products as $product)
-                            @if($product->parent_id == null)
+                        @foreach($sizes as $size)
+                            @if($size->parent_id == null)
                                 <tr class="odd gradeX">
                                     <td>
                                         <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -95,69 +92,25 @@
                                         </label>
                                     </td>
                                     <td><?php echo ++$i ?></td>
-                                    <td> {{$product->provider->name}} </td>
-                                    <td> {{$product->category == null ? '' : $product->category->name}} </td>
-
-                                    <td> {{$product->name}} </td>
-                                    <td> {{$product->price}} </td>
-                                    <td> {{$product->less_amount}} </td>
+                                    <td> {{app()->getLocale() == 'ar' ? $size->name_ar : $size->name_en}} </td>
                                     <td>
-                                        <a href="{{route('ProductSize' , $product->id)}}" class="btn btn-primary">
-                                            {{$product->sizes->count()}}
+                                        {{$size->price}}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info" href="{{route('editProductSize' , $size->id)}}">
+                                            <i class="fa fa-edit"></i>
+                                            تعديل
                                         </a>
-                                    </td>
-                                    <td>
-                                        <a href="{{route('ProductOption' , $product->id)}}" class="btn btn-danger">
-                                            {{$product->options->count()}}
+                                        <a class="delete_country btn btn-danger" data="{{$size->id}}"
+                                           data_name="{{app()->getLocale() == 'ar' ? $size->name_ar : $size->name_en}}">
+                                            <i class="fa fa-key"></i> حذف
                                         </a>
-                                    </td>
-
-                                    <td>
-                                        <a class="btn btn-danger"
-                                           href="{{route('recommendProduct' , [$product->id , 'false'])}}"> الغاء
-                                            التوصية </a>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-xs green dropdown-toggle" type="button"
-                                                    data-toggle="dropdown"
-                                                    aria-expanded="false"> العمليات
-                                                <i class="fa fa-angle-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu pull-left" role="menu">
-
-                                                <li>
-                                                    <a href="{{route('editProduct' , $product->id)}}">
-                                                        <i class="icon-docs"></i> تعديل </a>
-                                                </li>
-                                                <li>
-                                                    <a class="delete_country" data="{{$product->id}}"
-                                                       data_name="{{$product->name}}">
-                                                        <i class="fa fa-key"></i> حذف
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    @if($product->stop == 'true')
-                                                        <a href="{{route('stopProduct' , [$product->id , 'false'])}}">
-                                                            <i class="fa fa-hand-stop-o"></i>
-                                                            إلغاء الإيقاف
-                                                        </a>
-                                                    @else
-                                                        <a href="{{route('stopProduct' , [$product->id , 'true'])}}">
-                                                            <i class="fa fa-stop"></i>
-                                                            إيقاف
-                                                        </a>
-                                                    @endif
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </td>
                                 </tr>
                             @endif
                         @endforeach
                         </tbody>
                     </table>
-                    {{$products->links()}}
                 </div>
             </div>
             <!-- END EXAMPLE TABLE PORTLET-->
@@ -192,7 +145,7 @@
                     cancelButtonText: "أغلاق",
                     closeOnConfirm: false
                 }, function () {
-                    window.location.href = "{{ url('/') }}" + "/admin/products/delete/" + id;
+                    window.location.href = "{{ url('/') }}" + "/admin/product_sizes/delete/" + id;
                 });
             });
         });

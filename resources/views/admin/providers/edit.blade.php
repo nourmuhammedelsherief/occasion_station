@@ -303,7 +303,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="form-group" id="delivery_by" style="{{$provider->delivery == 'false' ? 'display: none' : 'display: block'}}">
+                                            <div class="form-group" id="delivery_by" style="{{($provider->delivery == 'true' and$provider->delivery_by == 'app' ) ? 'display: block' : 'display: none'}}">
                                                 <label class="col-md-3 control-label">من سيقوم بالتوصيل</label>
                                                 <div class="col-md-9">
                                                     <input type="radio" name="delivery_by" {{$provider->delivery_by == 'provider' ? 'checked' : ''}} value="provider">  المزود من سيقوم بالتوصيل

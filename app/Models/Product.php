@@ -27,6 +27,10 @@ class Product extends Model
     {
         return $this->belongsTo(Provider::class , 'provider_id');
     }
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class , 'category_id');
+    }
 
     public function photos()
     {
@@ -36,4 +40,13 @@ class Product extends Model
     {
         return $this->hasMany(FavoriteProduct::class , 'product_id');
     }
+    public function sizes()
+    {
+        return $this->hasMany(ProductSize::class , 'product_id');
+    }
+    public function options()
+    {
+        return $this->hasMany(ProductOption::class , 'product_id');
+    }
+
 }

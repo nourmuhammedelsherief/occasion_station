@@ -25,15 +25,11 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                @if(auth()->guard('admin')->user()->admin_category_id == 4)
-                    <a href="{{route('showOrder' , $order->id)}}">عرض بيانات الطلب</a>
-                @elseif(auth()->guard('admin')->user()->admin_category_id != 4)
-                    <a href="{{route('showOrderE' , $order->id)}}">عرض بيانات الطلب</a>
-                @endif
+
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>  عرض  عرض بيانات  الطلب</span>
+                <span>  عرض  عرض بيانات الطلب</span>
             </li>
         </ul>
     </div>

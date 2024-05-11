@@ -1,7 +1,7 @@
 @extends('provider.layouts.master')
 
 @section('title')
-    منتجاتي
+    @lang('messages.product_sizes')
 @endsection
 
 @section('styles')
@@ -19,17 +19,17 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="{{url('/provider/products')}}">منتجاتي</a>
+                <a href="{{url('/provider/provider_product_sizes' , $product->id)}}">@lang('messages.product_sizes')</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>  عرض  منتجاتي</span>
+                <span>  عرض  @lang('messages.product_sizes')</span>
             </li>
         </ul>
     </div>
 
-    <h1 class="page-title">عرض منتجاتي
-        <small>عرض منتجاتي</small>
+    <h1 class="page-title">عرض  @lang('messages.product_sizes')
+        <small>عرض  @lang('messages.product_sizes') ({{app()->getLocale() == 'ar' ? $product->name : $product->name_en}})</small>
     </h1>
 @endsection
 
@@ -51,9 +51,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="btn-group">
-                                    <a href="{{route('createMyProduct')}}">
+                                    <a href="{{route('createProviderProductSize' , $product->id)}}">
                                         <button id="sample_editable_1_new"
-                                                class="btn sbold green"> أضافه جديد
+                                                class="btn sbold green"> أضافه حجم جديد
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </a>
@@ -72,20 +72,15 @@
                                 </label>
                             </th>
                             <th></th>
-                            <th> الاسم</th>
-                            <th> القسم </th>
-                            <th> السعر</th>
-                            <th> أقل كميه</th>
-                            <th> @lang('messages.product_sizes') </th>
-                            <th> @lang('messages.product_options') </th>
-{{--                            <th> التوصيل</th>--}}
-                            {{--                            <th> العمليات</th>--}}
+                            <th> الاسم </th>
+                            <th> السعر </th>
+                            <th> العمليات</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php $i = 0 ?>
-                        @foreach($products as $product)
-                            @if($product->parent_id == null)
+                        @foreach($sizes as $size)
+                            @if($size->parent_id == null)
                                 <tr class="odd gradeX">
                                     <td>
                                         <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -94,49 +89,25 @@
                                         </label>
                                     </td>
                                     <td><?php echo ++$i ?></td>
-                                    <td> {{$product->name}} </td>
-                                    <td> {{$product->category == null ? '' : $product->category->name}} </td>
-                                    <td> {{$product->price}} </td>
-                                    <td> {{$product->less_amount}} </td>
+                                    <td> {{app()->getLocale() == 'ar' ? $size->name_ar : $size->name_en}} </td>
                                     <td>
-                                        <a href="{{route('ProviderProductSize' , $product->id)}}" class="btn btn-primary">
-                                            {{$product->sizes->count()}}
-                                        </a>
+                                        {{$size->price}}
                                     </td>
                                     <td>
-                                        <a href="{{route('ProviderProductOption' , $product->id)}}" class="btn btn-danger">
-                                            {{$product->options->count()}}
+                                        <a class="btn btn-info" href="{{route('editProviderProductSize' , $size->id)}}">
+                                            <i class="fa fa-edit"></i>
+                                            تعديل
+                                        </a>
+                                        <a class="delete_country btn btn-danger" data="{{$size->id}}"
+                                           data_name="{{app()->getLocale() == 'ar' ? $size->name_ar : $size->name_en}}">
+                                            <i class="fa fa-key"></i> حذف
                                         </a>
                                     </td>
-
-                                    {{--                                    <td>--}}
-                                    {{--                                        <div class="btn-group">--}}
-                                    {{--                                            <button class="btn btn-xs green dropdown-toggle" type="button"--}}
-                                    {{--                                                    data-toggle="dropdown"--}}
-                                    {{--                                                    aria-expanded="false"> العمليات--}}
-                                    {{--                                                <i class="fa fa-angle-down"></i>--}}
-                                    {{--                                            </button>--}}
-                                    {{--                                            <ul class="dropdown-menu pull-left" role="menu">--}}
-
-                                    {{--                                                <!--<li>-->--}}
-                                    {{--                                            <!--    <a href="{{route('editMyProduct' , $product->id)}}">-->--}}
-                                    {{--                                                <!--        <i class="icon-docs"></i> تعديل </a>-->--}}
-                                    {{--                                                <!--</li>-->--}}
-                                    {{--                                                <li>--}}
-                                    {{--                                                    <a class="delete_country" data="{{$product->id}}"--}}
-                                    {{--                                                       data_name="{{$product->name}}">--}}
-                                    {{--                                                        <i class="fa fa-key"></i> حذف--}}
-                                    {{--                                                    </a>--}}
-                                    {{--                                                </li>--}}
-                                    {{--                                            </ul>--}}
-                                    {{--                                        </div>--}}
-                                    {{--                                    </td>--}}
                                 </tr>
                             @endif
                         @endforeach
                         </tbody>
                     </table>
-                    {{$products->links()}}
                 </div>
             </div>
             <!-- END EXAMPLE TABLE PORTLET-->
@@ -171,7 +142,7 @@
                     cancelButtonText: "أغلاق",
                     closeOnConfirm: false
                 }, function () {
-                    window.location.href = "{{ url('/') }}" + "/provider/products/delete/" + id;
+                    window.location.href = "{{ url('/') }}" + "/provider/provider_product_sizes/delete/" + id;
                 });
             });
         });

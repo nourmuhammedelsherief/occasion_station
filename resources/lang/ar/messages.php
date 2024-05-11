@@ -204,4 +204,6 @@ return [
     'userNewOrder' => 'هناك طلب جديد من العميل : ',
     'thanksForShopping' => 'نشكر لكم تسوقكم وتم أستلام طلبك .',
     'itemDeleted' => 'تم حذف العنصر من السلة بنجاح',
+    'product_sizes' => 'ألأحجام',
+    'product_options' => 'الإضافات',
 ];

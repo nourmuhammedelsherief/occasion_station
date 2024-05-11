@@ -340,4 +340,6 @@ return [
     'userNewOrder' => 'New Order From Client',
     'thanksForShopping' => 'Thank For Shopping',
     'itemDeleted' => 'Cart Item Deleted Successfully',
+    'product_sizes' => 'Sizes',
+    'product_options' => 'Options',
 ];

@@ -34,6 +34,8 @@ class ProductCollection extends ResourceCollection
                     'product_requirements' => strip_tags(str_replace('&nbsp;', ' ', $query->product_requirements)),
                     'photos' => $query->photos->count() > 0 ? ProductPhoto::collection($query->photos) : null,
                     'provider_category' =>$query->category == null ? null : new ProviderCategoryResource($query->category),
+                    'sizes'       => SizeResource::collection($query->sizes),
+                    'options'     => OptionResource::collection($query->options),
                     'created_at' => $query->created_at->format('Y-m-d')
                 ];
             }),

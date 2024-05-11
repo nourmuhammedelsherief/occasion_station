@@ -31,6 +31,8 @@ class ProductResource extends JsonResource
             'product_requirements' => strip_tags(str_replace('&nbsp;', ' ', $this->product_requirements)),
             'photos' => $this->photos->count() > 0 ? ProductPhoto::collection($this->photos) : null,
             'provider_category' => $this->category == null ? null : new ProviderCategoryResource($this->category),
+            'sizes'       => SizeResource::collection($this->sizes),
+            'options'     => OptionResource::collection($this->options),
             'created_at' => $this->created_at->format('Y-m-d')
         ];
     }

@@ -88,6 +88,8 @@
                             <th> الاسم </th>
                             <th> السعر </th>
                             <th> أقل كميه </th>
+                            <th> @lang('messages.product_sizes') </th>
+                            <th> @lang('messages.product_options') </th>
 {{--                            <th> التوصيل </th>--}}
                             <th> موصي به  </th>
                             <th> العمليات</th>
@@ -110,6 +112,16 @@
                                     <td> {{$product->name}} </td>
                                     <td> {{$product->price}} </td>
                                     <td> {{$product->less_amount}} </td>
+                                    <td>
+                                        <a href="{{route('ProductSize' , $product->id)}}" class="btn btn-primary">
+                                            {{$product->sizes->count()}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{route('ProductOption' , $product->id)}}" class="btn btn-danger">
+                                            {{$product->options->count()}}
+                                        </a>
+                                    </td>
 
                                     <td>
                                         <a class="btn btn-success" href="{{route('recommendProduct' , [$product->id , 'true'])}}">  توصيه </a>
