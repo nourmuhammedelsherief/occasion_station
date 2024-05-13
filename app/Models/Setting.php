@@ -14,6 +14,11 @@ class Setting extends Model
         'coltd_token',
         'delivery_price',
         'search_range',
-        'tax'
+        'advisor_number',
+        'tax',
+        'myFatoourah_token',
+        'contact_text',
+        'email',
+        'customer_services_number',
     ];
 }

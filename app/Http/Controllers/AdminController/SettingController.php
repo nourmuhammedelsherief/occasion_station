@@ -31,6 +31,7 @@ class SettingController extends Controller
             'sender_name' => 'required|string|max:191',
             // 'commission' => 'required',
             'contact_number' => 'required',
+            'customer_services_number' => 'required',
             'tax' => 'required',
             // 'delivery_price' => 'sometimes',
             'advisor_number' => 'sometimes',

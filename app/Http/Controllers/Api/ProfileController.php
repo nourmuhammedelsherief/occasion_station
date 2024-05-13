@@ -24,7 +24,6 @@ use Auth;
 class ProfileController extends Controller
 {
     //
-
     public function about_us(Request $request)
     {
         $about = AboutUs::first();
@@ -63,9 +62,17 @@ class ProfileController extends Controller
 
     public function advisor_contact_number()
     {
-        $number = Setting::first();
+        $number = Setting::first()->advisor_number;
         $all = [
-            'advisor_contact_number' => $number->advisor_number,
+            'advisor_contact_number' => $number,
+        ];
+        return ApiController::respondWithSuccess($all);
+    }
+    public function customer_services_number()
+    {
+        $number = Setting::first()->customer_services_number;
+        $all = [
+            'customer_services_number' => $number,
         ];
         return ApiController::respondWithSuccess($all);
     }

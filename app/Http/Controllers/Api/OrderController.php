@@ -10,6 +10,9 @@ use App\Http\Resources\CartResource;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 use App\Mail\NotifyMail;
+use App\Models\OrderOption;
+use App\Models\ProductOption;
+use App\Models\ProductSize;
 use App\Notification;
 use App\Notifications\NewAdminNotification;
 use App\Models\Order;
@@ -30,11 +33,14 @@ class OrderController extends Controller
     {
         $rules = [
             'product_id' => 'required|exists:products,id',
+            'size_id' => 'nullable|exists:product_sizes,id',
             'product_count' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails())
             return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
+
+
         // create new Order
         $product = Product::find($request->product_id);
         $provider = $product->provider;
@@ -53,84 +59,63 @@ class OrderController extends Controller
         $check_provider_cart = Cart::whereUserId($request->user()->id)
             ->whereProviderId($provider->id)
             ->whereStatus('opened')
+            ->orderBy('id', 'desc')
             ->first();
         if ($check_provider_cart) {
             // add order to lasted opened cart
-            /**
-             * check if this product exists at same cart order
-             */
-            $check_order = Order::whereCartId($check_provider_cart->id)
-                ->whereProductId($product->id)
-                ->whereUserId($request->user()->id)
-                ->whereStatus('on_cart')
-                ->first();
-            if ($check_order) {
-                // add product to same order
-                $product_count = $check_order->product_count + $request->product_count;
-                $tax = Setting::find(1)->tax;
-                $new_order_price = $product->price * $request->product_count;
-                $new_order_tax = ($new_order_price * $tax) / 100;
-                $order_price = $new_order_price + $check_order->order_price;
-                $total_tax = $new_order_tax + $check_order->tax_value;
-                $total_price = $new_order_price + $check_order->order_price + $total_tax;
-                $check_order->update([
-                    'order_price' => $order_price,
-                    'product_count' => $product_count,
-                    'tax_value' => $total_tax,
-                ]);
-                // update cart values
-                $check_provider_cart->update([
-                    'items_price' => $order_price,
-                    'total_price' => $total_price,
-                    'tax_value' => $total_tax,
-                ]);
-                $cart = $check_provider_cart;
-
-            } else {
-                // create new order
-                $order_price = $product->price * $request->product_count;
-                $tax = Setting::find(1)->tax;
-                $order_tax = ($order_price * $tax) / 100;
-                $total_tax = $order_tax;
-                $order = Order::create([
-                    'cart_id' => $check_provider_cart->id,
-                    'provider_id' => $product->provider_id,
-                    'user_id' => $request->user()->id,
-                    'product_id' => $request->product_id,
-                    'order_price' => $order_price,
-                    'status' => 'on_cart',
-                    'product_count' => $request->product_count,
-                    'tax_value' => $total_tax,
-                ]);
-                $items_price = $check_provider_cart->items_price + $order_price;
-                $delivery_price = $check_provider_cart->delivery_price;            // same provider with same delivery value
-                $cart_tax_value = $check_provider_cart->tax_value + $total_tax;
-                $total_price = $items_price + $delivery_price + $cart_tax_value;
-                $check_provider_cart->update([
-                    'items_price' => $items_price,
-                    'total_price' => $total_price,
-                    'tax_value' => $cart_tax_value,
-                ]);
-                $cart = $check_provider_cart;
+            // create new order
+            $order = Order::create([
+                'cart_id' => $check_provider_cart->id,
+                'provider_id' => $product->provider_id,
+                'user_id' => $request->user()->id,
+                'product_id' => $request->product_id,
+                'size_id' => $request->size_id ?: null,
+                'status' => 'on_cart',
+                'product_count' => $request->product_count,
+            ]);
+            $options_price = 0;
+            // check options
+            if ($request->options) {
+                foreach (json_decode($request->options) as $option) {
+                    // add options to order
+                    $option_price = ProductOption::find($option->id)->price * $option->count;
+                    OrderOption::create([
+                        'order_id' => $order->id,
+                        'option_id' => $option->id,
+                        'option_count' => $option->count,
+                        'price' => $option_price,
+                    ]);
+                    $options_price += $option_price;
+                }
             }
+            $order_price = ($request->size_id ? ProductSize::find($request->size_id)->price : $product->price) * $request->product_count;
+            $tax = Setting::find(1)->tax;
+            $order_tax = (($order_price + $options_price) * $tax) / 100;
+            $total_tax = $order_tax;
+            $order->update([
+                'order_price' => $order_price,
+                'options_price' => $options_price,
+                'tax_value' => $order_tax,
+            ]);
+            $items_price = $check_provider_cart->items_price + $order_price + $options_price;
+            $delivery_price = $check_provider_cart->delivery_price;            // same provider with same delivery value
+            $cart_tax_value = $check_provider_cart->tax_value + $total_tax;
+            $total_price = $items_price + $delivery_price + $cart_tax_value;
+            $check_provider_cart->update([
+                'items_price' => $items_price,
+                'total_price' => $total_price,
+                'tax_value' => $cart_tax_value,
+            ]);
+            $cart = $check_provider_cart;
         } else {
             // create new cart provider and new product order
-            $order_price = $product->price * $request->product_count;
-            $tax = Setting::find(1)->tax;
-            $order_tax = ($order_price * $tax) / 100;
-            $total_tax = $order_tax;
-            $total_price = $order_price + $total_tax;
-
             $cart = Cart::create([
                 'user_id' => $request->user()->id,
                 'provider_id' => $provider->id,
-                'items_price' => $order_price,
-                'total_price' => $total_price,
                 'transfer_photo' => null,
                 'invoice_id' => null,
                 'payment_status' => 'wait',
                 'status' => 'opened',
-                'tax_value' => $total_tax,
             ]);
 
             $order = Order::create([
@@ -138,10 +123,41 @@ class OrderController extends Controller
                 'provider_id' => $product->provider_id,
                 'user_id' => $request->user()->id,
                 'product_id' => $request->product_id,
-                'order_price' => $order_price,
                 'status' => 'on_cart',
+                'size_id' => $request->size_id ?: null,
                 'product_count' => $request->product_count,
-                'tax_value' => $total_tax,
+            ]);
+            $options_price = 0;
+            // check options
+            if ($request->options) {
+                foreach (json_decode($request->options) as $option) {
+                    // add options to order
+                    $option_price = ProductOption::find($option->id)->price * $option->count;
+                    OrderOption::create([
+                        'order_id' => $order->id,
+                        'option_id' => $option->id,
+                        'option_count' => $option->count,
+                        'price' => $option_price,
+                    ]);
+                    $options_price += $option_price;
+                }
+            }
+
+
+            $order_price = ($request->size_id ? ProductSize::find($request->size_id)->price : $product->price) * $request->product_count;
+            $tax = Setting::find(1)->tax;
+            $total_order_price = $order_price + $options_price;
+            $order_tax = ($total_order_price * $tax) / 100;
+            $total_price = $total_order_price + $order_tax;
+            $order->update([
+                'order_price' => $order_price,
+                'options_price' => $options_price,
+                'tax_value' => $order_tax,
+            ]);
+            $cart->update([
+                'items_price'  => $total_order_price,
+                'tax_value'    => $order_tax,
+                'total_price'  => $total_price,
             ]);
 
         }
@@ -215,10 +231,9 @@ class OrderController extends Controller
                 } else {
                     $delivery_price = 0;
                 }
-                if ($request->store_receiving == 'true' and $provider->store_receiving == 'true' and $cart->store_receiving == 'false')
-                {
+                if ($request->store_receiving == 'true' and $provider->store_receiving == 'true' and $cart->store_receiving == 'false') {
                     $cart->update([
-                       'store_receiving' => 'true',
+                        'store_receiving' => 'true',
                     ]);
                     $delivery_price = 0;
                 }
@@ -226,8 +241,7 @@ class OrderController extends Controller
                 $delivery_tax = ($delivery_price * $tax) / 100;
                 $total_tax = $delivery_tax + $cart->tax_value;
                 $total_price = $cart->total_price + $delivery_price + $delivery_tax;
-                if ($cart->delivery_price == null)
-                {
+                if ($cart->delivery_price == null) {
                     $cart->update([
                         'delivery_price' => $delivery_price,
                         'total_price' => $total_price,

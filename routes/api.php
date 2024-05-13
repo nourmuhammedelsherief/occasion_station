@@ -83,6 +83,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/animated_sliders', 'sliders');
             Route::get('/contact_number', 'contact_number');
             Route::get('/advisor_contact_number', 'advisor_contact_number');
+            Route::get('/customer_services_number', 'customer_services_number');
 
             Route::get('/provider/{id}/sliders', 'provider_sliders');
             Route::get('/provider_categories', 'provider_categories');

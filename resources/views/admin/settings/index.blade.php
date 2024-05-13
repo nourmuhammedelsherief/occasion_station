@@ -119,6 +119,14 @@
                                                        name="sender_name" value="{{$settings->sender_name}}">
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label"> رقم تواصل خدمة العملاء </label>
+                                            <div class="col-md-9">
+                                                <input type="number" class="form-control" placeholder=" رقم تواصل خدمة العملاء "
+                                                       name="customer_services_number" value="{{$settings->customer_services_number}}">
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"> رقم التواصل </label>
                                             <div class="col-md-9">
