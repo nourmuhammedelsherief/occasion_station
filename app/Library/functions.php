@@ -480,7 +480,7 @@ function sendMultiNotification($notificationTitle, $notificationBody, $devicesTo
 
 function sendNotification($firebaseToken, $title, $body, $photo = null)
 {
-    $SERVER_API_KEY = 'AAAAMPW1SSg:APA91bHaD3j132C9NNKBrmHD4OMGOv_6GpWdOSHCpPHtWIXnhpA7WQo_ldHCeV2Nk9UBcaR-Jj4R4xvlng2AxF3ioFpjyg2q1UCI9wNZjbZmAFgVNPqe-q3Aucs9KWao_6sFjMrUkOdW';
+    $SERVER_API_KEY = 'AAAAXrWN78o:APA91bHh877uAsjYYhxlUAFKbpRkrlj0IhYkYJV0VMf6YQhpOVHkxVN9TrlR97rKUNGbDvTWAiKVgP4AMaCf5Z8g8LDgsSc_KdRVJjC_SyoiXdDFW0SsKvSCVoIY-cK4-VMdkGfPx4tE';
     // payload data, it will vary according to requirement
     $data = [
         "registration_ids" => $firebaseToken,
