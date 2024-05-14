@@ -103,8 +103,8 @@ class ProviderController extends Controller
             'category_id' => $request->category_id,
             'store_receiving'      => $request->store_receiving == null ? 'false' : $request->store_receiving,
             'delivery'             => $request->delivery,
-            'delivery_by'          => $request->delivery_by?:'app',
-            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
+            'delivery_by'          => $request->delivery == 'false' ? null :  ($request->delivery_by?:'app'),
+            'delivery_price'       => $request->delivery_price == null ? ($request->delivery == 'false' ? 0 : Setting::first()->delivery_price) : ($request->delivery == 'false' ? 0 : $request->delivery_price),
             'photo'   => $request->file('photo') == null ? null : UploadImage($request->file('photo') , 'photo' , '/uploads/providers'),
             'logo'    => $request->file('logo') == null ? null : UploadImage($request->file('logo') , 'logo' , '/uploads/providers/logos')
         ]);
@@ -218,8 +218,8 @@ class ProviderController extends Controller
             'tamara_payment' => $request->tamara_payment ?: 'false',
             'store_receiving'      => $request->store_receiving == null ? 'false' : ($request->delivery == 'false' ? 'false' : $request->store_receiving),
             'delivery'             => $request->delivery,
-            'delivery_by'          => $request->delivery_by?:'app',
-            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
+            'delivery_by'          => $request->delivery == 'false' ? null :  ($request->delivery_by?:'app'),
+            'delivery_price'       => $request->delivery_price == null ? ($request->delivery == 'false' ? 0 : Setting::first()->delivery_price) : ($request->delivery == 'false' ? 0 : $request->delivery_price),
             'category_id' => $request->category_id,
             'photo'   => $request->file('photo') == null ? $provider->photo : UploadImageEdit($request->file('photo') , 'photo' , '/uploads/providers' , $provider->photo),
             'logo'   => $request->file('logo') == null ? $provider->logo : UploadImageEdit($request->file('logo') , 'logo' , '/uploads/providers/logos' , $provider->logo),
