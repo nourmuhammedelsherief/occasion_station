@@ -55,13 +55,8 @@ use \App\Http\Controllers\Api\OrderController as ApiOrderController;
 Route::get('/tamara' , function (){
     tamara();
 });
+
 Route::get('/', ['middleware'=> 'auth:admin', 'uses'=>'AdminController\HomeController@index']);
-
-Route::controller(ApiOrderController::class)->group(function () {
-    Route::get('/check-status/{id?}/{id1?}', 'fatooraStatus');
-    Route::get('/error-status', 'errorStatus');
-});
-
 
 Route::get('/update_providers' , function (){
     $users  = \App\Models\ProviderMainCategory::all();

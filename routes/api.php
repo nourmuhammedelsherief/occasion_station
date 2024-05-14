@@ -48,9 +48,13 @@ Route::prefix('v1')->group(function () {
         }
     });
     Route::controller(OrderController::class)->group(function () {
+        Route::get('/check-status/{id?}/{id1?}', 'fatooraStatus');
+        Route::get('/error-status', 'errorStatus');
+
         Route::post('/complete_order' , 'complete_tamara_order');
         Route::get('/complete_order' , 'complete_tamara_order');
     });
+
 
     Route::group(['middleware' => ['cors', 'localization']], function () {
         /*user register*/

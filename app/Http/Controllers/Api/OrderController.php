@@ -283,12 +283,14 @@ class OrderController extends Controller
                         'message' => trans('messages.is_joinTrue'),
                     ];
                     return ApiController::respondWithSuccessData($success);
-                } elseif ($request->payment_type == 'online') {
+                }
+                elseif ($request->payment_type == 'online') {
                     // Online Payment
                     $amount = $cart->total_price;
                     $charge = $request->charge_id;
                     $user = $request->user();
                     $token = Setting::find(1)->myFatoourah_token;
+//                    $token = 'rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL';
                     $data = array(
                         "CustomerName" => $user->name,
                         "PaymentMethodId" => $charge,
@@ -298,8 +300,8 @@ class OrderController extends Controller
                         "CustomerEmail" => "mail@company.com",
                         "InvoiceValue" => $amount,
                         "DisplayCurrencyIso" => "kwd",
-                        "CallBackUrl" => url('/check-status'),
-                        "ErrorUrl" => url('/error-status'),
+                        "CallBackUrl" => 'http://127.0.0.1:8000/api/v1/check-status',
+                        "ErrorUrl" => 'http://127.0.0.1:8000/api/v1/error-status',
                         "Language" => "ar",
                         "CustomerReference" => "noshipping-nosupplier",
                         "CustomerAddress" => array(
@@ -335,7 +337,8 @@ class OrderController extends Controller
                         return ApiController::respondWithSuccessData($success);
 
                     }
-                } elseif ($request->payment_type == 'tamara') {
+                }
+                elseif ($request->payment_type == 'tamara') {
                     // payment by tamara
                     $amount = $cart->total_price;
                     $user = $request->user();
@@ -408,7 +411,7 @@ class OrderController extends Controller
                         // send notification to provider
                         $provider = Provider::find($order->provider_id);
                         $provider->notify(new NewAdminNotification($order->id));
-                        if ($order->product->delivery == 'yes') {
+                        if ($order->cart->delivery_price > 0) {
                             $note = $order->delivery_date . ' ' . $order->delivery_time;
                             $obj = array(
                                 'sender_data' => array(
@@ -515,6 +518,7 @@ class OrderController extends Controller
     public function fatooraStatus()
     {
         $token = Setting::find(1)->myFatoourah_token;
+//        $token = 'rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL';
         $PaymentId = \Request::query('paymentId');
         $resData = MyFatoorahStatus($token, $PaymentId);
         $result = json_decode($resData);
@@ -529,8 +533,8 @@ class OrderController extends Controller
                     'payment_type' => 'online',
                     'invoice_id' => null,
                 ]);
-                $title = 'الطلبات';
-                $message = 'نشكر لكم تسوقكم وتم أستلام طلبك';
+                $title = trans('messages.orders');
+                $message = trans('messages.thanksForShopping');
                 $devicesTokens = UserDevice::where('user_id', $cart->user_id)
                     ->get()
                     ->pluck('device_token')
@@ -555,7 +559,8 @@ class OrderController extends Controller
                         // send notification to provider
                         $provider = Provider::find($order->provider_id);
                         $provider->notify(new NewAdminNotification($order->id));
-                        if ($order->product->delivery == 'yes') {
+
+                        if ($order->cart->delivery_price > 0) {
                             $note = $order->delivery_date . ' ' . $order->delivery_time;
                             $obj = array(
                                 'sender_data' => array(
@@ -627,7 +632,6 @@ class OrderController extends Controller
                                 "force_create" => true,
                                 "reference_id" => $order->id,
                             );
-
                             createColdtOrder($obj);
                         }
                     }
