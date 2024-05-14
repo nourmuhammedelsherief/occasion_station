@@ -101,6 +101,10 @@ class CategoryController extends Controller
                 if (isset($request->latitude)) {
                     $query->orderBy(DB::raw("3959 * acos( cos( radians({$request->input('latitude')}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(-{$request->input('longitude')}) ) + sin( radians({$request->input('latitude')}) ) * sin(radians(latitude)) )"), 'ASC');
                 }
+                if (isset($request->rate_order))
+                {
+                    $query->orderBy('rate', 'DESC');
+                }
                 $query->whereStop('false');
                 $query->whereCategoryId($request->category_id);
             })
