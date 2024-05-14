@@ -23,7 +23,7 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>  عرض  مزودي الخدمات</span>
+                <span>  عرض مزودي الخدمات</span>
             </li>
         </ul>
     </div>
@@ -81,7 +81,6 @@
                             {{--                            <th> الهاتف</th>--}}
                             <th> السلايدر </th>
                             <th> النشاط </th>
-                            <th> سجل المبيعات </th>
                             <th>  المنتجات</th>
                             <th> التقييم </th>
                             @if(auth()->guard('admin')->user()->admin_category_id == 4 or auth()->guard('admin')->user()->admin_category_id == 6)
@@ -123,12 +122,10 @@
                                             بيع/تأجير
                                         @endif
                                     </td>
-                                    <td>
-                                        <a href="{{route('orders_completed' , $provider->id)}}" class="btn btn-success"> عرض </a>
-                                    </td>
+
                                     <td> {{$provider->products->count()}} </td>
                                     <td>
-                                        <a href="{{route('showProviderRates' , $provider->id)}}" class="btn btn-warning">{{$provider->rate}}</a>
+                                        <a href="{{route('showProviderRates' , $provider->id)}}" class="btn btn-warning">{{$provider->rates->count()}}</a>
                                     </td>
                                     @if(auth()->guard('admin')->user()->admin_category_id == 4 or auth()->guard('admin')->user()->admin_category_id == 6)
                                         <td>
@@ -196,6 +193,12 @@
                                                                 إيقاف
                                                             </a>
                                                         @endif
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{route('orders_completed' , $provider->id)}}">
+                                                            <i class="fa fa-eye"></i>
+                                                            سجل المبيعات
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>

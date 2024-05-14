@@ -138,7 +138,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/logout', 'logout');
         });
 
-        Route::post('/contact_us', 'Api\ProfileController@contact_us');
+        Route::controller(ProfileController::class)->group(function () {
+            Route::post('/contact_us', 'contact_us');
+        });
+
 
 
         /**

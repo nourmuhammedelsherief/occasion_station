@@ -290,6 +290,18 @@
                                             {{--                                                    </select>--}}
                                             {{--                                                </div>--}}
                                             {{--                                            </div>--}}
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
+                                                <div class="col-md-9">
+                                                    <input type="radio" name="store_receiving" {{$provider->store_receiving == 'true' ? 'checked' : ''}}  value="true"> نعم
+                                                    <input type="radio" name="store_receiving" {{$provider->store_receiving == 'false' ? 'checked' : ''}} value="false"> لا
+                                                    @if ($errors->has('store_receiving'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">هل السعر شامل التوصيل ؟</label>
@@ -303,7 +315,8 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="form-group" id="delivery_by" style="{{($provider->delivery == 'true' and$provider->delivery_by == 'app' ) ? 'display: block' : 'display: none'}}">
+
+                                            <div class="form-group" id="delivery_by" style="{{($provider->delivery == 'true' ) ? 'display: block' : 'display: none'}}">
                                                 <label class="col-md-3 control-label">من سيقوم بالتوصيل</label>
                                                 <div class="col-md-9">
                                                     <input type="radio" name="delivery_by" {{$provider->delivery_by == 'provider' ? 'checked' : ''}} value="provider">  المزود من سيقوم بالتوصيل
@@ -316,18 +329,6 @@
                                                 </div>
                                             </div>
                                             <div id="delivery_price" style="{{ ($provider->delivery == 'true' and $provider->delivery_by == 'app') ? 'display: block' : 'display: none'}}">
-                                                <div class="form-group">
-                                                    <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
-                                                    <div class="col-md-9">
-                                                        <input type="radio" name="store_receiving" {{$provider->store_receiving == 'true' ? 'checked' : ''}}  value="true"> نعم
-                                                        <input type="radio" name="store_receiving" {{$provider->store_receiving == 'false' ? 'checked' : ''}} value="false"> لا
-                                                        @if ($errors->has('store_receiving'))
-                                                            <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
-                                                        </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
                                                 <div class="form-group">
                                                     <label class="col-md-3 control-label">سعر التوصيل</label>
                                                     <div class="col-md-9">
