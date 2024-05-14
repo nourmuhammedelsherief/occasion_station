@@ -63,6 +63,18 @@ Route::controller(ApiOrderController::class)->group(function () {
 });
 
 
+Route::get('/update_providers' , function (){
+    $users  = \App\Models\ProviderMainCategory::all();
+    foreach ($users as  $user)
+    {
+        $user->provider->update([
+            'category_id' => $user->category_id,
+            'provider_category_arrange' => $user->arrange,
+        ]);
+    }
+    echo 'success';
+});
+
 Route::get('/update_users' , function (){
     $users  = \App\Models\User::all();
     foreach ($users as  $user)

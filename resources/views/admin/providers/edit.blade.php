@@ -218,7 +218,7 @@
                                                             </option>
                                                             @foreach($categories  as $category)
                                                                 <option
-                                                                    value="{{$category->id}}" {{\App\Models\ProviderMainCategory::whereProviderId($provider->id)->where('category_id' , $category->id)->first() != null ? 'selected' : ''}}> {{$category->name}} </option>
+                                                                    value="{{$category->id}}" {{ $provider->category_id == $category->id ? 'selected' : ''}}> {{$category->name}} </option>
                                                             @endforeach
                                                         </select>
                                                         @if ($errors->has('category_id'))

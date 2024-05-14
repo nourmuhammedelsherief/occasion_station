@@ -100,7 +100,7 @@ class ProviderController extends Controller
             'bank_payment'   => $request->bank_payment ?: 'false',
             'online_payment' => $request->online_payment ?: 'false',
             'tamara_payment' => $request->tamara_payment ?: 'false',
-//            'category_id' => $request->category_id,
+            'category_id' => $request->category_id,
             'store_receiving'      => $request->store_receiving == null ? 'false' : $request->store_receiving,
             'delivery'             => $request->delivery,
             'delivery_by'          => $request->delivery_by?:'app',
@@ -220,9 +220,7 @@ class ProviderController extends Controller
             'delivery'             => $request->delivery,
             'delivery_by'          => $request->delivery_by?:'app',
             'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
-
-//
-//            'category_id' => $request->category_id,
+            'category_id' => $request->category_id,
             'photo'   => $request->file('photo') == null ? $provider->photo : UploadImageEdit($request->file('photo') , 'photo' , '/uploads/providers' , $provider->photo),
             'logo'   => $request->file('logo') == null ? $provider->logo : UploadImageEdit($request->file('logo') , 'logo' , '/uploads/providers/logos' , $provider->logo),
         ]);
@@ -324,6 +322,9 @@ class ProviderController extends Controller
         ]);
         $category->update([
             'arrange' => $request->arrange
+        ]);
+        $category->provider->update([
+            'provider_category_arrange' => $request->arrange,
         ]);
         flash(trans('تم ترتيب المزود داخل القسم بنجاح'))->success();
         return redirect()->route('provider_categories' , $category->provider_id);

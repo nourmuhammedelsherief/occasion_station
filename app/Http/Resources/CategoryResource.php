@@ -17,11 +17,11 @@ class CategoryResource extends JsonResource
         if ($this->category)
         {
             return [
-                'id'   => $this->category->id,
+                'id'   => $this->category_id,
                 'name' => app()->getLocale() == 'ar' ? $this->category->name : ($this->category->name_en ?: $this->category->name),
                 'icon' => $this->category->icon == null ? null : asset('/uploads/categories/' . $this->category->icon),
                 'has_sub_categories' => $this->category->sub_categories->count() > 0 ? true : false,
-                'arrange'  => $this->category->arrange,
+                'arrange'  => $this->arrange,
                 'created_at' => $this->category->created_at->format('Y-m-d'),
             ];
         }else{

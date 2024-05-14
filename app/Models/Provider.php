@@ -30,6 +30,7 @@ class Provider extends Authenticatable
         'stop',
         'logo',
         'arrange',
+        'provider_category_arrange',
         'description',
         'commission',  // the total commissions for provider
         'bank_payment',
@@ -61,7 +62,7 @@ class Provider extends Authenticatable
     }
     public function provider_main_categories()
     {
-        return $this->hasMany(ProviderMainCategory::class , 'provider_id');
+        return $this->hasMany(ProviderMainCategory::class)->orderBy('arrange');
     }
     public function sliders()
     {
