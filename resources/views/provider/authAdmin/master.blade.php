@@ -41,9 +41,6 @@
 
 </div>
 
-<div class="copyright"> {{ date('Y') }} © تطوير بواسطة
-    <a target="_blank" href="https://tqnee.com.sa/">   شركة تقني. </a>
-</div>
 
 </body>
 </html>

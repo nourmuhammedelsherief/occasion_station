@@ -252,6 +252,21 @@
                             </p>
 
                     </div>
+                    <div class="table-toolbar">
+                        <h3 class="text-center"> بيانات المزود </h3>
+                        <p> الأسم : {{$order->provider->name}} </p>
+                        <p> الجوال : {{$order->provider->phone_number}} </p>
+                        <p> الأيميل : {{$order->provider->email}} </p>
+                        <p> المدينه : {{$order->provider->city->name}} </p>
+                        {{--                                                    <p> القسم : {{$item->provider->category->name}} </p>--}}
+                        @if($order->provider->latitude != null && $order->provider->longitude != null)
+
+                            <?php $location = 'https://www.google.com/maps?q=' . $order->provider->latitude . ',' . $order->provider->longitude; ?>
+                            <p><a href="{{$location}}" target="_blank"> {{$location}} </a>
+                                لوكيشن المزود
+                            </p>
+                        @endif
+                    </div>
                 </div>
             </div>
             <h3 class="text-center"> المنتجات </h3>
@@ -299,38 +314,57 @@
                                 {{--                                    لم يحدد بعد--}}
                                 {{--                                    @endif--}}
                                 {{--                                    </p>--}}
-                                <p> المزود :
-                                    @if($item->provider != null)
+
+
+                                <p> المنتج :
+                                    @if($item->product != null)
                                         <a type="button" class="btn btn-info" data-toggle="modal"
-                                           data-target="#exampleModalScrollable{{$item->provider->id}}">
+                                           data-target="#exampleModalScrollable{{$item->product->id}}">
                                             عرض
                                         </a>
-
-                                <div class="modal fade" id="exampleModalScrollable{{$item->provider->id}}"
+                                <div class="modal fade" id="exampleModalScrollable{{$item->product->id}}"
                                      tabindex="-1"
-                                     role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                                     role="dialog" aria-labelledby="exampleModalScrollableTitle"
+                                     aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض بيانات
-                                                    مزود الخدمه </h5>
+                                                <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض
+                                                    بيانات المنتج </h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <p> الأسم : {{$item->provider->name}} </p>
-                                                <p> الجوال : {{$item->provider->phone_number}} </p>
-                                                <p> الأيميل : {{$item->provider->email}} </p>
-                                                <p> المدينه : {{$item->provider->city->name}} </p>
-                                                {{--                                                    <p> القسم : {{$item->provider->category->name}} </p>--}}
-                                                @if($item->provider->latitude != null && $item->provider->longitude != null)
+                                                <p> أسم المنتج : {{$item->product->name}} </p>
+                                                <p> السعر : {{$item->product->price}} ريال </p>
+                                                {{--                                                        <p> أقل كميه للطلب : {{$item->product->less_amount}} </p>--}}
+                                                <p> الكميه في الطلب : {{$item->product_count}} </p>
+                                                <p> النشاط :
+                                                    @if($item->product->activity == 'sale')
+                                                        بيع
+                                                    @elseif($item->product->activity == 'rent')
+                                                        تأجير
+                                                    @else
+                                                        بيع / تأجير
+                                                    @endif
 
-                                                    <?php $location = 'https://www.google.com/maps?q=' . $item->provider->latitude . ',' . $item->provider->longitude; ?>
-                                                    <p><a href="{{$location}}" target="_blank"> {{$location}} </a>
-                                                        لوكيشن المزود
-                                                    </p>
+                                                </p>
+                                                @if($item->size)
+                                                    <hr>
+                                                    <p class="text-center"> ألأحجام </p>
+                                                    <p> الحجم : {{app()->getLocale() == 'ar' ? $item->size->name_ar : $item->size->name_en}} </p>
+                                                    <p> السعر : {{$item->size->price}} </p>
+                                                @endif
+                                                @if($item->options->count() > 0)
+                                                    <hr>
+                                                    <h5 class="text-center"> الاضافات </h5>
+                                                    @foreach($item->options as $option)
+                                                        <p> الأضافة : {{app()->getLocale() == 'ar' ? $option->option->name_ar : $option->option->name_en}} </p>
+                                                        <p> الكميه : {{$option->option_count}} </p>
+                                                        <p> السعر : {{$option->price}} </p>
+                                                    @endforeach
                                                 @endif
                                             </div>
                                             <div class="modal-footer">
@@ -346,58 +380,6 @@
                                     لم يحدد بعد
                                     @endif
                                     </p>
-
-
-                                    <p> المنتج :
-                                        @if($item->product != null)
-                                            <a type="button" class="btn btn-info" data-toggle="modal"
-                                               data-target="#exampleModalScrollable{{$item->product->id}}">
-                                                عرض
-                                            </a>
-                                    <div class="modal fade" id="exampleModalScrollable{{$item->product->id}}"
-                                         tabindex="-1"
-                                         role="dialog" aria-labelledby="exampleModalScrollableTitle"
-                                         aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalScrollableTitle"> عرض
-                                                        بيانات المنتج </h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p> أسم المنتج : {{$item->product->name}} </p>
-                                                    <p> السعر : {{$item->product->price}} ريال </p>
-                                                    {{--                                                        <p> أقل كميه للطلب : {{$item->product->less_amount}} </p>--}}
-                                                    <p> الكميه في الطلب : {{$item->product_count}} </p>
-                                                    <p> النشاط :
-                                                        @if($item->product->activity == 'sale')
-                                                            بيع
-                                                        @elseif($item->product->activity == 'rent')
-                                                            تأجير
-                                                        @else
-                                                            بيع / تأجير
-                                                        @endif
-
-                                                    </p>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">أغلاق
-                                                    </button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @else
-                                        لم يحدد بعد
-                                        @endif
-                                        </p>
 
 
                             </div>

@@ -50,8 +50,8 @@ class ProviderController extends Controller
             'longitude' => $request->longitude? $request->longitude : $data->longitude,
             'store_receiving'      => $request->store_receiving ?: 'false',
             'delivery'             => $request->delivery,
-            'delivery_by'          => $request->delivery_by?:'app',
-            'delivery_price'       => $request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price,
+            'delivery_by'          => $request->delivery == 'false' ? null : ($request->delivery_by?:'app'),
+            'delivery_price'       => $request->delivery == 'false' ? 0 : ($request->delivery_price == null ? Setting::first()->delivery_price : $request->delivery_price),
         ]);
         return redirect(url('/provider/profile'))->with('msg', 'تم التعديل بنجاح');
 

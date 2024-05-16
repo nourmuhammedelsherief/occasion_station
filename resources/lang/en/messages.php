@@ -311,7 +311,7 @@ return [
     'hotel_protraction_successfully' => 'Hotel Period Protraction Successfully',
     'codeSentSuccessfully' => 'Code Sent Successfully',
     'hotelArchived' => 'Hotel Is Archived',
-    'Unauthorized' => 'Unauthorized',
+    'Unauthorized' => 'Token is Required',
     'providerNotFound' => 'Provider Not Found',
     'emptyCart' => 'Empty Cart For This Provider',
     'notification_deleted_successfully' => 'Notification Deleted Successfully',
@@ -342,4 +342,5 @@ return [
     'itemDeleted' => 'Cart Item Deleted Successfully',
     'product_sizes' => 'Sizes',
     'product_options' => 'Options',
+    'profile_setting' => 'Profile Setting',
 ];

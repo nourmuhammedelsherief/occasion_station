@@ -18,7 +18,7 @@
     <form method="POST" action="{{route('provider.login.submit')}}">
         @csrf
 
-        <h3 class="form-title font-green">تسجيل الدخول</h3>
+        <h3 class="form-title font-green">تسجيل الدخول(المزودين)</h3>
 
         <div class="form-group">
             <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->

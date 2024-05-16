@@ -285,6 +285,21 @@
                                                         @endif
 
                                                     </p>
+                                                    @if($item->size)
+                                                        <hr>
+                                                        <p class="text-center"> ألأحجام </p>
+                                                        <p> الحجم : {{app()->getLocale() == 'ar' ? $item->size->name_ar : $item->size->name_en}} </p>
+                                                        <p> السعر : {{$item->size->price}} </p>
+                                                    @endif
+                                                    @if($item->options->count() > 0)
+                                                        <hr>
+                                                        <h5 class="text-center"> الاضافات </h5>
+                                                        @foreach($item->options as $option)
+                                                            <p> الأضافة : {{app()->getLocale() == 'ar' ? $option->option->name_ar : $option->option->name_en}} </p>
+                                                            <p> الكميه : {{$option->option_count}} </p>
+                                                            <p> السعر : {{$option->price}} </p>
+                                                        @endforeach
+                                                    @endif
 
                                                 </div>
                                                 <div class="modal-footer">

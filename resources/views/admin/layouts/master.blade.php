@@ -83,9 +83,7 @@
     </div>
     <!-- BEGIN FOOTER -->
     <div class="page-footer">
-        <div class="page-footer-inner"> {{ date('Y') }} &copy; تطوير بواسطة
-            <a target="_blank" href="https://tqnee.com.sa/">   شركة تقني . </a>
-        </div>
+
         <div class="scroll-to-top">
             <i class="icon-arrow-up"></i>
         </div>

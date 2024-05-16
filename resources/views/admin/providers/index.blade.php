@@ -86,7 +86,8 @@
                             @if(auth()->guard('admin')->user()->admin_category_id == 4 or auth()->guard('admin')->user()->admin_category_id == 6)
                                 <th> مميز </th>
                                 <th> vip </th>
-                                <th> الأقسام </th>
+                                <th> القسم </th>
+                                <th> الترتيب </th>
                                 <th> الحالة </th>
                                 <th> العمليات</th>
                             @endif
@@ -151,9 +152,13 @@
                                             {{--                                                    {{$provider->arrange}}--}}
                                             {{--                                                @endif--}}
                                             {{--                                            </a>--}}
+                                            {{app()->getLocale() == 'ar' ? $provider->category->name : $provider->category->name_en}}
+
+                                        </td>
+                                        <td>
                                             <a href="{{route('provider_categories' , $provider->id)}}"
                                                class="btn btn-primary">
-                                                عرض
+                                                {{$provider->provider_category_arrange?:'لم يرتب'}}
                                             </a>
                                         </td>
                                         <td>

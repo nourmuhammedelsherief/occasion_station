@@ -82,34 +82,107 @@ class CategoryController extends Controller
             return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
 
 //        $range = Setting::find(1)->search_range;
-        $providers = Provider::with('provider_categories', 'city')
-            ->whereHas('city', function ($q) use ($request) {
-                $q->where('google_city_id', $request->google_city_id);
-            })
-            ->where(function ($query) use ($request) {
-                if (isset($request->search)) {
-                    $query->where('name', 'LIKE', "%{$request->search}%");
-                }
-                if (isset($request->tamara_order)) {
-                    $query->where('tamara_payment', 'true');
-                }
-                if (isset($request->sub_category_id)) {
-                    $query->whereHas('provider_categories', function ($q) use ($request) {
-                        $q->where('sub_category_id', $request->sub_category_id);
-                    });
-                }
-                if (isset($request->latitude)) {
-                    $query->orderBy(DB::raw("3959 * acos( cos( radians({$request->input('latitude')}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(-{$request->input('longitude')}) ) + sin( radians({$request->input('latitude')}) ) * sin(radians(latitude)) )"), 'ASC');
-                }
-                if (isset($request->rate_order))
-                {
-                    $query->orderBy('rate', 'DESC');
-                }
-                $query->whereStop('false');
-                $query->whereCategoryId($request->category_id);
-            })
-            ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
-            ->paginate(10);
+        if ($request->latitude and $request->longitude and $request->rate_order) {
+            $providers = Provider::with('provider_categories', 'city')
+                ->whereHas('city', function ($q) use ($request) {
+                    $q->where('google_city_id', $request->google_city_id);
+                })
+                ->where(function ($query) use ($request) {
+                    if (isset($request->search)) {
+                        $query->where('name', 'LIKE', "%{$request->search}%");
+                    }
+                    if (isset($request->tamara_order)) {
+                        $query->where('tamara_payment', 'true');
+                    }
+                    if (isset($request->sub_category_id)) {
+                        $query->whereHas('provider_categories', function ($q) use ($request) {
+                            $q->where('sub_category_id', $request->sub_category_id);
+                        });
+                    }
+                    $query->whereStop('false');
+                    $query->whereCategoryId($request->category_id);
+                })
+                ->orderBy('rate', 'DESC')
+                ->orderBy(DB::raw("3959 * acos( cos( radians({$request->input('latitude')}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(-{$request->input('longitude')}) ) + sin( radians({$request->input('latitude')}) ) * sin(radians(latitude)) )"), 'ASC')
+                ->orderBy('vip', 'ASC')
+                ->orderBy('special', 'ASC')
+                ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
+                ->paginate(10);
+        } elseif ($request->latitude and $request->longitude and $request->rate_order == null) {
+            $providers = Provider::with('provider_categories', 'city')
+                ->whereHas('city', function ($q) use ($request) {
+                    $q->where('google_city_id', $request->google_city_id);
+                })
+                ->where(function ($query) use ($request) {
+                    if (isset($request->search)) {
+                        $query->where('name', 'LIKE', "%{$request->search}%");
+                    }
+                    if (isset($request->tamara_order)) {
+                        $query->where('tamara_payment', 'true');
+                    }
+                    if (isset($request->sub_category_id)) {
+                        $query->whereHas('provider_categories', function ($q) use ($request) {
+                            $q->where('sub_category_id', $request->sub_category_id);
+                        });
+                    }
+                    $query->whereStop('false');
+                    $query->whereCategoryId($request->category_id);
+                })
+                ->orderBy(DB::raw("3959 * acos( cos( radians({$request->input('latitude')}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(-{$request->input('longitude')}) ) + sin( radians({$request->input('latitude')}) ) * sin(radians(latitude)) )"), 'ASC')
+                ->orderBy('vip', 'ASC')
+                ->orderBy('special', 'ASC')
+                ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
+                ->paginate(10);
+        } elseif ($request->latitude == null and $request->rate_order) {
+            $providers = Provider::with('provider_categories', 'city')
+                ->whereHas('city', function ($q) use ($request) {
+                    $q->where('google_city_id', $request->google_city_id);
+                })
+                ->where(function ($query) use ($request) {
+                    if (isset($request->search)) {
+                        $query->where('name', 'LIKE', "%{$request->search}%");
+                    }
+                    if (isset($request->tamara_order)) {
+                        $query->where('tamara_payment', 'true');
+                    }
+                    if (isset($request->sub_category_id)) {
+                        $query->whereHas('provider_categories', function ($q) use ($request) {
+                            $q->where('sub_category_id', $request->sub_category_id);
+                        });
+                    }
+                    $query->whereStop('false');
+                    $query->whereCategoryId($request->category_id);
+                })
+                ->orderBy('rate', 'DESC')
+                ->orderBy('vip', 'ASC')
+                ->orderBy('special', 'ASC')
+                ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
+                ->paginate(10);
+        } else {
+            $providers = Provider::with('provider_categories', 'city')
+                ->whereHas('city', function ($q) use ($request) {
+                    $q->where('google_city_id', $request->google_city_id);
+                })
+                ->where(function ($query) use ($request) {
+                    if (isset($request->search)) {
+                        $query->where('name', 'LIKE', "%{$request->search}%");
+                    }
+                    if (isset($request->tamara_order)) {
+                        $query->where('tamara_payment', 'true');
+                    }
+                    if (isset($request->sub_category_id)) {
+                        $query->whereHas('provider_categories', function ($q) use ($request) {
+                            $q->where('sub_category_id', $request->sub_category_id);
+                        });
+                    }
+                    $query->whereStop('false');
+                    $query->whereCategoryId($request->category_id);
+                })
+                ->orderBy('vip', 'ASC')
+                ->orderBy('special', 'ASC')
+                ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
+                ->paginate(10);
+        }
         if ($providers->count() > 0) {
             return ApiController::respondWithSuccessData(new ProviderCollectionTest($providers));
         } else {

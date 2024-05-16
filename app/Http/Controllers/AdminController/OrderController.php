@@ -47,7 +47,7 @@ class OrderController extends Controller
                 $item->update([
                     'status' => 'new_paid',
                 ]);
-                if($item->product->delivery == 'yes')
+                if($order->delivery_price > 0)
                 {
                     $note = $item->delivery_date . ' ' . $item->delivery_time;
                     $obj = array(

@@ -273,8 +273,8 @@ class OrderController extends Controller
                             'delivery_address' => $request->delivery_address == null ? null : $request->delivery_address,
                             'more_details' => $request->more_details == null ? null : $request->more_details,
                         ]);
-                        $provider = Provider::find($order->provider_id);
-                        $provider->notify(new NewAdminNotification($order->id));
+                        $provider = Provider::find($cart->provider_id);
+                        $provider->notify(new NewAdminNotification($cart->id));
                     }
                     $msg = trans('messages.userNewOrder') . $cart->user->name;
                     $data = ['msg' => $msg];
@@ -300,8 +300,8 @@ class OrderController extends Controller
                         "CustomerEmail" => "mail@company.com",
                         "InvoiceValue" => $amount,
                         "DisplayCurrencyIso" => "kwd",
-                        "CallBackUrl" => 'http://127.0.0.1:8000/api/v1/check-status',
-                        "ErrorUrl" => 'http://127.0.0.1:8000/api/v1/error-status',
+                        "CallBackUrl" => url('/api/v1/check-status'),
+                        "ErrorUrl" => url('/api/v1/error-status'),
                         "Language" => "ar",
                         "CustomerReference" => "noshipping-nosupplier",
                         "CustomerAddress" => array(
@@ -409,8 +409,8 @@ class OrderController extends Controller
                             'more_details' => $cart->more_details == null ? null : $cart->more_details,
                         ]);
                         // send notification to provider
-                        $provider = Provider::find($order->provider_id);
-                        $provider->notify(new NewAdminNotification($order->id));
+                        $provider = Provider::find($cart->provider_id);
+                        $provider->notify(new NewAdminNotification($cart->id));
                         if ($order->cart->delivery_price > 0) {
                             $note = $order->delivery_date . ' ' . $order->delivery_time;
                             $obj = array(
@@ -557,8 +557,8 @@ class OrderController extends Controller
                             'more_details' => $cart->more_details == null ? null : $cart->more_details,
                         ]);
                         // send notification to provider
-                        $provider = Provider::find($order->provider_id);
-                        $provider->notify(new NewAdminNotification($order->id));
+                        $provider = Provider::find($cart->provider_id);
+                        $provider->notify(new NewAdminNotification($cart->id));
 
                         if ($order->cart->delivery_price > 0) {
                             $note = $order->delivery_date . ' ' . $order->delivery_time;
@@ -739,21 +739,19 @@ class OrderController extends Controller
             if ($cart->orders->count() > 0) {
                 $order = Order::find($request->order_id);
                 // check if there are more than order to same provider
-                $check_order = Order::whereProviderId($order->provider_id)
-                    ->whereCartId($order->cart_id)
-                    ->first();
+                $check_order = Order::whereCartId($order->cart_id)->first();
                 if ($check_order and $check_order->id != $order->id and $cart->orders()->whereProviderId($order->provider_id)->count() > 0) {
                     $cart->update([
-                        'items_price' => $cart->items_price - $order->order_price,
+                        'items_price' => $cart->items_price - ($order->order_price + $order->options_price),
                         'tax_value' => $cart->tax_value - $order->tax_value,
-                        'total_price' => $cart->total_price - ($order->order_price + $order->tax_value),
+                        'total_price' => $cart->total_price - ($order->order_price + $order->tax_value + $order->options_price),
                     ]);
                 } else {
                     $cart->update([
-                        'items_price' => $cart->items_price - $order->order_price,
+                        'items_price' => $cart->items_price - ($order->order_price + $order->options_price),
                         'delivery_price' => $cart->delivery_price - $order->delivery_price,
                         'tax_value' => $cart->tax_value - $order->tax_value,
-                        'total_price' => $cart->total_price - ($order->order_price + $order->delivery_price + $order->tax_value),
+                        'total_price' => $cart->total_price - ($order->order_price + $order->delivery_price + $order->tax_value + $order->options_price),
                     ]);
                 }
                 $order->delete();

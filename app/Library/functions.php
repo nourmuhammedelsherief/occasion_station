@@ -487,7 +487,6 @@ function sendNotification($firebaseToken, $title, $body, $photo = null)
         "notification" => [
             "title" => $title,
             "body" => $body,
-            "photo" => $photo,
         ]
     ];
     $dataString = json_encode($data);

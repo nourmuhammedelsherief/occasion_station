@@ -25,7 +25,7 @@
             <li class="nav-item {{ strpos(URL::current(), 'provider/profile') !== false ? 'active' : '' }}">
                 <a href="{{url('/provider/profile')}}" class="nav-link ">
                     <i class="fa fa-user" style="color: aqua;"></i>
-                    <span class="title"> الصفحه الشخصية </span>
+                    <span class="title"> @lang('messages.profile_setting') </span>
                     <span class="pull-right-container"></span>
                 </a>
             </li>

@@ -13,6 +13,7 @@ class Product extends Model
         'activity',    // rent , sale
         'name',
         'name_en',
+        'description_en',
         'description',
         'price_before_discount',
         'price',

@@ -206,4 +206,5 @@ return [
     'itemDeleted' => 'تم حذف العنصر من السلة بنجاح',
     'product_sizes' => 'ألأحجام',
     'product_options' => 'الإضافات',
+    'profile_setting' => 'إعدادات حسابي',
 ];

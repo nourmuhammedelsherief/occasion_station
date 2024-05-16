@@ -18,12 +18,18 @@
     <form method="POST" action="{{route('admin.login.submit')}}">
         @csrf
 
-        <h3 class="form-title font-green">تسجيل الدخول</h3>
-
+        @if( Request::url() == url('/admin/login'))
+            <h3 class="form-title font-green">تسجيل الدخول (آلإدارة)</h3>
+        @else
+            <h3 class="form-title font-green">تسجيل الدخول (الموظفين)</h3>
+        @endif
         <div class="form-group">
             <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
             <label class="control-label visible-ie8 visible-ie9">االبريد الالكتروني</label>
-            <input class="form-control form-control-solid placeholder-no-fix{{ $errors->has('email') ? ' is-invalid' : '' }}" type="text" autocomplete="off" placeholder="البريد الالكتروني" name="email" value="{{ old('email') }}"  required autofocus />
+            <input
+                class="form-control form-control-solid placeholder-no-fix{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                type="text" autocomplete="off" placeholder="البريد الالكتروني" name="email" value="{{ old('email') }}"
+                required autofocus/>
             @if ($errors->has('email'))
 
                 <div class="alert alert-danger">
@@ -34,7 +40,9 @@
         </div>
         <div class="form-group">
             <label class="control-label visible-ie8 visible-ie9">كلمة المرور</label>
-            <input class="form-control form-control-solid placeholder-no-fix{{ $errors->has('email') ? ' is-invalid' : '' }}" type="password" autocomplete="off" placeholder="كلمة المرور" name="password" required  />
+            <input
+                class="form-control form-control-solid placeholder-no-fix{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                type="password" autocomplete="off" placeholder="كلمة المرور" name="password" required/>
             @if ($errors->has('password'))
                 <div class="alert alert-danger">
                     <button class="close" data-close="alert"></button>
@@ -43,13 +51,13 @@
             @endif
         </div>
         {{--<div class="form-group">--}}
-            {{--<div class="g-recaptcha" data-sitekey="6Ldd7IkUAAAAAPJRA62wUutPjglEGFKKRvnA2QSJ"></div>--}}
-            {{--@if ($errors->has('g-recaptcha-response'))--}}
+        {{--<div class="g-recaptcha" data-sitekey="6Ldd7IkUAAAAAPJRA62wUutPjglEGFKKRvnA2QSJ"></div>--}}
+        {{--@if ($errors->has('g-recaptcha-response'))--}}
 
-                {{--<div class="alert alert-danger">--}}
-                    {{--<span> {{ $errors->first('g-recaptcha-response') }}</span>--}}
-                {{--</div>--}}
-            {{--@endif--}}
+        {{--<div class="alert alert-danger">--}}
+        {{--<span> {{ $errors->first('g-recaptcha-response') }}</span>--}}
+        {{--</div>--}}
+        {{--@endif--}}
         {{--</div>--}}
         <div class="form-actions">
             <button type="submit" class="btn green uppercase">تسجيل الدخول</button>
@@ -57,7 +65,7 @@
                 <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} />تذكرني
                 <span></span>
             </label>
-            <a href="{{ route('admin.password.request') }}"  class="forget-password">هل نسيت كلمة المرور؟</a>
+            <a href="{{ route('admin.password.request') }}" class="forget-password">هل نسيت كلمة المرور؟</a>
         </div>
 
 

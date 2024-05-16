@@ -1,7 +1,7 @@
 @extends('provider.layouts.master')
 
 @section('title')
-    @lang('messages.my_profile')
+    @lang('messages.profile_setting')
 @endsection
 
 @section('styles')
@@ -27,17 +27,17 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="{{ url('/provider/profile') }}">@lang('messages.my_profile')</a>
+                <a href="{{ url('/provider/profile') }}">@lang('messages.profile_setting')</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>@lang('messages.show')   @lang('messages.my_profile')</span>
+                <span>@lang('messages.show')   @lang('messages.profile_setting')</span>
             </li>
         </ul>
     </div>
 
-    <h1 class="page-title">@lang('messages.show')  @lang('messages.my_profile')
-        <small>@lang('messages.edit')  @lang('messages.my_profile')</small>
+    <h1 class="page-title">@lang('messages.show')  @lang('messages.profile_setting')
+        <small>@lang('messages.edit')  @lang('messages.profile_setting')</small>
     </h1>
 @endsection
 
@@ -112,6 +112,18 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
+                            <div class="col-md-9">
+                                <input type="radio" name="store_receiving" {{$data->store_receiving == 'true' ? 'checked' : ''}} value="true"> نعم
+                                <input type="radio" name="store_receiving" {{$data->store_receiving == 'false' ? 'checked' : ''}} value="false"> لا
+                                @if ($errors->has('store_receiving'))
+                                    <span class="help-block">
+                                            <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
+                                        </span>
+                                @endif
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">هل السعر شامل التوصيل ؟</label>
@@ -137,19 +149,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div id="delivery_price" style="{{$data->delivery_by == 'app' ? 'display: none' : 'display: block'}}">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">أستلام المنتج من المتجر</label>
-                                <div class="col-md-9">
-                                    <input type="radio" name="store_receiving" {{$data->store_receiving == 'true' ? 'checked' : ''}} value="true"> نعم
-                                    <input type="radio" name="store_receiving" {{$data->store_receiving == 'false' ? 'checked' : ''}} value="false"> لا
-                                    @if ($errors->has('store_receiving'))
-                                        <span class="help-block">
-                                            <strong style="color: red;">{{ $errors->first('store_receiving') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
+                        <div id="delivery_price" style="{{($data->delivery == 'true' and $data->delivery_by == 'provider') ? 'display: block' : 'display: none'}}">
                             <div class="form-group">
                                 <label class="col-md-3 control-label">سعر التوصيل</label>
                                 <div class="col-md-9">
