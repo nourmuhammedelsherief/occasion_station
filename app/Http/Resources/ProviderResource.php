@@ -26,6 +26,7 @@ class ProviderResource extends JsonResource
             'activity'       => activity($this->activity),
             'special'        => $this->special,
             'vip'            => $this->vip,
+            'show_cart'      => $this->show_cart,
             'arrange'        => $this->arrange,
             'category'       => CategoryResource::collection($this->provider_main_categories),
             'sub_categories' => SubCategoryResource::collection($this->provider_categories),

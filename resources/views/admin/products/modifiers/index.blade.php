@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    @lang('messages.product_options')
+    @lang('messages.product_modifiers')
 @endsection
 
 @section('styles')
@@ -19,17 +19,17 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="{{url('/admin/product_options' , $product->id)}}">@lang('messages.product_options')</a>
+                <a href="{{url('/admin/product_modifiers' , $product->id)}}">@lang('messages.product_modifiers')</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>  عرض  @lang('messages.product_options')</span>
+                <span>  عرض  @lang('messages.product_modifiers')</span>
             </li>
         </ul>
     </div>
 
-    <h1 class="page-title">عرض  @lang('messages.product_options')
-        <small>عرض  @lang('messages.product_options') ({{app()->getLocale() == 'ar' ? $product->name : $product->name_en}})</small>
+    <h1 class="page-title">عرض  @lang('messages.product_modifiers')
+        <small>عرض  @lang('messages.product_modifiers') ({{app()->getLocale() == 'ar' ? $product->name : $product->name_en}})</small>
     </h1>
 @endsection
 
@@ -51,19 +51,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="btn-group">
-                                    <a href="{{route('createProductOption' , $product->id)}}">
+                                    <a href="{{route('createProductModifier' , $product->id)}}">
                                         <button id="sample_editable_1_new"
-                                                class="btn sbold green"> أضافه إضافات جديد
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="btn-group">
-                                    <a href="{{route('ProductModifier' , $product->id)}}">
-                                        <button id="sample_editable_1_new"
-                                                class="btn sbold yellow"> الإضافات الأساسية
+                                                class="btn sbold green"> أضافه جديد
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </a>
@@ -83,7 +73,8 @@
                             </th>
                             <th></th>
                             <th> الاسم </th>
-                            <th> السعر </th>
+                            <th> الوصف </th>
+                            <th> عدد الإضافات المطلوب </th>
                             <th> العمليات</th>
                             @if(Auth::guard('admin')->user()->role == 'admin' || Auth::guard('admin')->user()->role == 'editor')
 
@@ -92,8 +83,8 @@
                         </thead>
                         <tbody>
                         <?php $i = 0 ?>
-                        @foreach($options as $option)
-                            @if($option->parent_id == null)
+                        @foreach($modifiers as $modifier)
+                            @if($modifier->parent_id == null)
                                 <tr class="odd gradeX">
                                     <td>
                                         <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -102,17 +93,20 @@
                                         </label>
                                     </td>
                                     <td><?php echo ++$i ?></td>
-                                    <td> {{app()->getLocale() == 'ar' ? $option->name_ar : $option->name_en}} </td>
+                                    <td> {{app()->getLocale() == 'ar' ? $modifier->name_ar : $modifier->name_en}} </td>
                                     <td>
-                                        {{$option->price}}
+                                        {!! app()->getLocale() == 'ar' ? $modifier->details_ar : $modifier->details_en !!}
                                     </td>
                                     <td>
-                                        <a class="btn btn-info" href="{{route('editProductOption' , $option->id)}}">
+                                        {{$modifier->count}}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info" href="{{route('editProductModifier' , $modifier->id)}}">
                                             <i class="fa fa-edit"></i>
                                             تعديل
                                         </a>
-                                        <a class="delete_country btn btn-danger" data="{{$option->id}}"
-                                           data_name="{{app()->getLocale() == 'ar' ? $option->name_ar : $option->name_en}}">
+                                        <a class="delete_country btn btn-danger" data="{{$modifier->id}}"
+                                           data_name="{{app()->getLocale() == 'ar' ? $modifier->name_ar : $modifier->name_en}}">
                                             <i class="fa fa-key"></i> حذف
                                         </a>
                                     </td>
@@ -155,7 +149,7 @@
                     cancelButtonText: "أغلاق",
                     closeOnConfirm: false
                 }, function () {
-                    window.location.href = "{{ url('/') }}" + "/admin/product_options/delete/" + id;
+                    window.location.href = "{{ url('/') }}" + "/admin/product_modifiers/delete/" + id;
                 });
             });
         });

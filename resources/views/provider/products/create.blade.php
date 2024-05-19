@@ -72,15 +72,28 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">أسم المنتج </label>
+                                                <label class="col-md-3 control-label">أسم المنتج (بالعربي)</label>
                                                 <div class="col-md-9">
                                                     <input type="text" name="name" class="form-control"
-                                                           placeholder="أكتب أسم  المنتج" value="{{old('name')}}"
+                                                           placeholder="أكتب أسم  المنتج باللغة العربية" value="{{old('name')}}"
                                                            required>
                                                     @if ($errors->has('name'))
                                                         <span class="help-block">
-                                               <strong style="color: red;">{{ $errors->first('name') }}</strong>
-                                            </span>
+                                                            <strong style="color: red;">{{ $errors->first('name') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">أسم المنتج (بالانجليزي)</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" name="name_en" class="form-control"
+                                                           placeholder="أكتب أسم  المنتج باللغة الانجليزية" value="{{old('name_en')}}"
+                                                           required>
+                                                    @if ($errors->has('name_en'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('name_en') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -152,10 +165,10 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label"> تفاصيل المنتج </label>
+                                                <label class="col-md-3 control-label"> تفاصيل المنتج (بالعربي) </label>
                                                 <div class="col-md-9">
-                                                    <textarea name="description" id="description1" class="form-control"
-                                                              placeholder="اكتب تفاصيل  المنتج"></textarea>
+                                                    <textarea name="description" id="" class="form-control" rows="5"
+                                                              placeholder="اكتب تفاصيل  المنتج (باللغة العربية)"></textarea>
                                                     @if ($errors->has('description'))
                                                         <span class="help-block">
                                                             <strong
@@ -165,15 +178,42 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label"> أحتياجات المنتج </label>
+                                                <label class="col-md-3 control-label"> تفاصيل المنتج (بالانجليزي) </label>
                                                 <div class="col-md-9">
-                                                    <textarea name="product_requirements" id="description2"
+                                                    <textarea name="description_en" id="" class="form-control" rows="5"
+                                                              placeholder="اكتب تفاصيل  المنتج (باللغة الانجليزية)"></textarea>
+                                                    @if ($errors->has('description_en'))
+                                                        <span class="help-block">
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('description_en') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label"> أحتياجات المنتج (باللغة العربية) </label>
+                                                <div class="col-md-9">
+                                                    <textarea name="product_requirements" id="" rows="5"
                                                               class="form-control"
-                                                              placeholder="اكتب أحتياجات المنتج"></textarea>
+                                                              placeholder="اكتب أحتياجات المنتج (باللغة العربية)"></textarea>
                                                     @if ($errors->has('product_requirements'))
                                                         <span class="help-block">
                                                             <strong
                                                                 style="color: red;">{{ $errors->first('product_requirements') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label"> أحتياجات المنتج (باللغة الانجليزية) </label>
+                                                <div class="col-md-9">
+                                                    <textarea name="product_requirements_en" id="" rows="5"
+                                                              class="form-control"
+                                                              placeholder="اكتب أحتياجات المنتج (باللغة الانجليزية)"></textarea>
+                                                    @if ($errors->has('product_requirements_en'))
+                                                        <span class="help-block">
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('product_requirements_en') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>

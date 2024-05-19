@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    @lang('messages.product_options')
+    @lang('messages.product_modifiers')
 @endsection
 @section('styles')
     <link rel="stylesheet" href="{{ URL::asset('admin/css/bootstrap-fileinput.css') }}">
@@ -16,17 +16,17 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="{{url('/admin/product_options/' . $product->id)}}">@lang('messages.product_options')</a>
+                <a href="{{url('/admin/product_modifiers/' . $modifier->product->id)}}">@lang('messages.product_modifiers')</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>اضافه  @lang('messages.product_options')</span>
+                <span>تعديل  @lang('messages.product_modifiers')</span>
             </li>
         </ul>
     </div>
 
-    <h1 class="page-title">اضافه  @lang('messages.product_options') ({{app()->getLocale() == 'ar' ? $product->name : $product->name_en}})
-        <small>   @lang('messages.product_options')</small>
+    <h1 class="page-title">تعديل  @lang('messages.product_modifiers') ({{app()->getLocale() == 'ar' ? $modifier->product->name : $modifier->product->name_en}})
+        <small>   @lang('messages.product_modifiers')</small>
     </h1>
 @endsection
 
@@ -36,13 +36,13 @@
 
         <div class="col-md-8">
             <!-- BEGIN TAB PORTLET-->
-            <form method="post" action="{{route('storeProductOption' , $product->id)}}" enctype="multipart/form-data" >
+            <form method="post" action="{{route('updateProductModifier' , $modifier->id)}}" enctype="multipart/form-data" >
                 <input type = 'hidden' name = '_token' value = '{{Session::token()}}'>
                 <div class="portlet light bordered table-responsive">
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="icon-anchor font-green-sharp"></i>
-                            <span class="caption-subject font-green-sharp bold uppercase"> أضافه @lang('messages.product_options')</span>
+                            <span class="caption-subject font-green-sharp bold uppercase"> تعديل @lang('messages.product_modifiers')</span>
                         </div>
 
                     </div>
@@ -54,27 +54,9 @@
                                     <div class="form-horizontal" role="form">
                                         <div class="form-body">
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label"> الإضافة الأساسية </label>
-                                                <div class="col-md-9">
-                                                    <select name="modifier_id" class="form-control" required>
-                                                        <option disabled selected> أختر الإضافة الأساسية </option>
-                                                        @foreach($modifiers as $modifier)
-                                                            <option value="{{$modifier->id}}">
-                                                                {{app()->getLocale() == 'ar' ? $modifier->name_ar : $modifier->name_en}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('modifier_id'))
-                                                        <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('modifier_id') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label class="col-md-3 control-label"> @lang('messages.name_ar') </label>
                                                 <div class="col-md-9">
-                                                    <input type="text" name="name_ar" class="form-control" placeholder="@lang('messages.name_ar')" value="{{old('name_ar')}}" required>
+                                                    <input type="text" name="name_ar" class="form-control" placeholder="@lang('messages.name_ar')" value="{{$modifier->name_ar}}" required>
                                                     @if ($errors->has('name_ar'))
                                                         <span class="help-block">
                                                             <strong style="color: red;">{{ $errors->first('name_ar') }}</strong>
@@ -85,7 +67,7 @@
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label"> @lang('messages.name_en') </label>
                                                 <div class="col-md-9">
-                                                    <input type="text" name="name_en" class="form-control" placeholder="@lang('messages.name_en')" value="{{old('name_en')}}" required>
+                                                    <input type="text" name="name_en" class="form-control" placeholder="@lang('messages.name_en')" value="{{$modifier->name_en}}" required>
                                                     @if ($errors->has('name_en'))
                                                         <span class="help-block">
                                                             <strong style="color: red;">{{ $errors->first('name_en') }}</strong>
@@ -94,12 +76,38 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">@lang('messages.price')</label>
+                                                <label class="col-md-3 control-label"> تفاصيل نص الإضافة الأساسية (بالعربي)</label>
                                                 <div class="col-md-9">
-                                                    <input type="number" name="price" class="form-control" placeholder="@lang('messages.price')" value="{{old('price')}}" required>
-                                                    @if ($errors->has('price'))
+                                                    <textarea name="details_ar" rows="5" class="form-control"
+                                                              placeholder="اكتب تفاصيل  نص الإضافة الأساسية باللغة العربية">{{$modifier->details_ar}}</textarea>
+                                                    @if ($errors->has('details_ar'))
                                                         <span class="help-block">
-                                                            <strong style="color: red;">{{ $errors->first('price') }}</strong>
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('details_ar') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label"> تفاصيل نص ألإضافة الأساسية (بالانجليزي)</label>
+                                                <div class="col-md-9">
+                                                    <textarea name="details_en" rows="5" class="form-control"
+                                                              placeholder="اكتب تفاصيل  نص ألإضافة الأساسية باللغة الانجليزية">{{$modifier->details_en}}</textarea>
+                                                    @if ($errors->has('details_en'))
+                                                        <span class="help-block">
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('details_en') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">@lang('messages.count')</label>
+                                                <div class="col-md-9">
+                                                    <input type="number" name="count" class="form-control" placeholder="@lang('messages.count')" value="{{$modifier->count}}" required>
+                                                    @if ($errors->has('count'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('count') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>
@@ -130,11 +138,6 @@
                 </div>
             </form>
             <!-- END TAB PORTLET-->
-
-
-
-
-
         </div>
     </div>
 

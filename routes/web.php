@@ -36,6 +36,7 @@ use \App\Http\Controllers\AdminController\OrderController;
 use \App\Http\Controllers\AdminController\ProviderRateController;
 use \App\Http\Controllers\AdminController\ProductSizeController;
 use \App\Http\Controllers\AdminController\ProductOptionController;
+use \App\Http\Controllers\AdminController\ProductModifierController;
 
 // provider controller
 use \App\Http\Controllers\ProviderController\HomeController as ProviderHomeController;
@@ -47,6 +48,7 @@ use \App\Http\Controllers\ProviderController\OrderController as ProviderOrderCon
 use \App\Http\Controllers\ProviderController\CommissionController as ProviderCommissionController;
 use \App\Http\Controllers\ProviderController\ProviderProductSizeController;
 use \App\Http\Controllers\ProviderController\ProviderProductOptionController;
+use \App\Http\Controllers\ProviderController\ProviderProductModifierController;
 
 
 use \App\Http\Controllers\Api\OrderController as ApiOrderController;
@@ -330,6 +332,15 @@ Route::prefix('admin')->group(function () {
             Route::post('product_options/update/{id}','update')->name('updateProductOption');
             Route::get('product_options/delete/{id}','destroy')->name('deleteProductOption');
         });
+        Route::controller(ProductModifierController::class)->group(function () {
+            Route::get('product_modifiers/{id}','index')->name('ProductModifier');
+            Route::get('product_modifiers/{id}/create','create')->name('createProductModifier');
+            Route::post('product_modifiers/{id}/store','store')->name('storeProductModifier');
+            Route::get('product_modifiers/edit/{id}','edit')->name('editProductModifier');
+            Route::post('product_modifiers/update/{id}','update')->name('updateProductModifier');
+            Route::get('product_modifiers/delete/{id}','destroy')->name('deleteProductModifier');
+        });
+
 
 
 
@@ -532,6 +543,14 @@ Route::prefix('provider')->group(function () {
             Route::get('provider_product_options/edit/{id}','edit')->name('editProviderProductOption');
             Route::post('provider_product_options/update/{id}','update')->name('updateProviderProductOption');
             Route::get('provider_product_options/delete/{id}','destroy')->name('deleteProviderProductOption');
+        });
+        Route::controller(ProviderProductModifierController::class)->group(function () {
+            Route::get('provider_product_modifiers/{id}','index')->name('ProviderProductModifier');
+            Route::get('provider_product_modifiers/{id}/create','create')->name('createProviderProductModifier');
+            Route::post('provider_product_modifiers/{id}/store','store')->name('storeProviderProductModifier');
+            Route::get('provider_product_modifiers/edit/{id}','edit')->name('editProviderProductModifier');
+            Route::post('provider_product_modifiers/update/{id}','update')->name('updateProviderProductModifier');
+            Route::get('provider_product_modifiers/delete/{id}','destroy')->name('deleteProviderProductModifier');
         });
 
         // order routes

@@ -342,5 +342,7 @@ return [
     'itemDeleted' => 'Cart Item Deleted Successfully',
     'product_sizes' => 'Sizes',
     'product_options' => 'Options',
+    'product_modifiers' => 'modifiers',
     'profile_setting' => 'Profile Setting',
+    'count' => 'Count Of Required Options',
 ];

@@ -137,6 +137,18 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">أظهار السلة ؟</label>
+                            <div class="col-md-9">
+                                <input type="radio" name="show_cart" {{$data->show_cart == 'true' ? 'checked' : ''}}  value="true"> نعم
+                                <input type="radio" name="show_cart" {{$data->show_cart == 'false' ? 'checked' : ''}}  value="false"> لا
+                                @if ($errors->has('show_cart'))
+                                    <span class="help-block">
+                                        <strong style="color: red;">{{ $errors->first('show_cart') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
                         <div class="form-group" id="delivery_by" style="{{$data->delivery == 'false' ? 'display: none' : 'display: block'}}">
                             <label class="col-md-3 control-label">من سيقوم بالتوصيل</label>
                             <div class="col-md-9">

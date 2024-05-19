@@ -19,6 +19,7 @@ class Product extends Model
         'price',
         'less_amount',
         'product_requirements',
+        'product_requirements_en',
         'recomended',
         'stop',
         'accepted',
@@ -44,6 +45,10 @@ class Product extends Model
     public function sizes()
     {
         return $this->hasMany(ProductSize::class , 'product_id');
+    }
+    public function modifiers()
+    {
+        return $this->hasMany(ProductModifier::class , 'product_id');
     }
     public function options()
     {

@@ -5,26 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductOption extends Model
+class ProductModifier extends Model
 {
     use HasFactory;
-    protected $table = 'product_options';
+    protected $table = 'product_modifiers';
     protected $fillable = [
         'product_id',
-        'modifier_id',
         'name_ar',
         'name_en',
-        'price',
-        'calories',
-        'active',
+        'details_ar',
+        'details_en',
+        'count',
     ];
 
     public function product()
     {
         return $this->belongsTo(Product::class , 'product_id');
     }
-    public function modifier()
+    public function options()
     {
-        return $this->belongsTo(ProductModifier::class , 'modifier_id');
+        return $this->hasMany(ProductOption::class , 'modifier_id');
     }
+
 }

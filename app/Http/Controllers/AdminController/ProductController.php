@@ -88,11 +88,12 @@ class ProductController extends Controller
             'category_id'          => 'required|exists:product_categories,id',
             'activity'             => 'required|in:rent,sale',
             'description'          => 'sometimes|string',
-//            'description_en'       => 'sometimes|string',
+            'description_en'       => 'sometimes|string',
             'price'                => 'required',
             'price_before_discount'=> 'nullable',
             'less_amount'          => 'required',
             'product_requirements' => 'required',
+            'product_requirements_en' => 'required',
             'photos'               => 'required|array',
             'photos*'              => 'mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000'
         ]);
@@ -104,10 +105,12 @@ class ProductController extends Controller
             'name_en'              => $request->name_en,
             'activity'             => $request->activity,
             'description'          => $request->description,
+            'description_en'       => $request->description_en,
             'price'                => $request->price,
             'price_before_discount'=> $request->price_before_discount,
             'less_amount'          => $request->less_amount,
             'product_requirements' => $request->product_requirements,
+            'product_requirements_en' => $request->product_requirements_en,
         ]);
 
         ProviderProductCategory::updateOrCreate(
@@ -181,7 +184,8 @@ class ProductController extends Controller
             'name_en'              => 'required|string|max:191',
             'activity'             => 'required|in:rent,sale',
             'description'          => 'sometimes|string',
-//            'description_en'       => 'sometimes|string',
+            'description_en'       => 'sometimes|string',
+            'product_requirements_en'  => 'sometimes|string',
             'price'                => 'required',
             'price_before_discount'=> 'nullable',
             'less_amount'          => 'required',
@@ -197,7 +201,8 @@ class ProductController extends Controller
             'name_en'              => $request->name_en,
             'activity'             => $request->activity,
             'description'          => $request->description ? : $product->description,
-//            'description_en'       => $request->description_en ? : $product->description_en,
+            'description_en'       => $request->description_en ? : $product->description_en,
+            'product_requirements_en' => $request->product_requirements_en ? : $product->product_requirements_en,
             'price'                => $request->price,
             'price_before_discount'=> $request->price_before_discount == null ? $product->price_before_discount : $request->price_before_discount,
             'less_amount'          => $request->less_amount,

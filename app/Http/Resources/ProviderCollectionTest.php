@@ -30,6 +30,7 @@ class ProviderCollectionTest extends ResourceCollection
                     'activity'       => activity($query->activity),
                     'special'        => $query->special,
                     'vip'            => $query->vip,
+                    'show_cart'      => $query->show_cart,
                     'arrange'        => $query->arrange,
                     'category'       => CategoryResource::collection($query->provider_main_categories),
                     'sub_categories' => SubCategoryResource::collection($query->provider_categories),

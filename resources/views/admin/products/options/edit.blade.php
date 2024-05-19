@@ -54,6 +54,24 @@
                                     <div class="form-horizontal" role="form">
                                         <div class="form-body">
                                             <div class="form-group">
+                                                <label class="col-md-3 control-label"> الإضافة الأساسية </label>
+                                                <div class="col-md-9">
+                                                    <select name="modifier_id" class="form-control" required>
+                                                        <option disabled selected> أختر الإضافة الأساسية </option>
+                                                        @foreach($modifiers as $modifier)
+                                                            <option value="{{$modifier->id}}" {{$option->modifier_id == $modifier->id ? 'selected' : ''}}>
+                                                                {{app()->getLocale() == 'ar' ? $modifier->name_ar : $modifier->name_en}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('modifier_id'))
+                                                        <span class="help-block">
+                                                            <strong style="color: red;">{{ $errors->first('modifier_id') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label class="col-md-3 control-label"> @lang('messages.name_ar') </label>
                                                 <div class="col-md-9">
                                                     <input type="text" name="name_ar" class="form-control" placeholder="@lang('messages.name_ar')" value="{{$option->name_ar}}" required>

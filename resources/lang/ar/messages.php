@@ -206,5 +206,7 @@ return [
     'itemDeleted' => 'تم حذف العنصر من السلة بنجاح',
     'product_sizes' => 'ألأحجام',
     'product_options' => 'الإضافات',
+    'product_modifiers' => 'الإضافات الأساسية',
     'profile_setting' => 'إعدادات حسابي',
+    'count' => 'عدد الإضافات الفرعية المطلوبة',
 ];

@@ -26,6 +26,7 @@ class Provider extends Authenticatable
         'longitude',
         'address',
         'special',
+        'show_cart',
         'vip',
         'stop',
         'logo',

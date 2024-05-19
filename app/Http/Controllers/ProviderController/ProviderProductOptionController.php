@@ -25,7 +25,8 @@ class ProviderProductOptionController extends Controller
     public function create($id)
     {
         $product = Product::findOrFail($id);
-        return view('provider.products.options.create' , compact('product'));
+        $modifiers = $product->modifiers;
+        return view('provider.products.options.create' , compact('product' , 'modifiers'));
     }
 
     /**
@@ -35,6 +36,7 @@ class ProviderProductOptionController extends Controller
     {
         $product = Product::findOrFail($id);
         $this->validate($request , [
+            'modifier_id' => 'required',
             'name_ar'  => 'required|string|max:191',
             'name_en'  => 'required|string|max:191',
             'price'    => 'required|numeric',
@@ -42,6 +44,7 @@ class ProviderProductOptionController extends Controller
 
         // create new options
         ProductOption::create([
+            'modifier_id' => $request->modifier_id,
             'product_id'  => $product->id,
             'name_ar'     => $request->name_ar,
             'name_en'     => $request->name_en,
@@ -66,7 +69,8 @@ class ProviderProductOptionController extends Controller
     public function edit(string $id)
     {
         $option = ProductOption::findOrFail($id);
-        return view('provider.products.options.edit' , compact('option'));
+        $modifiers = $option->product->modifiers;
+        return view('provider.products.options.edit' , compact('option' , 'modifiers'));
     }
 
     /**
@@ -76,12 +80,14 @@ class ProviderProductOptionController extends Controller
     {
         $option = ProductOption::findOrFail($id);
         $this->validate($request , [
+            'modifier_id' => 'required',
             'name_ar'  => 'required|string|max:191',
             'name_en'  => 'required|string|max:191',
             'price'    => 'required|numeric',
         ]);
 
         $option->update([
+            'modifier_id' => $request->modifier_id,
             'name_ar'     => $request->name_ar,
             'name_en'     => $request->name_en,
             'price'       => $request->price,
