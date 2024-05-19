@@ -64,7 +64,7 @@
                                     <a href="{{route('ProductModifier' , $product->id)}}">
                                         <button id="sample_editable_1_new"
                                                 class="btn sbold yellow"> الإضافات الأساسية
-                                            <i class="fa fa-plus"></i>
+                                            <i class="fa fa-arrow-left"></i>
                                         </button>
                                     </a>
                                 </div>

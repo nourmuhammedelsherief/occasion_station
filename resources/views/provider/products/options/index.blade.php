@@ -59,6 +59,16 @@
                                     </a>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    <a href="{{route('ProviderProductModifier' , $product->id)}}">
+                                        <button id="sample_editable_1_new"
+                                                class="btn sbold yellow">الإضافات الأساسية
+                                            <i class="fa fa-arrow-left"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover table-checkable order-column"

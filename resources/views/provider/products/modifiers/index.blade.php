@@ -59,6 +59,16 @@
                                     </a>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    <a href="{{route('ProviderProductOption' , $product->id)}}">
+                                        <button id="sample_editable_1_new"
+                                                class="btn sbold blue"> الإضافات
+                                            <i class="fa fa-arrow-left"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover table-checkable order-column"
@@ -76,9 +86,6 @@
                             <th> الوصف </th>
                             <th> عدد الإضافات المطلوب </th>
                             <th> العمليات</th>
-                            @if(Auth::guard('admin')->user()->role == 'admin' || Auth::guard('admin')->user()->role == 'editor')
-
-                            @endif
                         </tr>
                         </thead>
                         <tbody>
