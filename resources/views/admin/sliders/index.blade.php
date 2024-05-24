@@ -51,7 +51,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="btn-group">
-                                    <a href="{{route('createAnimatedSlider')}}">
+                                    <a href="{{route('createSlider')}}">
                                         <button id="sample_editable_1_new"
                                                 class="btn sbold green"> أضافه  جديد
                                             <i class="fa fa-plus"></i>
@@ -93,7 +93,7 @@
                                         @if($slider->photo != null)
                                             <a type="button"  data-toggle="modal"
                                                data-target="#exampleModalScrollable{{$slider->id}}">
-                                                <img class="imageresource" src="{{asset('/uploads/animated_sliders/'.$slider->photo)}}" height="100" width="180">
+                                                <img class="imageresource" src="{{asset('/uploads/sliders/'.$slider->photo)}}" height="100" width="180">
                                             </a>
                                             <div class="modal fade" id="exampleModalScrollable{{$slider->id}}" tabindex="-1"
                                                  role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -108,7 +108,7 @@
                                                         </div>
                                                         <div class="modal-body">
 
-                                                            <img src="{{asset('/uploads/animated_sliders/'.$slider->photo)}}"
+                                                            <img src="{{asset('/uploads/sliders/'.$slider->photo)}}"
                                                                  width="500px"/>
                                                         </div>
                                                         <div class="modal-footer">
@@ -132,7 +132,7 @@
                                             <ul class="dropdown-menu pull-left" role="menu">
 
                                                 <li>
-                                                    <a href="{{route('editAnimatedSlider' , $slider->id)}}">
+                                                    <a href="{{route('editSlider' , $slider->id)}}">
                                                         <i class="icon-docs"></i> تعديل </a>
                                                 </li>
                                                 <li>
@@ -184,7 +184,7 @@
                     cancelButtonText: "أغلاق",
                     closeOnConfirm: false
                 }, function () {
-                    window.location.href = "{{ url('/') }}" + "/admin/animated_sliders/delete/" + id;
+                    window.location.href = "{{ url('/') }}" + "/admin/sliders/delete/" + id;
                 });
             });
         });

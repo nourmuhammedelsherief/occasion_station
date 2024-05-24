@@ -40,7 +40,6 @@ class OrderController extends Controller
         if ($validator->fails())
             return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
 
-
         // create new Order
         $product = Product::find($request->product_id);
         $provider = $product->provider;
