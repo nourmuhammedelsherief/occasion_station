@@ -23,6 +23,7 @@ class OrderResource extends JsonResource
             'options'  => OrderOptionResource::collection($this->options),
             'tax_value' => $this->tax_value,
             'product_count' => $this->product_count,
+            'options_price' => $this->options ? $this->options()->sum('price') : 0,
             'order_price'   => $this->order_price,
             'store_receiving' => $this->store_receiving,
             'created_at'    => $this->created_at->format('Y-m-d'),
