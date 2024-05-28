@@ -140,7 +140,7 @@ class ProfileController extends Controller
 
     public function get_visitors_notifications($id)
     {
-        $notifications = UserNotification::Where('device_token', $id)
+        $notifications = App\Models\UserNotification::Where('device_token', $id)
             ->orderBy('id','desc')
             ->get();
         if ($notifications->count() > 0)
@@ -162,7 +162,7 @@ class ProfileController extends Controller
             $sliders = ProviderSlider::whereProviderId($provider->id)->get();
             if($sliders->count() == 0)
             {
-                $sliders = App\ProviderSlider::where('provider_id' , null)->get();
+                $sliders = ProviderSlider::where('provider_id' , null)->get();
                 foreach ($sliders  as $slider)
                 {
                     ProviderSlider::create([
