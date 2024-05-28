@@ -192,4 +192,37 @@ class CategoryController extends Controller
             return ApiController::respondWithErrorClient($errors);
         }
     }
+    public function providers_search(Request $request)
+    {
+        $rules = [
+            'google_city_id' => 'required',
+            'key_search' => 'sometimes',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails())
+            return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
+
+        $providers = Provider::with('provider_categories', 'city')
+            ->whereHas('city', function ($q) use ($request) {
+                $q->where('google_city_id', $request->google_city_id);
+            })
+            ->where(function ($query) use ($request) {
+                if (isset($request->key_search)) {
+                    $query->where('name', 'LIKE', "%{$request->key_search}%");
+                }
+                $query->whereStop('false');
+            })
+            ->orderBy('vip', 'ASC')
+            ->orderBy('special', 'ASC')
+            ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
+            ->paginate(10);
+        if ($providers->count() > 0) {
+            return ApiController::respondWithSuccessData(new ProviderCollectionTest($providers));
+        } else {
+            $errors = [
+                'message' => trans('messages.no_providers')
+            ];
+            return ApiController::respondWithErrorClient($errors);
+        }
+    }
 }

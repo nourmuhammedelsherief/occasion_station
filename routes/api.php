@@ -105,6 +105,7 @@ Route::prefix('v1')->group(function () {
 
             Route::get('/sub_categories/{category_id}' , 'sub_categories');
             Route::post('/providers' , 'providers');
+            Route::post('/providers_search' , 'providers_search');
         });
 
         Route::controller(ProductController::class)->group(function () {
