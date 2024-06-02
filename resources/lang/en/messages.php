@@ -345,4 +345,6 @@ return [
     'product_modifiers' => 'modifiers',
     'profile_setting' => 'Profile Setting',
     'count' => 'Count Of Required Options',
+    'inSearchRange' => 'You Are In Search Range',
+    'outSearchRange' => 'You Are Out Search Range',
 ];

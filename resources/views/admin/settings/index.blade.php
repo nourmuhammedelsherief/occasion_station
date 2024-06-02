@@ -186,15 +186,15 @@
                                                        value="{{$settings->myFatoourah_token}}">
                                             </div>
                                         </div>
-                                        {{--                                <div class="form-group">--}}
-                                        {{--                                    <label class="col-md-3 control-label"> نطاق أرسال  الطللبات </label>--}}
-                                        {{--                                    <div class="col-md-7">--}}
-                                        {{--                                        <input type="number" class="form-control" placeholder="نطاق أرسال الطلبات" name="search_range" value="{{$settings->search_range}}">--}}
-                                        {{--                                    </div>--}}
-                                        {{--                                    <div class="col-md-2">--}}
-                                        {{--                                        كيلومتر--}}
-                                        {{--                                    </div>--}}
-                                        {{--                                </div>--}}
+                                                                        <div class="form-group">
+                                                                            <label class="col-md-3 control-label"> نطاق المسافة للطلبات </label>
+                                                                            <div class="col-md-7">
+                                                                                <input type="number" class="form-control" placeholder="نطاق المسافة للطلبات" name="search_range" value="{{$settings->search_range}}">
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                كيلومتر
+                                                                            </div>
+                                                                        </div>
                                         {{--                                <div class="form-group">--}}
                                         {{--                                    <label class="col-md-3 control-label"> عمولة التطبيق   </label>--}}
                                         {{--                                    <div class="col-md-7">--}}

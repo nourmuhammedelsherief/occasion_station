@@ -209,4 +209,6 @@ return [
     'product_modifiers' => 'الإضافات الأساسية',
     'profile_setting' => 'إعدادات حسابي',
     'count' => 'عدد الإضافات الفرعية المطلوبة',
+    'inSearchRange' => 'انت داخل نطاق الطلبات',
+    'outSearchRange' => 'أنت خارج نطاق الطلبات',
 ];

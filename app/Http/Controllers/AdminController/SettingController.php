@@ -44,5 +44,4 @@ class SettingController extends Controller
         return Redirect::back()->with('success', 'تم حفظ البيانات بنجاح');
     }
 
-
 }

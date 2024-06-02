@@ -179,6 +179,30 @@ class ProfileController extends Controller
             return ApiController::respondWithSuccess($success);
         }
     }
+    public function orders_search_range(Request $request)
+    {
+        $rules = [
+            'provider_id'  => 'required|exists:providers,id',
+            'latitude'     => 'required',
+            'longitude'    => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails())
+            return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
+
+        $provider = Provider::find($request->provider_id);
+        $range    = Setting::first()->search_range;
+        $distance = distanceBetweenTowPlaces($request->latitude , $request->longitude , $provider->latitude , $provider->longitude);
+        $success = [
+            'range'  => $range,
+            'distance' => $distance,
+            'at_range' => $distance < $range,
+            'message' => $distance < $range ? trans('messages.inSearchRange') : trans('messages.outSearchRange'),
+        ];
+        return ApiController::respondWithSuccess($success);
+    }
     public function provider_categories()
     {
         $categories = ProductCategory::all();

@@ -97,6 +97,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/store_device_token', 'store_device_token');
             Route::get('/get_visitors_notifications/{device_token}', 'get_visitors_notifications');
 
+            Route::post('/orders_search_range', 'orders_search_range');
+
         });
         // categories
         Route::controller(CategoryController::class)->group(function () {
