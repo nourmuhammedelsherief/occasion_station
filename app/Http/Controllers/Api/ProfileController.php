@@ -195,13 +195,15 @@ class ProfileController extends Controller
         $provider = Provider::find($request->provider_id);
         $range    = Setting::first()->search_range;
         $distance = distanceBetweenTowPlaces($request->latitude , $request->longitude , $provider->latitude , $provider->longitude);
-        $success = [
-            'range'  => $range,
-            'distance' => $distance,
-            'at_range' => $distance < $range,
-            'message' => $distance < $range ? trans('messages.inSearchRange') : trans('messages.outSearchRange'),
+        $data = [
+            'data' =>   [
+                'range'  => $range,
+                'distance' => $distance,
+                'at_range' => $distance < $range,
+                'message' => $distance < $range ? trans('messages.inSearchRange') : trans('messages.outSearchRange'),
+            ]
         ];
-        return ApiController::respondWithSuccess($success);
+        return ApiController::respondWithSuccess($data);
     }
     public function provider_categories()
     {
