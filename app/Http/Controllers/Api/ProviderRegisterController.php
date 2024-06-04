@@ -17,9 +17,9 @@ class ProviderRegisterController extends Controller
     public function provider_register_request(Request $request)
     {
         $rules = [
-            'name' => 'required|string|max:191',
+            'name' => 'sometimes|string|max:191',
             'store_name' => 'sometimes|string|max:191',
-            'phone_number' => 'required|string|max:191',
+            'phone_number' => 'sometimes|string|max:191',
             'email' => 'sometimes|string|max:191',
             'street' => 'sometimes|string|max:191',
             'district' => 'sometimes|string|max:191',
