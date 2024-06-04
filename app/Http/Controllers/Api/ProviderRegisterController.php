@@ -20,7 +20,7 @@ class ProviderRegisterController extends Controller
             'name' => 'required|string|max:191',
             'store_name' => 'sometimes|string|max:191',
             'phone_number' => 'required|string|max:191',
-            'email' => 'required|string|max:191',
+            'email' => 'sometimes|string|max:191',
             'street' => 'sometimes|string|max:191',
             'district' => 'sometimes|string|max:191',
             'url' => 'sometimes|string|max:191',
