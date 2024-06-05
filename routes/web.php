@@ -61,25 +61,6 @@ Route::get('/tamara' , function (){
 
 Route::get('/', ['middleware'=> 'auth:admin', 'uses'=>'AdminController\HomeController@index']);
 
-Route::get('/update_sliders' , function (){
-    $sliders  = \App\Models\Slider::all();
-    foreach ($sliders as  $slider)
-    {
-        $provider = null;
-        $product  = null;
-        if ($slider->provider_id){
-            $provider = \App\Models\Provider::find($slider->provider_id);
-        }
-        if ($slider->product_id){
-            $product = \App\Models\Product::find($slider->product_id);
-        }
-        if ($product == null and $provider == null)
-        {
-            $slider->delete();
-        }
-    }
-    echo 'success';
-});
 
 Route::get('/update_users' , function (){
     $users  = \App\Models\User::all();
