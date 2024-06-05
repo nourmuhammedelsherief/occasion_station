@@ -19,6 +19,10 @@ class HomeResource extends JsonResource
      */
     public function toArray($request)
     {
+//        $sliders = Slider::with('provider' , 'product')
+//            ->whereHas('provider' , function ($p) use ($request){
+//
+//            });
         return [
             'categories' => CategoryResource::collection(Category::orderBy(DB::raw('ISNULL(arrange), arrange'), 'ASC')->get()),
             'sliders'    => SliderResource::collection(Slider::all()),
