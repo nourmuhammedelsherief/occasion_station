@@ -16,20 +16,20 @@ class ProviderRegisterController extends Controller
 {
     public function provider_register_request(Request $request)
     {
-        $rules = [
-            'name' => 'sometimes|string|max:191',
-            'store_name' => 'sometimes|string|max:191',
-            'phone_number' => 'sometimes|string|max:191',
-            'email' => 'sometimes|string|max:191',
-            'street' => 'sometimes|string|max:191',
-            'district' => 'sometimes|string|max:191',
-            'url' => 'sometimes|string|max:191',
-            'city' => 'sometimes|string|max:191',
-            'activity_type' => 'sometimes|string|max:191',
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails())
-            return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
+//        $rules = [
+//            'name' => 'sometimes|string|max:191',
+//            'store_name' => 'sometimes|string|max:191',
+//            'phone_number' => 'sometimes|string|max:191',
+//            'email' => 'sometimes|string|max:191',
+//            'street' => 'sometimes|string|max:191',
+//            'district' => 'sometimes|string|max:191',
+//            'url' => 'sometimes|string|max:191',
+//            'city' => 'sometimes|string|max:191',
+//            'activity_type' => 'sometimes|string|max:191',
+//        ];
+//        $validator = Validator::make($request->all(), $rules);
+//        if ($validator->fails())
+//            return ApiController::respondWithErrorObject(validateRules($validator->errors(), $rules));
 
         // create new provider
         $provider = ProviderRegister::create([
