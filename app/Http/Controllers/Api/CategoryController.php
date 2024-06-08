@@ -107,7 +107,7 @@ class CategoryController extends Controller
                 ->orderBy('vip', 'ASC')
                 ->orderBy('special', 'ASC')
                 ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
-                ->paginate(10);
+                ->paginate(15);
         } elseif ($request->latitude and $request->longitude and $request->rate_order == null) {
             $providers = Provider::with('provider_categories', 'city')
                 ->whereHas('city', function ($q) use ($request) {
@@ -132,7 +132,7 @@ class CategoryController extends Controller
                 ->orderBy('vip', 'ASC')
                 ->orderBy('special', 'ASC')
                 ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
-                ->paginate(10);
+                ->paginate(15);
         } elseif ($request->latitude == null and $request->rate_order) {
             $providers = Provider::with('provider_categories', 'city')
                 ->whereHas('city', function ($q) use ($request) {
@@ -157,7 +157,7 @@ class CategoryController extends Controller
                 ->orderBy('vip', 'ASC')
                 ->orderBy('special', 'ASC')
                 ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
-                ->paginate(10);
+                ->paginate(15);
         } else {
             $providers = Provider::with('provider_categories', 'city')
                 ->whereHas('city', function ($q) use ($request) {
@@ -212,7 +212,7 @@ class CategoryController extends Controller
             ->orderBy('vip', 'ASC')
             ->orderBy('special', 'ASC')
             ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
-            ->paginate(10);
+            ->paginate(15);
         if ($providers->count() > 0) {
             return ApiController::respondWithSuccessData(new ProviderCollectionTest($providers));
         } else {
