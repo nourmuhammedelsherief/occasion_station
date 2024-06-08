@@ -33,6 +33,7 @@ class Provider extends Authenticatable
         'arrange',
         'provider_category_arrange',
         'description',
+        'description_en',
         'commission',  // the total commissions for provider
         'bank_payment',
         'online_payment',
