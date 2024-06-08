@@ -181,6 +181,7 @@ class CategoryController extends Controller
                 ->orderBy('vip', 'ASC')
                 ->orderBy('special', 'ASC')
                 ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
+                ->distinct()
                 ->paginate(15);
         }
         if ($providers->count() > 0) {
