@@ -178,10 +178,9 @@ class CategoryController extends Controller
                     $query->whereStop('false');
                     $query->whereCategoryId($request->category_id);
                 })
-                ->orderBy('vip', 'ASC')
-                ->orderBy('special', 'ASC')
+//                ->orderBy('vip', 'ASC')
+//                ->orderBy('special', 'ASC')
                 ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
-                ->distinct()
                 ->paginate();
         }
         if ($providers->count() > 0) {
