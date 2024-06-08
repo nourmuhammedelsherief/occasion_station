@@ -51,7 +51,7 @@ class ProductController extends Controller
             ->whereStop('false')
             ->whereAccepted('true')
             ->orderBy('id' , 'desc')
-            ->paginate(10);
+            ->paginate(15);
         $categories = ProviderProductCategory::whereProviderId($request->provider_id)
             ->get();
         foreach ($categories as $category)
@@ -134,7 +134,7 @@ class ProductController extends Controller
             ->where('recomended' , 'true')
             ->whereStop('false')
             ->whereAccepted('true')
-            ->paginate(10);
+            ->paginate(15);
         return ApiController::respondWithSuccessData(new ProductCollection($products));
     }
 
