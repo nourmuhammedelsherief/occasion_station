@@ -178,7 +178,7 @@ class CategoryController extends Controller
                 ->orderBy('vip', 'ASC')
                 ->orderBy('special', 'ASC')
                 ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
-                ->paginate(10);
+                ->paginate(50);
         }
         if ($providers->count() > 0) {
             return ApiController::respondWithSuccessData(new ProviderCollectionTest($providers));
