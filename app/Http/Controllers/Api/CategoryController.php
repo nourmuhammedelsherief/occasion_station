@@ -164,7 +164,7 @@ class CategoryController extends Controller
                     $q->where('google_city_id', $request->google_city_id);
                 })
                 ->where(function ($query) use ($request) {
-                    if (isset($request->search)) {
+                    if (isset($request->search) and $request->search != null or $request->search != 'null') {
                         $query->where('name', 'LIKE', "%{$request->search}%");
                     }
                     if (isset($request->tamara_order)) {
@@ -178,8 +178,8 @@ class CategoryController extends Controller
                     $query->whereStop('false');
                     $query->whereCategoryId($request->category_id);
                 })
-//                ->orderBy('vip', 'ASC')
-//                ->orderBy('special', 'ASC')
+                ->orderBy('vip', 'ASC')
+                ->orderBy('special', 'ASC')
                 ->orderBy(DB::raw('ISNULL(provider_category_arrange), provider_category_arrange'), 'ASC')
                 ->paginate();
         }
