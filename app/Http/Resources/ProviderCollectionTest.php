@@ -34,7 +34,7 @@ class ProviderCollectionTest extends ResourceCollection
                     'arrange'        => $query->arrange,
                     'category'       => CategoryResource::collection($query->provider_main_categories),
                     'sub_categories' => SubCategoryResource::collection($query->provider_categories),
-                    'description'  => $query->description,
+                    'description'    => app()->getLocale() == 'ar' ? $query->description : $query->description_en,
                     'bank_payment'   => $query->bank_payment,
                     'online_payment' => $query->online_payment,
                     'tamara_payment' => $query->tamara_payment,

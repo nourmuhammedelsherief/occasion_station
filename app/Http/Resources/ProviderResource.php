@@ -30,7 +30,7 @@ class ProviderResource extends JsonResource
             'arrange'        => $this->arrange,
             'category'       => CategoryResource::collection($this->provider_main_categories),
             'sub_categories' => SubCategoryResource::collection($this->provider_categories),
-            'description'    => $this->description,
+            'description'    => app()->getLocale() == 'ar' ? $this->description : $this->description_en,
             'bank_payment'   => $this->bank_payment,
             'online_payment' => $this->online_payment,
             'tamara_payment' => $this->tamara_payment,
