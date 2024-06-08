@@ -164,6 +164,9 @@ class CategoryController extends Controller
                     $q->where('google_city_id', $request->google_city_id);
                 })
                 ->where(function ($query) use ($request) {
+                    if (isset($request->search)) {
+                        $query->where('name', 'LIKE', "%{$request->search}%");
+                    }
                     if (isset($request->tamara_order)) {
                         $query->where('tamara_payment', 'true');
                     }
