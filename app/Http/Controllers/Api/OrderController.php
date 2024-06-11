@@ -298,7 +298,7 @@ class OrderController extends Controller
                         "CustomerMobile" => $user->phone_number,
                         "CustomerEmail" => "mail@company.com",
                         "InvoiceValue" => $amount,
-                        "DisplayCurrencyIso" => "kwd",
+                        "DisplayCurrencyIso" => "SAR",
                         "CallBackUrl" => url('/api/v1/check-status'),
                         "ErrorUrl" => url('/api/v1/error-status'),
                         "Language" => "ar",
