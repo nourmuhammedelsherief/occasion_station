@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\ProviderController\Provider;
 
 use App\Http\Controllers\Controller;
+use App\Models\Provider;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
@@ -66,4 +68,14 @@ class ForgotPasswordController extends Controller
             : $this->sendResetLinkFailedResponse($request, $response);
     }
 
+    public function reset(Request $request)
+    {
+        $this->validate($request , [
+            'email' => 'required',
+            'password' => 'required:confirmed',
+        ]);
+        $provider = Provider::whereEmail($request->email)->first();
+        Auth::guard('provider')->login($provider);
+        return redirect()->intended(route('provider.home'));
+    }
 }
