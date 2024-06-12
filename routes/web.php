@@ -490,8 +490,8 @@ Route::prefix('provider')->group(function () {
         Route::post('logout', 'logout')->name('provider.logout');
     });
     Route::controller(ProviderForgotPasswordController::class)->group(function () {
-        Route::get('password/reset', '@showLinkRequestForm')->name('provider.password.request');
-        Route::post('password/email', '@sendResetLinkEmail')->name('provider.password.email');
+        Route::get('password/reset', 'showLinkRequestForm')->name('provider.password.request');
+        Route::post('password/email', 'sendResetLinkEmail')->name('provider.password.email');
         Route::get('password/reset/{token}', 'showResetForm')->name('provider.password.reset');
         Route::post('password/reset', 'reset')->name('provider.password.update');
 
